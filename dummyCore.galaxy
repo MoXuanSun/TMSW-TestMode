@@ -121,7 +121,34 @@ void onInit(){
 //后初始化 -- 英雄生成结束后1秒调用
 void onPostInit(){
 
+    libNtve_gf_ShareVisionofUnit(botUnit,true,1);
+
+    libNtve_gf_SetAllianceOneWay(2,1,libNtve_ge_AllianceSetting_Ally);   
+
+    UnitAbilityEnable(gv_71C054E5[1],"dbnu_spell_2_0",false);
+    UnitAbilityShow(gv_71C054E5[1],"dbnu_spell_2_0",false);
+
+    UnitAbilityEnable(gv_71C054E5[1],"dbnu_spell_2_1",true);
+    UnitAbilityShow(gv_71C054E5[1],"dbnu_spell_2_1",true);
+    createDialogs();
+
+    TriggerExecute(gt_0315FDBE, false, false);
+    
+    gf_5B3578B1();
+    gf_1A8469C6();
+    gf_85CE78E1();
+
+    gv_BB284D6D = 1;
+    //timer
+    TriggerExecute(gt_50AA3CE2, false, false);
+
+    //ui
+    TriggerExecute(gt_0315FDBE, false, false);
+
+    DialogSetVisible(gv_17071D73, PlayerGroupAll(), false);
+    gf_5B3968D5();
 }
+
 
 void reflashPlayer(int player){
     int i;
@@ -212,16 +239,7 @@ bool onCommand(bool t,bool r){
 
     }
     else if (cmd == "r"){
-        currentAbility = "";
-        for (;i<50;i+=1){
-            if (UnitAbilityGet(gv_71C054E5[1],i) != ""){
-                currentAbility = UnitAbilityGet(gv_71C054E5[1],i);
-                if (currentAbility != "stop" || currentAbility != "attack" || currentAbility != "move"){
-                    libNtve_gf_UnitAbilityRemoveCooldown(gv_71C054E5[1],
-                        currentAbility,"Abil/" +currentAbility);
-                }
-            }
-        }
+        UnitClearCooldowns(gv_71C054E5[1],true);
     }
     //dummyPropa
     else if (cmd == "dpa"){
@@ -247,43 +265,6 @@ bool onCommand(bool t,bool r){
     return true;
 }
 
-void onPostInit(){
-
-    libNtve_gf_ShareVisionofUnit(botUnit,true,1);
-
-    libNtve_gf_SetAllianceOneWay(2,1,libNtve_ge_AllianceSetting_Ally);   
-
-    UnitAbilityEnable(gv_71C054E5[1],"dbnu_spell_2_0",false);
-    UnitAbilityShow(gv_71C054E5[1],"dbnu_spell_2_0",false);
-
-    UnitAbilityEnable(gv_71C054E5[1],"dbnu_spell_2_1",true);
-    UnitAbilityShow(gv_71C054E5[1],"dbnu_spell_2_1",true);
-    createDialogs();
-
-    TriggerExecute(gt_0315FDBE, false, false);
-    
-    // libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_D11CB209, (("character\\interface\\face\\interface_face_" + IntToString(gv_131E8983[1]) + ".dds")), PlayerGroupSingle(1));
-
-    // libNtve_gf_SetDialogItemImage(gv_169C778B[0], gv_AA1BDB6C[gv_131E8983[1]], PlayerGroupSingle(1));
-    // libNtve_gf_SetDialogItemColor(gv_169C778B[1], libNtve_gf_ConvertPlayerColorToColor(PlayerGetColorIndex(1, false)), PlayerGroupSingle(1));
-    // libNtve_gf_SetDialogItemText(gv_169C778B[1], UnitTypeGetName(UnitGetType(gv_71C054E5[1])), PlayerGroupSingle(1));
-
-    // DialogControlSetVisible(gv_169C778B[0],PlayerGroupSingle(1),true);
-    // DialogControlSetVisible(gv_169C778B[1],PlayerGroupSingle(1),true);
-    gf_5B3578B1();
-    gf_1A8469C6();
-    gf_85CE78E1();
-
-    gv_BB284D6D = 1;
-    //timer
-    TriggerExecute(gt_50AA3CE2, false, false);
-
-    //ui
-    TriggerExecute(gt_0315FDBE, false, false);
-
-    DialogSetVisible(gv_17071D73, PlayerGroupAll(), false);
-    gf_5B3968D5();
-}
 
 int textTag;
 
@@ -457,6 +438,7 @@ bool onPanelClcik(bool t, bool r){
 
     string currentAbility;
     int i;
+    int j;
 
     if (rootDialog == gv_277B64A1)
     {
@@ -507,42 +489,73 @@ bool onPanelClcik(bool t, bool r){
         onTalentOptPanelClick();
     }
 
-    else if (eDialogControl == SELECT_BTN && DialogIsVisible(gv_BB156610.lv_5C8CC8E9[3], 1))
+    else if (eDialogControl == SELECT_BTN)
     {
-        // panelCycle(c_UIType_talentSelect);
-        // gf_D78F0E01(12);
-        
-        panelCycle(c_UIType_SKillSelect);
-
-        // Wait(1.0,c_timeReal);
-        // onPostInit();
+        if (DialogIsVisible(gv_BB156610.lv_5C8CC8E9[3], 1)){
+            panelCycle(c_UIType_talentSelect);
+            
+            panelCycle(c_UIType_SKillSelect);
+        }
+        else if (DialogIsVisible(gv_BB156610.lv_DC4A4CA5[0], 1)){
+            gf_D78F0E01(12);
+            Wait(1.0,c_timeReal);
+            onPostInit();
+        }
+     
     } 
     
     else if (eDialogControl == Dialogs.main_menu.noCoolDownBtn.btn){
-        currentAbility = "";
-        for (;i<50;i+=1){
-            if (UnitAbilityGet(gv_71C054E5[1],i) != ""){
+        // currentAbility = "";
+        // for (;i<50;i+=1){
+        //     if (UnitAbilityGet(gv_71C054E5[1],i) != ""){
+        //         currentAbility = UnitAbilityGet(gv_71C054E5[1],i);
+        //         showMsg(1,currentAbility);
+        //         Wait(1,c_timeGame);
+        //         if (currentAbility != "stop" || currentAbility != "attack" || currentAbility != "move"){
+        //             libNtve_gf_UnitAbilityRemoveCooldown(gv_71C054E5[1],
+        //                 currentAbility,"Abil/" +currentAbility);
+        //         }
 
-                // libNtve_gf_PlayerRemoveCooldown()
-
-                currentAbility = UnitAbilityGet(gv_71C054E5[1],i);
-                if (currentAbility != "stop" || currentAbility != "attack" || currentAbility != "move"){
-                    libNtve_gf_UnitAbilityRemoveCooldown(gv_71C054E5[1],
-                        currentAbility,"Abil/" +currentAbility);
-                }
-            }
-        }
+        //         if (currentAbility == "dbnu_spell_1_0"){
+        //              UnitClearCooldowns(gv_71C054E5[1],true);
+        //         }
+        //     }
+            
+        // }
+        UnitClearCooldowns(gv_71C054E5[1],true);
     }
 
     else if (eDialogControl == Dialogs.main_menu.upgradeHeroBtn.btn){
         UnitXPSetCurrentLevel(gv_71C054E5[1],null,MinI(UnitXPGetCurrentLevel(gv_71C054E5[1],null) + 1,36));
     }
 
-    // else if (gf_9C62D140(eDialogControl) != 99){
-    //     showMsg(1,IntToString(eDialogControl));
-    // }
-    
+    //技能选择
+    else if (rootDialog == gv_BB156610.lv_DC4A4CA5[0] ||
+        rootDialog == gv_BB156610.lv_DC4A4CA5[1] ||
+        rootDialog == gv_BB156610.lv_DC4A4CA5[2] || 
+        rootDialog == gv_BB156610.lv_DC4A4CA5[3] ||
+        rootDialog == gv_BB156610.lv_DC4A4CA5[4]){
 
+            for (i = 0; i < 5; i += 1) {
+
+                for (j = 0; j < 5; j += 1) {
+                    //判断是哪一个技能按键
+                    if (eDialogControl == gv_BB156610.lv_52872E19[i][j]){
+                        //转置一下
+                        gf_2784DE6E(1, j, i);  
+                    }
+                }
+        
+                // gv_BB156610.lv_0195430E[player][i] = StringToInt(StringWord(str,101 + i));
+                // j = gv_BB156610.lv_0195430E[player][i];
+        
+                // DialogControlSetEnabled(gv_BB156610.lv_429AF84E[i][j], PlayerGroupSingle(player), true);
+                // DialogControlSetEnabled(gv_BB156610.lv_0F36D2DD[i][j], PlayerGroupSingle(player), true);
+                // libNtve_gf_SetDialogItemImage(gv_BB156610.lv_0F36D2DD[i][j], "character\\newroon\\border\\my_roon_system_border_white.dds", PlayerGroupSingle(player));
+                // DialogControlSetVisible(gv_BB156610.lv_0B0B9E92[i][j], PlayerGroupSingle(player), true);               
+            }
+
+            }
     return true;
 }
 

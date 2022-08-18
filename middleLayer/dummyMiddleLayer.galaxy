@@ -54,7 +54,7 @@ void panelCycle(int type){
             {
                 DialogCreate(240, 80, c_anchorCenter, 0, 0, true);
         
-                DialogSetPositionRelative(DialogLastCreated(), c_anchorCenter, gv_BB156610.lv_5C8CC8E9[2], c_anchorBottom, 0, 0);
+                DialogSetPositionRelative(DialogLastCreated(), c_anchorCenter, gv_BB156610.lv_5C8CC8E9[2], c_anchorTop, 0, -100);
         
                 DialogSetImageVisible(DialogLastCreated(), false);
         
@@ -79,13 +79,12 @@ void panelCycle(int type){
             DialogSetVisible(gv_BB156610.lv_5C8CC8E9[3], PlayerGroupActive(), true);   
             DialogSetVisible(gv_BB156610.lv_5C8CC8E9[4], PlayerGroupActive(), true);
         
-            offsetX = 50;
-        
-            DialogSetPosition(gv_BB156610.lv_5C8CC8E9[0], c_anchorTopLeft, offsetX + 50, 0);   
-            DialogSetPositionRelative(gv_BB156610.lv_5C8CC8E9[1], c_anchorCenter, gv_BB156610.lv_5C8CC8E9[0], c_anchorRight, (offsetX + 280 / 2), 0);    
-            DialogSetPositionRelative(gv_BB156610.lv_5C8CC8E9[2], c_anchorCenter, gv_BB156610.lv_5C8CC8E9[1], c_anchorRight, (offsetX + 280 / 2), 0);    
-            DialogSetPositionRelative(gv_BB156610.lv_5C8CC8E9[3], c_anchorCenter, gv_BB156610.lv_5C8CC8E9[2], c_anchorRight, (offsetX + 280 / 2), 0);
-            DialogSetPositionRelative(gv_BB156610.lv_5C8CC8E9[4], c_anchorCenter, gv_BB156610.lv_5C8CC8E9[3], c_anchorRight, (offsetX + 280 / 2), 0);
+            // offsetX = 50;
+            // DialogSetPosition(gv_BB156610.lv_5C8CC8E9[0], c_anchorLeft, offsetX, 0);   
+            // DialogSetPositionRelative(gv_BB156610.lv_5C8CC8E9[1], c_anchorCenter, gv_BB156610.lv_5C8CC8E9[0], c_anchorRight, (offsetX + 280 / 2), 0);    
+            // DialogSetPositionRelative(gv_BB156610.lv_5C8CC8E9[2], c_anchorCenter, gv_BB156610.lv_5C8CC8E9[1], c_anchorRight, (offsetX + 280 / 2), 0);    
+            // DialogSetPositionRelative(gv_BB156610.lv_5C8CC8E9[3], c_anchorCenter, gv_BB156610.lv_5C8CC8E9[2], c_anchorRight, (offsetX + 280 / 2), 0);
+            // DialogSetPositionRelative(gv_BB156610.lv_5C8CC8E9[4], c_anchorCenter, gv_BB156610.lv_5C8CC8E9[3], c_anchorRight, (offsetX + 280 / 2), 0);
 
             for (i = 0; i < 18; i += 1)
             {
@@ -119,17 +118,29 @@ void panelCycle(int type){
             }
         } 
     else if (type == c_UIType_SKillSelect){
+
+        DialogControlSetVisible(SELECT_BTN, defaultPlayerGroup, true);
+
         TriggerExecute(gt_597AD091,false,true);
         DialogSetVisible(gv_BB156610.lv_DC4A4CA5[0], PlayerGroupSingle(1), true);
         DialogSetVisible(gv_BB156610.lv_DC4A4CA5[1], PlayerGroupSingle(1), true);
         DialogSetVisible(gv_BB156610.lv_DC4A4CA5[2], PlayerGroupSingle(1), true);
         DialogSetVisible(gv_BB156610.lv_DC4A4CA5[3], PlayerGroupSingle(1), true);
         DialogSetVisible(gv_BB156610.lv_DC4A4CA5[4], PlayerGroupSingle(1), true);
-        Wait(0.105, c_timeGame);
         DialogControlSetVisible(gv_C8C6EA72[3], PlayerGroupSingle(1), true);
         DialogControlSetEnabled(gv_ECE9BB7D[0], PlayerGroupSingle(1), false);
         DialogControlSetEnabled(gv_ECE9BB7D[1], PlayerGroupSingle(1), false);
         DialogControlSetEnabled(gv_ECE9BB7D[2], PlayerGroupSingle(1), false);
+
+        // offsetX = 50;
+        // DialogSetPosition(gv_BB156610.lv_DC4A4CA5[0], c_anchorLeft, offsetX, 0);   
+        // DialogSetPositionRelative(gv_BB156610.lv_DC4A4CA5[1], c_anchorCenter, gv_BB156610.lv_DC4A4CA5[0], c_anchorRight, (offsetX + 280 / 2), 0);    
+        // DialogSetPositionRelative(gv_BB156610.lv_DC4A4CA5[2], c_anchorCenter, gv_BB156610.lv_DC4A4CA5[1], c_anchorRight, (offsetX + 280 / 2), 0);    
+        // DialogSetPositionRelative(gv_BB156610.lv_DC4A4CA5[3], c_anchorCenter, gv_BB156610.lv_DC4A4CA5[2], c_anchorRight, (offsetX + 280 / 2), 0);
+        // DialogSetPositionRelative(gv_BB156610.lv_DC4A4CA5[4], c_anchorCenter, gv_BB156610.lv_DC4A4CA5[3], c_anchorRight, (offsetX + 280 / 2), 0);
+
+        //更新技能图标并显示
+        TriggerExecute(gt_27AD87BA,false,true);
     }
 
 } 
