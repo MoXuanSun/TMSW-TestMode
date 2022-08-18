@@ -1,0 +1,464 @@
+//GongSun_ink 2022
+
+int c_UIType_heroSelect = 1;
+int c_UIType_talentSelect = 2;
+int c_UIType_additionalSkillSelect = 3;
+int c_UIType_SKillSelect = 4;
+int c_UIType_additionalPropSelect;
+
+int SELECT_BTN;
+
+void panelCycle(int type){
+
+    int offsetX;
+    int i;
+    int j;
+
+    int player = 1;
+    
+    playergroup defaultPlayerGroup = PlayerGroupAll();
+
+    if (type == c_UIType_heroSelect){
+        if (gv_277B64A1 == c_invalidDialogId){
+            TriggerExecute(gt_7903E3D3, true, true);
+        }
+        else if (DialogIsVisible(gv_277B64A1,EventPlayer())){
+            DialogSetVisible(gv_277B64A1,defaultPlayerGroup,false);
+            //lock func
+        }else {
+            DialogSetVisible(gv_277B64A1,defaultPlayerGroup,true);
+        }
+    }
+    else if (type == c_UIType_talentSelect){
+        if (DialogControlIsVisible(SELECT_BTN,1)){
+            DialogControlSetVisible(SELECT_BTN, defaultPlayerGroup, false);
+
+            DialogSetVisible(gv_BB156610.lv_5C8CC8E9[0], PlayerGroupActive(), false);
+        
+            DialogSetVisible(gv_BB156610.lv_5C8CC8E9[1], PlayerGroupActive(), false);
+        
+            DialogSetVisible(gv_BB156610.lv_5C8CC8E9[2], PlayerGroupActive(), false);
+        
+            DialogSetVisible(gv_BB156610.lv_5C8CC8E9[3], PlayerGroupActive(), false);
+        
+            DialogSetVisible(gv_BB156610.lv_5C8CC8E9[4], PlayerGroupActive(), false);
+        
+        }
+        else{    
+            if (gv_BB156610.lv_5C8CC8E9[0] == c_invalidDialogId)
+            {
+                TriggerExecute(gt_509C5828, true, true);
+            }
+        
+            if (SELECT_BTN == c_invalidDialogId)
+            {
+                DialogCreate(240, 80, c_anchorCenter, 0, 0, true);
+        
+                DialogSetPositionRelative(DialogLastCreated(), c_anchorCenter, gv_BB156610.lv_5C8CC8E9[2], c_anchorBottom, 0, 0);
+        
+                DialogSetImageVisible(DialogLastCreated(), false);
+        
+                DialogSetVisible(DialogLastCreated(), PlayerGroupActive(), true);
+        
+                libNtve_gf_CreateDialogItemButton(DialogLastCreated(), 232, 74, c_anchorCenter, 0, 0, null, StringToText("确认"), "");
+                libNtve_gf_SetDialogItemImage(DialogControlLastCreated(), "GamesUis\\MyG_BTN_Alpha.dds", defaultPlayerGroup);
+                libNtve_gf_SetDialogItemImage2(DialogControlLastCreated(), "GamesUis\\MyG_All_Blue.dds", defaultPlayerGroup);
+        
+                SELECT_BTN = DialogControlLastCreated();
+                DialogControlSetEnabled(SELECT_BTN, defaultPlayerGroup, true);
+            }
+        
+            DialogControlSetVisible(SELECT_BTN, defaultPlayerGroup, true);
+
+             
+            //---------------------------------------------------------------------------------
+
+            DialogSetVisible(gv_BB156610.lv_5C8CC8E9[0], PlayerGroupActive(), true);   
+            DialogSetVisible(gv_BB156610.lv_5C8CC8E9[1], PlayerGroupActive(), true);    
+            DialogSetVisible(gv_BB156610.lv_5C8CC8E9[2], PlayerGroupActive(), true);    
+            DialogSetVisible(gv_BB156610.lv_5C8CC8E9[3], PlayerGroupActive(), true);   
+            DialogSetVisible(gv_BB156610.lv_5C8CC8E9[4], PlayerGroupActive(), true);
+        
+            offsetX = 50;
+        
+            DialogSetPosition(gv_BB156610.lv_5C8CC8E9[0], c_anchorTopLeft, offsetX + 50, 0);   
+            DialogSetPositionRelative(gv_BB156610.lv_5C8CC8E9[1], c_anchorCenter, gv_BB156610.lv_5C8CC8E9[0], c_anchorRight, (offsetX + 280 / 2), 0);    
+            DialogSetPositionRelative(gv_BB156610.lv_5C8CC8E9[2], c_anchorCenter, gv_BB156610.lv_5C8CC8E9[1], c_anchorRight, (offsetX + 280 / 2), 0);    
+            DialogSetPositionRelative(gv_BB156610.lv_5C8CC8E9[3], c_anchorCenter, gv_BB156610.lv_5C8CC8E9[2], c_anchorRight, (offsetX + 280 / 2), 0);
+            DialogSetPositionRelative(gv_BB156610.lv_5C8CC8E9[4], c_anchorCenter, gv_BB156610.lv_5C8CC8E9[3], c_anchorRight, (offsetX + 280 / 2), 0);
+
+            for (i = 0; i < 18; i += 1)
+            {
+                for (j = 0; j < 5; j += 1)
+                {
+                    DialogControlSetEnabled(gv_BB156610.lv_18A4806A[j][i], PlayerGroupSingle(player), true);
+                    if (j == 0)
+                    {
+                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(96.08, 98.43, 70.98), defaultPlayerGroup);
+                    }
+                    else if (j == 1)
+                    {
+                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(82.35, 50.98, 48.24), defaultPlayerGroup);
+                    }
+                    else if (j == 2)
+                    {
+                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(88.24, 70.20, 98.43), defaultPlayerGroup);
+                    }
+                    else if (j == 3)
+                    {
+                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(72.16, 98.43, 70.98), defaultPlayerGroup);
+                    }
+                    else if (j == 4)
+                    {
+                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(70.98, 93.33, 98.43), defaultPlayerGroup);
+                    }
+                        DialogControlSetEnabled(gv_BB156610.lv_E2A89576[j][i], PlayerGroupSingle(player), true);
+                        DialogControlSetEnabled(gv_BB156610.lv_DEE7AA8A[j][i], PlayerGroupSingle(player), true);
+                    }
+                }
+            }
+        } 
+    else if (type == c_UIType_SKillSelect){
+        TriggerExecute(gt_597AD091,false,true);
+        DialogSetVisible(gv_BB156610.lv_DC4A4CA5[0], PlayerGroupSingle(1), true);
+        DialogSetVisible(gv_BB156610.lv_DC4A4CA5[1], PlayerGroupSingle(1), true);
+        DialogSetVisible(gv_BB156610.lv_DC4A4CA5[2], PlayerGroupSingle(1), true);
+        DialogSetVisible(gv_BB156610.lv_DC4A4CA5[3], PlayerGroupSingle(1), true);
+        DialogSetVisible(gv_BB156610.lv_DC4A4CA5[4], PlayerGroupSingle(1), true);
+        Wait(0.105, c_timeGame);
+        DialogControlSetVisible(gv_C8C6EA72[3], PlayerGroupSingle(1), true);
+        DialogControlSetEnabled(gv_ECE9BB7D[0], PlayerGroupSingle(1), false);
+        DialogControlSetEnabled(gv_ECE9BB7D[1], PlayerGroupSingle(1), false);
+        DialogControlSetEnabled(gv_ECE9BB7D[2], PlayerGroupSingle(1), false);
+    }
+
+} 
+
+void loadAraneUI(){
+    //ui
+    TriggerExecute(gt_1C5C641A, true, true);
+    //?
+    TriggerExecute(gt_9B48566C, true, true);
+    //升级按钮创建
+    TriggerExecute(gt_6C558B0C, true, true);
+    //handle
+    TriggerExecute(gt_965A63A0, true, true);
+    //天赋？
+    TriggerExecute(gt_7988D49E, false, true);
+    //UI
+    //tab
+    TriggerExecute(gt_EFE165C0, true, true);
+    //加点ui
+    TriggerExecute(gt_C723D23B, true, true);
+    //?
+    TriggerExecute(gt_D3F02B96, true, true);
+    //参数录入
+    TriggerExecute(gt_A6596446, true, true);
+    //ui
+    //?
+    TriggerExecute(gt_0C3CB411, true, true);
+
+    //信息
+    TriggerExecute(gt_33A76FD1, true, true);
+    //bank
+    TriggerExecute(gt_8F0F4A51, false, false);
+    //ui
+
+    //setings etc
+    TriggerExecute(gt_39E9F3AC, false, false);
+    TriggerExecute(gt_7E1E7511, false, false);
+    TriggerExecute(gt_63B72605, false, false);
+    TriggerExecute(gt_C04D8CFD, false, false);
+    //血量 护盾处理
+    TriggerEnable(gt_A334548C, true);
+    //emeny hud
+    TriggerEnable(gt_5E391F04, true);
+
+    //创建致命伤害显示ui
+    TriggerExecute(gt_BEAA2115, false, false);
+    TriggerExecute(gt_6A0C33ED, false, false);
+
+    DialogSetVisible(gv_17071D73, PlayerGroupAll(), false);
+}
+
+// void playerSummonHero(int inPlayer, int heroId){
+
+//         lv_52378F9E[0] = PointFromId(36);
+//         lv_52378F9E[1] = PointFromId(37);
+//         playerId = 1;
+//                 gf_3A83C136(playerId);
+//                 TechTreeUpgradeAddLevel(playerId, "roundupgradeTotal", 1);
+//                 gf_35172460(playerId, 0);
+//                 if (((gv_131E8983[playerId] == 19) || (gv_131E8983[playerId] == 43)))
+//                 {
+//                     //克劳和四季
+//                     if ((gv_131E8983[playerId] == 19))
+//                     {
+//                         if ((UnitGetOwner(UnitFromId(20)) == 0))
+//                         {
+//                             libNtve_gf_ShowHideUnit(UnitFromId(20), true);
+//                             UnitSetOwner(UnitFromId(20), playerId, true);
+//                             UnitSetPosition(UnitFromId(20), RegionRandomPoint(RegionCircle(lv_52378F9E[gv_9EEEA78D[playerId]], lv_02165E4C)), false);
+//                             gv_71C054E5[playerId] = UnitFromId(20);
+//                             gv_5F6F4890[0] = playerId;
+//                             UnitCreateEffectUnit(UnitFromId(20), "effectclickss2", UnitFromId(20));
+//                             TriggerEnable(gt_06F46C59, true);
+//                             TriggerEnable(gt_B8A29486, true);
+//                         }
+//                         else
+//                         {
+//                             libNtve_gf_ShowHideUnit(UnitFromId(608), true);
+//                             UnitSetOwner(UnitFromId(608), playerId, true);
+//                             UnitSetPosition(UnitFromId(608), RegionRandomPoint(RegionCircle(lv_52378F9E[gv_9EEEA78D[playerId]], lv_02165E4C)), false);
+//                             gv_71C054E5[playerId] = UnitFromId(608);
+//                             gv_5F6F4890[1] = playerId;
+//                             UnitCreateEffectUnit(UnitFromId(608), "effectclickss2", UnitFromId(608));
+//                             TriggerEnable(gt_6E4F8EAE, true);
+//                             TriggerEnable(gt_CC047C8E, true);
+//                         }
+//                     }
+//                     else if ((gv_131E8983[playerId] == 43))
+//                     {
+//                         if ((UnitGetOwner(UnitFromId(1657007678)) == 0))
+//                         {
+//                             libNtve_gf_ShowHideUnit(UnitFromId(1657007678), true);
+//                             UnitSetOwner(UnitFromId(1657007678), playerId, true);
+//                             UnitSetPosition(UnitFromId(1657007678), RegionRandomPoint(RegionCircle(lv_52378F9E[gv_9EEEA78D[playerId]], lv_02165E4C)), false);
+//                             gv_71C054E5[playerId] = UnitFromId(1657007678);
+//                             gv_D07DF7B9[0] = playerId;
+//                             UnitCreateEffectUnit(UnitFromId(1657007678), "effectclickss", UnitFromId(1657007678));
+//                             TriggerEnable(gt_9F080E6C, true);
+//                         }
+//                         else
+//                         {
+//                             libNtve_gf_ShowHideUnit(UnitFromId(168525155), true);
+//                             UnitSetOwner(UnitFromId(168525155), playerId, true);
+//                             UnitSetPosition(UnitFromId(168525155), RegionRandomPoint(RegionCircle(lv_52378F9E[gv_9EEEA78D[playerId]], lv_02165E4C)), false);
+//                             gv_71C054E5[playerId] = UnitFromId(168525155);
+//                             gv_D07DF7B9[1] = playerId;
+//                             UnitCreateEffectUnit(UnitFromId(168525155), "effectclickss", UnitFromId(168525155));
+//                             TriggerEnable(gt_64FD760E, true);
+//                         }
+//                     }
+//                 }
+//                 else
+//                 {
+//                     //创建英雄
+//                     libNtve_gf_CreateUnitsWithDefaultFacing(1, gv_367C7760[gv_131E8983[playerId]], c_unitCreateIgnorePlacement, playerId, RegionRandomPoint(RegionCircle(lv_52378F9E[gv_9EEEA78D[playerId]], lv_02165E4C)));
+//                     gv_71C054E5[playerId] = UnitLastCreated();                   
+//                 }
+//                 //保存英雄到bank
+//                 saveHero(playerId,gv_367C7760[gv_131E8983[playerId]]);
+//                 gv_305DA55D[playerId] = true;
+//                 //单位设置队伍颜色
+//                 if ((gv_9EEEA78D[playerId] == 0))
+//                 {
+//                     UnitSetTeamColorIndex(gv_71C054E5[playerId], 5);
+//                 }
+//                 else
+//                 {
+//                     UnitSetTeamColorIndex(gv_71C054E5[playerId], 8);
+//                 }
+//                 //启用或禁用技能
+//                 gf_ED9D4333(gv_71C054E5[playerId], playerId);
+//                 UnitSelect(gv_71C054E5[playerId], playerId, true);
+//                 //添加行为
+                
+//                 //老兵行为
+//                 UnitBehaviorAddPlayer(gv_71C054E5[playerId], "dbdo_ex", playerId, 1);
+                
+//                 UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie", playerId, 1);
+//                 UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie4", playerId, 1);
+//                 UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie42", playerId, 1);
+//                 UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie2", playerId, 1);
+//                 DialogSetVisible(gv_782416F1, PlayerGroupSingle(playerId), true);
+
+//                 //移动每个玩家的视角到单位
+//                 CameraPan(playerId, UnitGetPosition(gv_71C054E5[playerId]), 0.85, -1, 25.0, false);
+//                 gv_55A8AB50[playerId] += 1;
+//                 gv_48E7CC05[gv_9EEEA78D[playerId]] += 1;
+//                 UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie25", playerId, 1);
+//                 UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie23", playerId, 1);
+//                 UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie24res", playerId, 1);
+                
+//                 //快乐冲锋
+//                 gf_20271FB9(playerId);
+                
+//                 if ((gv_131E8983[playerId] == 1) && (gv_BB156610.lv_0195430E[playerId][0] == 1))
+//                 {
+//                     UnitBehaviorAdd(gv_71C054E5[playerId], "nodie3", gv_71C054E5[playerId], 1);
+//                     UnitBehaviorAdd(gv_71C054E5[playerId], "nodie32", gv_71C054E5[playerId], 1);
+//                     UnitBehaviorAdd(gv_71C054E5[playerId], "nodie322", gv_71C054E5[playerId], 1);
+//                     UnitBehaviorRemove(gv_71C054E5[playerId], "nodie", 1);
+//                     UnitBehaviorRemove(gv_71C054E5[playerId], "nodie4", 1);
+//                     UnitBehaviorRemove(gv_71C054E5[playerId], "nodie42", 1);
+//                 }
+//                 if ((gv_131E8983[playerId] == 49) && (gv_BB156610.lv_0195430E[playerId][0] == 0))
+//                 {
+//                     UnitBehaviorAdd(gv_71C054E5[playerId], "dbdo49_1_0t_16", gv_71C054E5[playerId], 1);
+//                     UnitBehaviorAdd(gv_71C054E5[playerId], "dbdo49_1_0t_506", gv_71C054E5[playerId], 1);
+//                     UnitBehaviorAdd(gv_71C054E5[playerId], "dbdo49_1_0t_600", gv_71C054E5[playerId], 1);
+//                     UnitBehaviorRemove(gv_71C054E5[playerId], "nodie", 1);
+//                     UnitBehaviorRemove(gv_71C054E5[playerId], "nodie4", 1);
+//                     UnitBehaviorRemove(gv_71C054E5[playerId], "nodie42", 1);
+//                 }
+//                 if ((gv_131E8983[playerId] == 1) && (gv_BB156610.lv_0195430E[playerId][0] == 1))
+//                 {
+//                     UnitBehaviorAdd(gv_71C054E5[playerId], "nodie3", gv_71C054E5[playerId], 1);
+//                     UnitBehaviorAdd(gv_71C054E5[playerId], "nodie32", gv_71C054E5[playerId], 1);
+//                     UnitBehaviorAdd(gv_71C054E5[playerId], "nodie322", gv_71C054E5[playerId], 1);
+//                     UnitBehaviorRemove(gv_71C054E5[playerId], "nodie", 1);
+//                     UnitBehaviorRemove(gv_71C054E5[playerId], "nodie4", 1);
+//                     UnitBehaviorRemove(gv_71C054E5[playerId], "nodie42", 1);
+//                 }
+//                 if ((gv_131E8983[playerId] == 1) && (gv_BB156610.lv_0195430E[playerId][0] == 0))
+//                 {
+//                     UnitBehaviorAdd(gv_71C054E5[playerId], "siyadammm", gv_71C054E5[playerId], 1);
+//                 }
+//                 if ((gv_131E8983[playerId] == 10))
+//                 {
+//                     TriggerEnable(gt_24D8433E, true);
+//                 }
+//                 if ((gv_131E8983[playerId] == 10) && (gv_BB156610.lv_0195430E[playerId][0] == 0))
+//                 {
+//                     UnitBehaviorAdd(gv_71C054E5[playerId], "dbdo_10_1_0t", gv_71C054E5[playerId], 1);
+//                 }
+//                 if ((gv_131E8983[playerId] == 14))
+//                 {
+//                     if ((gv_BB156610.lv_0195430E[playerId][0] == 0))
+//                     {
+//                         TechTreeUpgradeAddLevel(playerId, "dbup_14_1_0t", 1);
+//                     }
+//                     if ((gv_BB156610.lv_0195430E[playerId][0] == 1) && (gv_BB156610.lv_0195430E[playerId][1] == 1) && (gv_BB156610.lv_0195430E[playerId][3] == 1))
+//                     {
+//                         TechTreeUpgradeAddLevel(playerId, "dbup_14_2_4r", 1);
+//                     }
+//                 }
+//                 if ((gv_131E8983[playerId] == 19) && (gv_BB156610.lv_0195430E[playerId][0] == 0))
+//                 {
+//                     UnitBehaviorAdd(gv_71C054E5[playerId], "dbdo_19_1_0t_03", gv_71C054E5[playerId], 1);
+//                 }
+//                 if ((gv_131E8983[playerId] == 8))
+//                 {
+//                     TriggerEnable(gt_D5601087, true);
+//                     TriggerEnable(gt_07C5E602, true);
+//                 }
+//                 if ((gv_131E8983[playerId] == 8) && (gv_BB156610.lv_0195430E[playerId][0] == 0))
+//                 {
+//                     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "dbdo_08_1_0t", playerId, 1);
+//                     libNtve_gf_CreateUnitsWithDefaultFacing(1, "dbyu08_1_0t", c_unitCreateIgnorePlacement, playerId, UnitGetPosition(gv_71C054E5[playerId]));
+//                     gv_E7EDB9D8[playerId] = UnitLastCreated();
+//                     UnitStatusBarOverride(UnitLastCreated(), c_unitStatusGroupOwner);
+//                 }
+//                 if ((gv_69CED423[playerId] >= 1))
+//                 {
+//                     CameraFollowUnitGroup(playerId, libNtve_gf_ConvertUnitToUnitGroup(gv_71C054E5[playerId]), true, false);
+//                 }
+//                 else
+//                 {
+//                     CameraFollowUnitGroup(playerId, libNtve_gf_ConvertUnitToUnitGroup(gv_71C054E5[playerId]), false, false);
+//                 }
+//                 //玩家技能可升级点数+1
+//                 gv_63B35897[playerId] = 1;
+//                 //没有用的函数
+//                 gf_E21FB1A1(gv_71C054E5[playerId]);
+//                 //技能升级函数
+//                 gf_91088DA7(playerId);
+//                 //技能组
+//                 gf_C71F331B(playerId);
+//                 //初始属性加点
+//                 gf_C4DA1C21(playerId);
+//                 //技能组第二部分
+//                 gf_08CCA537(playerId);
+//                 //天赋
+//                 gf_D5AA5B4B(playerId);
+//                 //天赋
+//                 gf_63372EA8(playerId);
+//                 //天赋
+//                 gf_17113C81(gv_71C054E5[playerId]);
+//                 //天赋
+//                 gf_1DA6D503(gv_71C054E5[playerId]);
+//                 UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropLifePercent, 100.0);
+//                 //除四季外 其他英雄重生后回复85%能量
+//                 if ((UnitGetType(gv_71C054E5[playerId]) != "dbHero43"))
+//                 {
+//                     UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropEnergyPercent, 85.0);
+//                 }
+//                 else
+//                 {
+//                     UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropEnergyPercent, 0.0);
+//                 }
+//                 gf_67CE0F82(gv_71C054E5[playerId]);
+//         gf_5B3578B1();
+//         gf_1A8469C6();
+//         gf_85CE78E1();
+//         //作者自定义的测试模式
+//         if ((gv_6AE4610B == true))
+//         {
+//             PlayerModifyPropertyInt(1, c_playerPropMinerals, c_playerPropOperAdd, 100000);
+//             playerId = 2;
+//             for (; ((auto3BBF4BB6_ai >= 0 && playerId <= auto3BBF4BB6_ae) || (auto3BBF4BB6_ai < 0 && playerId >= auto3BBF4BB6_ae)); playerId += auto3BBF4BB6_ai)
+//             {
+//                 UnitBehaviorAdd(gv_71C054E5[playerId], "nodie222", gv_71C054E5[playerId], 1);
+//             }
+//             UnitBehaviorAdd(gv_71C054E5[1], "nodie22", gv_71C054E5[1], 1);
+//             VisRevealerCreate(1, RegionEntireMap());
+//             playerId = 2;
+//             for (; ((auto194959B9_ai >= 0 && playerId <= auto194959B9_ae) || (auto194959B9_ai < 0 && playerId >= auto194959B9_ae)); playerId += auto194959B9_ai)
+//             {
+//                 UnitBehaviorRemove(gv_71C054E5[playerId], "nodie2", 1);
+//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_q", 1);
+//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_w", 1);
+//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_w2", 1);
+//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_e", 1);
+//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_e2", 1);
+//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_e22", 1);
+//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_r", 1);
+//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_r2", 1);
+//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_r22", 1);
+//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_r222", 1);
+//                 TechTreeUpgradeAddLevel(playerId, "dbup_ablv_q_plus", 1);
+//                 TechTreeUpgradeAddLevel(playerId, "dbup_ablv_w_plus", 1);
+//                 TechTreeUpgradeAddLevel(playerId, "dbup_ablv_e_plus", 1);
+//                 TechTreeUpgradeAddLevel(playerId, "dbup_ablv_r_plus", 1);
+//             }
+//         }
+//         gv_BB284D6D = 1;
+//         //timer
+//         TriggerExecute(gt_50AA3CE2, false, false);
+
+//         //作者handle
+//         TriggerExecute(gt_D05F9FF2, false, false);
+//         //ui
+//         TriggerExecute(gt_0315FDBE, false, false);
+
+//         //?????
+//         Wait(0.2, c_timeGame);
+//         DialogSetVisible(gv_17071D73, PlayerGroupAll(), false);
+//         Wait(0.1, c_timeGame);
+//         DialogSetVisible(gv_17071D73, PlayerGroupAll(), false);
+//         Wait(0.1, c_timeGame);
+//         DialogSetVisible(gv_17071D73, PlayerGroupAll(), false);
+
+//         gf_AA586BEC((StringExternal("Param/Value/572E854E") + (IntToText(gv_8D37EDF7) +
+//          StringExternal("Button/Tooltip/db_txt_preset_zameText_80"))), 3.6, false);
+//         gf_AA586BEC(StringExternal("Param/Value/D2C5FC8E"), 5.5, false);
+//         if ((gv_5F6F4890[0] == 0))
+//         {
+//             UnitRemove(UnitFromId(20));
+//         }
+//         if ((gv_5F6F4890[1] == 0))
+//         {
+//             UnitRemove(UnitFromId(608));
+//         }
+//         if ((gv_D07DF7B9[0] == 0))
+//         {
+//             UnitRemove(UnitFromId(1657007678));
+//         }
+//         if ((gv_D07DF7B9[1] == 0))
+//         {
+//             UnitRemove(UnitFromId(168525155));
+//         }
+//         gf_5B3968D5();
+  
+// }
