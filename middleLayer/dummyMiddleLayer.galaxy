@@ -6,7 +6,42 @@ int c_UIType_additionalSkillSelect = 3;
 int c_UIType_SKillSelect = 4;
 int c_UIType_additionalPropSelect;
 
+int v_additionalSelect = 1;
+int v_heroSelect = 2;
+int v_roundInit = 3;
+
 int SELECT_BTN;
+
+playergroup defaultPlayerGroup = PlayerGroupSingle(1);
+int defaultPlayer = 1;
+
+//---------------------------------------Tools-------------------------------------
+
+int queryPlayerHeroId(int playerId){
+    return gv_131E8983[playerId];
+}
+
+unit queryPlayerHeroUnit(int playerId){
+    return gv_71C054E5[playerId];
+}
+
+void gameSoundPlayer(int type){
+    if (type == v_additionalSelect){
+        SoundPlay(SoundLink("sounduistarclick",-1),defaultPlayerGroup,100.0,0.0);
+    }
+    else if (type == v_heroSelect){
+        SoundPlay(SoundLink("sounduistar12",-1),defaultPlayerGroup,100.0,0.0);
+    }
+    else if (tyoe == v_roundInit){
+        SoundPlay(SoundLink("UI_ConsoleIn_Prot2", -1), PlayerGroupAll(), 100.0, 0.0);
+    }
+}
+
+int getHeroIdByUnit(unit inUnit){
+    return StringToInt(StringSub(UnitGetType(inUnit),7,8));
+}
+
+//---------------------------------------onClick-----------------------------------------
 
 void panelCycle(int type){
 
@@ -118,20 +153,35 @@ void panelCycle(int type){
             }
         } 
     else if (type == c_UIType_SKillSelect){
-
-        DialogControlSetVisible(SELECT_BTN, defaultPlayerGroup, true);
-
-        TriggerExecute(gt_597AD091,false,true);
-        DialogSetVisible(gv_BB156610.lv_DC4A4CA5[0], PlayerGroupSingle(1), true);
-        DialogSetVisible(gv_BB156610.lv_DC4A4CA5[1], PlayerGroupSingle(1), true);
-        DialogSetVisible(gv_BB156610.lv_DC4A4CA5[2], PlayerGroupSingle(1), true);
-        DialogSetVisible(gv_BB156610.lv_DC4A4CA5[3], PlayerGroupSingle(1), true);
-        DialogSetVisible(gv_BB156610.lv_DC4A4CA5[4], PlayerGroupSingle(1), true);
-        DialogControlSetVisible(gv_C8C6EA72[3], PlayerGroupSingle(1), true);
-        DialogControlSetEnabled(gv_ECE9BB7D[0], PlayerGroupSingle(1), false);
-        DialogControlSetEnabled(gv_ECE9BB7D[1], PlayerGroupSingle(1), false);
-        DialogControlSetEnabled(gv_ECE9BB7D[2], PlayerGroupSingle(1), false);
-
+        
+        if (gv_BB156610.lv_DC4A4CA5[0] == c_invalidDialogId){
+            TriggerExecute(gt_597AD091,false,true);
+        }
+        if (DialogIsVisible(gv_BB156610.lv_DC4A4CA5[0],1)){
+            DialogControlSetVisible(SELECT_BTN, defaultPlayerGroup, false);
+            DialogSetVisible(gv_BB156610.lv_DC4A4CA5[0], PlayerGroupSingle(1), false);
+            DialogSetVisible(gv_BB156610.lv_DC4A4CA5[1], PlayerGroupSingle(1), false);
+            DialogSetVisible(gv_BB156610.lv_DC4A4CA5[2], PlayerGroupSingle(1), false);
+            DialogSetVisible(gv_BB156610.lv_DC4A4CA5[3], PlayerGroupSingle(1), false);
+            DialogSetVisible(gv_BB156610.lv_DC4A4CA5[4], PlayerGroupSingle(1), false);
+            DialogControlSetVisible(gv_C8C6EA72[3], PlayerGroupSingle(1), true);
+            DialogControlSetEnabled(gv_ECE9BB7D[0], PlayerGroupSingle(1), false);
+            DialogControlSetEnabled(gv_ECE9BB7D[1], PlayerGroupSingle(1), false);
+            DialogControlSetEnabled(gv_ECE9BB7D[2], PlayerGroupSingle(1), false);
+        }
+        else {
+            DialogControlSetVisible(SELECT_BTN, defaultPlayerGroup, true);
+            DialogSetVisible(gv_BB156610.lv_DC4A4CA5[0], PlayerGroupSingle(1), true);
+            DialogSetVisible(gv_BB156610.lv_DC4A4CA5[1], PlayerGroupSingle(1), true);
+            DialogSetVisible(gv_BB156610.lv_DC4A4CA5[2], PlayerGroupSingle(1), true);
+            DialogSetVisible(gv_BB156610.lv_DC4A4CA5[3], PlayerGroupSingle(1), true);
+            DialogSetVisible(gv_BB156610.lv_DC4A4CA5[4], PlayerGroupSingle(1), true);
+            DialogControlSetVisible(gv_C8C6EA72[3], PlayerGroupSingle(1), true);
+            DialogControlSetEnabled(gv_ECE9BB7D[0], PlayerGroupSingle(1), false);
+            DialogControlSetEnabled(gv_ECE9BB7D[1], PlayerGroupSingle(1), false);
+            DialogControlSetEnabled(gv_ECE9BB7D[2], PlayerGroupSingle(1), false);
+        }
+        
         // offsetX = 50;
         // DialogSetPosition(gv_BB156610.lv_DC4A4CA5[0], c_anchorLeft, offsetX, 0);   
         // DialogSetPositionRelative(gv_BB156610.lv_DC4A4CA5[1], c_anchorCenter, gv_BB156610.lv_DC4A4CA5[0], c_anchorRight, (offsetX + 280 / 2), 0);    
@@ -144,29 +194,239 @@ void panelCycle(int type){
     }
 
 } 
+//英雄技能选择界面点击触发
+void onHeroSkillPickPanelClick(){
+    int i;
+    int j;
+    gameSoundPlayer(v_additionalSelect);
+    for (i = 0; i < 5; i += 1) {
 
-void loadAraneUI(){
-    //ui
+        for (j = 0; j < 5; j += 1) {
+            //判断是哪一个技能按键
+            if (EventDialogControl() == gv_BB156610.lv_52872E19[i][j]){
+                //转置一下
+                gf_2784DE6E(DataTableGetInt(true,"player"), j, i);  
+            }
+        }    
+    }
+}
+//英雄选择界面点击触发
+void onSummonHeroBtnClick(){
+    int player = DataTableGetInt(true,"player");
+
+    gv_131E8983[player] = DataTableGetInt(true,"heroId");
+   
+    //玩家队伍
+    gv_9EEEA78D[player] = MinI(FixedToInt(player / 5),1);
+
+    //为玩家的英雄初始化加点、技能信息，成长树
+    TriggerExecute(gt_C7E3A592, false, true);
+    TriggerExecute(gt_84BE2900, false, true);
+    TriggerExecute(gt_53B638C3, false, true);
+    TriggerExecute(gt_B15050B7, false, true);
+    TriggerExecute(gt_F00C0934, false, true);
+    TriggerExecute(gt_64FBF599, false, true);
+    TriggerExecute(gt_27ED109B, false, true);
+    TriggerExecute(gt_449346FA, false, true);
+    TriggerExecute(gt_936A4CD0, false, true);
+    TriggerExecute(gt_4763C627, false, true);
+    TriggerExecute(gt_7B46B8A2, false, true);
+    TriggerExecute(gt_E09377E6, false, true);
+    TriggerExecute(gt_21AB3C1E, false, true);
+  
+    initStarStrs();
+}
+//天赋界面点击触发，选择后再点击取消选择
+void onTalentSelectPanelClick(){
+    int i;
+    int j;
+
+    int player = DataTableGetInt(true,"player");
+
+    gameSoundPlayer(v_additionalSelect);
+    //暴力判断找到控件对应数组的位置
+    for (i = 0; i < 18; i += 1)
+    {
+        for (j = 0; j < 5; j += 1)
+        {
+            if (EventDialogControl() == gv_BB156610.lv_18A4806A[j][i])
+            {
+                //如果已经选中
+                if (gv_BB156610.lv_48849745[player][j][i])
+                {
+                    gv_BB156610.lv_48849745[player][j][i] = false;
+                    if (j == 0)
+                    {
+                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_0_yellow.dds", PlayerGroupAll());
+                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(96.08, 98.43, 70.98), PlayerGroupAll());
+                    }
+                    else if (j == 1)
+                    {
+                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_1_red.dds", PlayerGroupAll());
+                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(82.35, 50.98, 48.24), PlayerGroupAll());
+                    }
+                    else if (j == 2)
+                    {
+                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_2_violet.dds", PlayerGroupAll());
+                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(88.24, 70.20, 98.43), PlayerGroupAll());
+                    }
+                    else if (j == 3)
+                    {
+                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_3_green.dds", PlayerGroupAll());
+                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(72.16, 98.43, 70.98), PlayerGroupAll());
+                    }
+                    else if (j == 4)
+                    {
+                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_4_teal.dds", PlayerGroupAll());
+                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(70.98, 93.33, 98.43), PlayerGroupAll());
+                    }
+                    DialogControlSetVisible(gv_BB156610.lv_51B06619[j][i], PlayerGroupSingle(player), false);
+                    DialogControlSetEnabled(gv_BB156610.lv_E2A89576[j][i], PlayerGroupSingle(player), true);
+                    DialogControlSetEnabled(gv_BB156610.lv_DEE7AA8A[j][i], PlayerGroupSingle(player), true);
+                }
+                //如果没有被选择
+                else
+                {
+                    gv_BB156610.lv_48849745[player][j][i] = true;
+                    if (j == 0)
+                    {
+                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_0_yellow_com.dds", PlayerGroupSingle(player));
+                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(89.41, 94.90, 24.31), PlayerGroupSingle(player));
+                    }
+                    else if (j == 1)
+                    {
+                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_1_red_com.dds", PlayerGroupSingle(player));
+                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(60.78, 22.75, 20.00), PlayerGroupSingle(player));
+                    }
+                    else if (j == 2)
+                    {
+                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_2_violet_com.dds", PlayerGroupSingle(player));
+                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(73.33, 30.20, 96.86), PlayerGroupSingle(player));
+                    }
+                    else if (j == 3)
+                    {
+                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_3_green_com.dds", PlayerGroupSingle(player));
+                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(34.90, 95.69, 31.76), PlayerGroupSingle(player));
+                    }
+                    else if (j == 4)
+                    {
+                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_4_teal_com.dds", PlayerGroupSingle(player));
+                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(30.98, 85.10, 96.86), PlayerGroupSingle(player));
+                    }
+                    DialogControlSetVisible(gv_BB156610.lv_51B06619[j][i], PlayerGroupSingle(player), true);
+                    DialogControlSetEnabled(gv_BB156610.lv_E2A89576[j][i], PlayerGroupSingle(player), true);
+                    DialogControlSetEnabled(gv_BB156610.lv_DEE7AA8A[j][i], PlayerGroupSingle(player), true);
+                }
+            }
+        }
+    }
+}
+
+void initAlliances(){
+    int i = 1;
+
+    playergroup tempPlayerGroup;
+    
+    for (; i < 6 ; i +=1){
+        PlayerGroupAdd(tempPlayerGroup,i);
+        PlayerGroupAdd(tempPlayerGroup,i + 5);
+        PlayerGroupAdd(gv_12BC5A6E[0],i);
+        PlayerGroupAdd(gv_12BC5A6E[1],i + 5);
+
+        gv_9EEEA78D[i] = 0;
+        gv_9EEEA78D[i + 5] = 1;
+    }
+    
+    //dummyplayer
+    PlayerGroupAdd(tempPlayerGroup,11);
+
+    libNtve_gf_SetPlayerGroupAlliance(tempPlayerGroup, libNtve_ge_AllianceSetting_Enemy);
+    libNtve_gf_SetPlayerGroupAlliance(gv_12BC5A6E[0], libNtve_ge_AllianceSetting_AllyWithSharedVision);
+    libNtve_gf_SetPlayerGroupAlliance(gv_12BC5A6E[1], libNtve_ge_AllianceSetting_AllyWithSharedVision);
+
+    // PlayerSetAlliance(i,c_allianceIdControl,playerid + 5,true); 
+}
+
+void loadDummyHud(){
+    int ePlayer = 1;
+    int eUnitOwner = 11;
+    int mphpSize;
+    int i;
+
+    gf_0B99E26F(ePlayer, eUnitOwner);
+    //头像
+    libNtve_gf_SetDialogItemImage(gv_2DED9336[1], gv_AA1BDB6C[38], PlayerGroupSingle(ePlayer));
+    //等级
+    libNtve_gf_SetDialogItemText(gv_2DED9336[2], StringToText("?"), PlayerGroupSingle(ePlayer));
+    //颜色
+    libNtve_gf_SetDialogItemColor(gv_2DED9336[3], Color(100,0,0), PlayerGroupSingle(ePlayer));
+    //玩家名
+    libNtve_gf_SetDialogItemText(gv_2DED9336[3], StringToText("木偶"), PlayerGroupSingle(ePlayer));
+    //属性设置
+    for (; i < 7 ; i += 1)
+    {
+        libNtve_gf_SetDialogItemText(gv_D33859CA[i], FixedToText(0,2), PlayerGroupSingle(ePlayer));
+    }
+
+    libNtve_gf_SetDialogItemText(gv_D33859CA[8], (IntToText(1000000) + (StringExternal("Param/Value/858C3123") + IntToText(1000000))), PlayerGroupSingle(ePlayer));
+    libNtve_gf_SetDialogItemText(gv_D33859CA[9], (IntToText(1000000) + (StringExternal("Param/Value/7EE57AF9") + IntToText(1000000))), PlayerGroupSingle(ePlayer));
+    
+    mphpSize = MaxI(FixedToInt(268.0 * (100) * 0.01),1);
+    DialogControlSetSize(gv_2DED9336[4], PlayerGroupSingle(ePlayer), mphpSize, 16);
+    mphpSize = MaxI(FixedToInt(268.0 * (100) * 0.01),1);
+    DialogControlSetSize(gv_2DED9336[5], PlayerGroupSingle(ePlayer), mphpSize, 16);
+}
+
+void showHideDummyHud(bool show){
+    DialogSetVisible(gv_4EE04C84, defaultPlayerGroup, show);
+} 
+
+void loadArane(){
+
+    gv_65C11E79 = 13;
+
+    //点击触发器
+    TriggerEnable(gt_B5F15D4C, true);
+    gameSoundPlayer(v_roundInit);
+   
+    DialogControlFadeTransparency(gv_D3F35143, PlayerGroupAll(), 2.0, 100.0);
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeInventoryPanel, true);
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeInfoPanel, true);
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeCommandPanel, true);
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeMinimapPanel, true);
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeResourcePanel, true);
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeMenuBar, true);
+    // DialogDestroyAll();
+
+    CameraLockInput(1, false);
+    // TriggerExecute(gt_ED707C50, false, true);
+
+    // TriggerExecute(gt_85BAD3D9, false, true);
+    //播放音乐
+    gf_1C2570FD(1);
+
+    if ((gv_AC56085D == true))
+    {
+        gf_41370374(1, true);
+    }
+
+    //血条、经验条和属性栏
     TriggerExecute(gt_1C5C641A, true, true);
     //?
     TriggerExecute(gt_9B48566C, true, true);
     //升级按钮创建
     TriggerExecute(gt_6C558B0C, true, true);
-    //handle
-    TriggerExecute(gt_965A63A0, true, true);
     //天赋？
     TriggerExecute(gt_7988D49E, false, true);
-    //UI
     //tab
     TriggerExecute(gt_EFE165C0, true, true);
-    //加点ui
+    //加点ui -- 需要动态更新
     TriggerExecute(gt_C723D23B, true, true);
     //?
     TriggerExecute(gt_D3F02B96, true, true);
     //参数录入
     TriggerExecute(gt_A6596446, true, true);
-    //ui
-    //?
+    //创建英雄信息ui
     TriggerExecute(gt_0C3CB411, true, true);
 
     //信息
@@ -176,300 +436,347 @@ void loadAraneUI(){
     //ui
 
     //setings etc
-    TriggerExecute(gt_39E9F3AC, false, false);
-    TriggerExecute(gt_7E1E7511, false, false);
-    TriggerExecute(gt_63B72605, false, false);
-    TriggerExecute(gt_C04D8CFD, false, false);
-    //血量 护盾处理
+    TriggerExecute(gt_39E9F3AC, false, true);
+    TriggerExecute(gt_7E1E7511, false, true);
+    TriggerExecute(gt_63B72605, false, true);
+    TriggerExecute(gt_C04D8CFD, false, true);
+    //血量 护盾显示更新
     TriggerEnable(gt_A334548C, true);
-    //emeny hud
+    //显示别人的英雄信息
     TriggerEnable(gt_5E391F04, true);
 
     //创建致命伤害显示ui
     TriggerExecute(gt_BEAA2115, false, false);
     TriggerExecute(gt_6A0C33ED, false, false);
-
+    //隐藏皮肤选择界面
     DialogSetVisible(gv_17071D73, PlayerGroupAll(), false);
+
+    //timer
+    // TriggerExecute(gt_50AA3CE2, false, false);
+
+    
+    // // loadDummyHud();
+
+    // gv_BB284D6D = 1;
 }
 
-// void playerSummonHero(int inPlayer, int heroId){
+void initGameSettings(){
+    //加载bank
+    TriggerExecute(gt_CC470061, false, true);
+    GameSetLighting("Char2", 1.4);
+    TriggerExecute(gt_CA75246F, false, false);
+    TriggerExecute(gt_0C458B09, false, true);
+    gv_12D739B9 = 13;
+    TriggerEnable(gt_F16108BA, false);
+    TriggerExecute(gt_610A1DC5, false, true);
+    //视角调整
+    gf_654885B9();
+    gv_12D739B9 = 13;
+}
 
-//         lv_52378F9E[0] = PointFromId(36);
-//         lv_52378F9E[1] = PointFromId(37);
-//         playerId = 1;
-//                 gf_3A83C136(playerId);
-//                 TechTreeUpgradeAddLevel(playerId, "roundupgradeTotal", 1);
-//                 gf_35172460(playerId, 0);
-//                 if (((gv_131E8983[playerId] == 19) || (gv_131E8983[playerId] == 43)))
-//                 {
-//                     //克劳和四季
-//                     if ((gv_131E8983[playerId] == 19))
-//                     {
-//                         if ((UnitGetOwner(UnitFromId(20)) == 0))
-//                         {
-//                             libNtve_gf_ShowHideUnit(UnitFromId(20), true);
-//                             UnitSetOwner(UnitFromId(20), playerId, true);
-//                             UnitSetPosition(UnitFromId(20), RegionRandomPoint(RegionCircle(lv_52378F9E[gv_9EEEA78D[playerId]], lv_02165E4C)), false);
-//                             gv_71C054E5[playerId] = UnitFromId(20);
-//                             gv_5F6F4890[0] = playerId;
-//                             UnitCreateEffectUnit(UnitFromId(20), "effectclickss2", UnitFromId(20));
-//                             TriggerEnable(gt_06F46C59, true);
-//                             TriggerEnable(gt_B8A29486, true);
-//                         }
-//                         else
-//                         {
-//                             libNtve_gf_ShowHideUnit(UnitFromId(608), true);
-//                             UnitSetOwner(UnitFromId(608), playerId, true);
-//                             UnitSetPosition(UnitFromId(608), RegionRandomPoint(RegionCircle(lv_52378F9E[gv_9EEEA78D[playerId]], lv_02165E4C)), false);
-//                             gv_71C054E5[playerId] = UnitFromId(608);
-//                             gv_5F6F4890[1] = playerId;
-//                             UnitCreateEffectUnit(UnitFromId(608), "effectclickss2", UnitFromId(608));
-//                             TriggerEnable(gt_6E4F8EAE, true);
-//                             TriggerEnable(gt_CC047C8E, true);
-//                         }
-//                     }
-//                     else if ((gv_131E8983[playerId] == 43))
-//                     {
-//                         if ((UnitGetOwner(UnitFromId(1657007678)) == 0))
-//                         {
-//                             libNtve_gf_ShowHideUnit(UnitFromId(1657007678), true);
-//                             UnitSetOwner(UnitFromId(1657007678), playerId, true);
-//                             UnitSetPosition(UnitFromId(1657007678), RegionRandomPoint(RegionCircle(lv_52378F9E[gv_9EEEA78D[playerId]], lv_02165E4C)), false);
-//                             gv_71C054E5[playerId] = UnitFromId(1657007678);
-//                             gv_D07DF7B9[0] = playerId;
-//                             UnitCreateEffectUnit(UnitFromId(1657007678), "effectclickss", UnitFromId(1657007678));
-//                             TriggerEnable(gt_9F080E6C, true);
-//                         }
-//                         else
-//                         {
-//                             libNtve_gf_ShowHideUnit(UnitFromId(168525155), true);
-//                             UnitSetOwner(UnitFromId(168525155), playerId, true);
-//                             UnitSetPosition(UnitFromId(168525155), RegionRandomPoint(RegionCircle(lv_52378F9E[gv_9EEEA78D[playerId]], lv_02165E4C)), false);
-//                             gv_71C054E5[playerId] = UnitFromId(168525155);
-//                             gv_D07DF7B9[1] = playerId;
-//                             UnitCreateEffectUnit(UnitFromId(168525155), "effectclickss", UnitFromId(168525155));
-//                             TriggerEnable(gt_64FD760E, true);
-//                         }
-//                     }
-//                 }
-//                 else
-//                 {
-//                     //创建英雄
-//                     libNtve_gf_CreateUnitsWithDefaultFacing(1, gv_367C7760[gv_131E8983[playerId]], c_unitCreateIgnorePlacement, playerId, RegionRandomPoint(RegionCircle(lv_52378F9E[gv_9EEEA78D[playerId]], lv_02165E4C)));
-//                     gv_71C054E5[playerId] = UnitLastCreated();                   
-//                 }
-//                 //保存英雄到bank
-//                 saveHero(playerId,gv_367C7760[gv_131E8983[playerId]]);
-//                 gv_305DA55D[playerId] = true;
-//                 //单位设置队伍颜色
-//                 if ((gv_9EEEA78D[playerId] == 0))
-//                 {
-//                     UnitSetTeamColorIndex(gv_71C054E5[playerId], 5);
-//                 }
-//                 else
-//                 {
-//                     UnitSetTeamColorIndex(gv_71C054E5[playerId], 8);
-//                 }
-//                 //启用或禁用技能
-//                 gf_ED9D4333(gv_71C054E5[playerId], playerId);
-//                 UnitSelect(gv_71C054E5[playerId], playerId, true);
-//                 //添加行为
+void initGameData(){
+
+    //隐藏克劳和四季
+    libNtve_gf_ShowHideUnit(UnitFromId(608), false);
+    libNtve_gf_ShowHideUnit(UnitFromId(20), false);
+    libNtve_gf_ShowHideUnit(UnitFromId(1657007678), false);
+    libNtve_gf_ShowHideUnit(UnitFromId(168525155), false);
+
+    //装填字符
+    TriggerExecute(gt_6F6A2EA8, false, true);
+    TriggerExecute(gt_48BC82B7, false, true);
+    TriggerExecute(gt_21F1D4C9, false, true);
+    TriggerExecute(gt_9142A6D9, false, true);
+    TriggerExecute(gt_44B0C1F1, false, true);
+    TriggerExecute(gt_6F15A027, false, true);
+    TriggerExecute(gt_2DC208BE, false, true);
+
+    //assets
+    TriggerExecute(gt_A42AFADF, true, true);
+    TriggerExecute(gt_67FDA500, true, true);
+    TriggerExecute(gt_A21467A7, true, true);
+
+    //车模型
+    TriggerExecute(gt_6C7F4620, false, true);
+
+    gv_E8AAF5C5 = true;
+    gv_65C11E79 = 3;
+    gv_8558D5EF = 1;
+    //1ban0直接选
+    gv_B37F1D3F = 0;
+    gv_DA579AA4 = 2;
+
+}
+
+//-------------------------------------------------gameFunc----------------------------------------------------
+
+void removeHeroAndReflashPlayer(){
+    
+}
+
+int autoPickPlayer(bool isAlly){
+    bool flag;
+    int i = 1; 
+
+    if (isAlly){  
+        for (; i < 6 ; i+=1){
+           if (queryPlayerHeroId(i) == 0){
+                return i;
+           }
+        }
+    }else {
+        for (i = 6; i < 11 ;i+=1){
+            if (queryPlayerHeroId(i) == 0){
+                return i;
+           }
+        }
+    }
+    showMsg(1,"该阵容已满，请移除英雄");
+    return -1;
+}
+
+void playerSummonHero(){
+
+    point[2] teamPoints;
+    int playerId = DataTableGetInt(true,"player");
+
+    teamPoints[0] = PointFromId(36);
+    teamPoints[1] = PointFromId(37);
+    //------------------------------------
+
+     //ui
+    TriggerExecute(gt_0315FDBE, false, false);
+
+    //更新数值显示面板
+    gf_3A83C136(playerId);
+
+    //回合升级总成
+    TechTreeUpgradeAddLevel(playerId, "roundupgradeTotal", 1);
+
+    //女院被动
+    gf_35172460(playerId, 0);
+
+    //克劳和四季的触发器脚本只对这四个单位生效
+    if (((gv_131E8983[playerId] == 19) || (gv_131E8983[playerId] == 43))){
+        if ((UnitGetOwner(UnitFromId(1657007678)) != 0 && UnitGetOwner(UnitFromId(168525155)) != 0) || 
+            (UnitGetOwner(UnitFromId(20)) != 0 && UnitGetOwner(UnitFromId(608)) != 0)){
+            showMsg(1,"目前由于源代码限制,四季和克劳不能多于2个");
+            return;
+        }
+        if ((gv_131E8983[playerId] == 19)){
+            if ((UnitGetOwner(UnitFromId(20)) == 0)){
+                libNtve_gf_ShowHideUnit(UnitFromId(20), true);
+                UnitSetOwner(UnitFromId(20), playerId, true);
+                UnitSetPosition(UnitFromId(20), RegionRandomPoint(RegionCircle(teamPoints[gv_9EEEA78D[playerId]], 5.5)), false);
+                gv_71C054E5[playerId] = UnitFromId(20);
+                gv_5F6F4890[0] = playerId;
+                UnitCreateEffectUnit(UnitFromId(20), "effectclickss2", UnitFromId(20));
+                TriggerEnable(gt_06F46C59, true);
+                TriggerEnable(gt_B8A29486, true);
+            }
+            else{
+                libNtve_gf_ShowHideUnit(UnitFromId(608), true);
+                UnitSetOwner(UnitFromId(608), playerId, true);
+                UnitSetPosition(UnitFromId(608), RegionRandomPoint(RegionCircle(teamPoints[gv_9EEEA78D[playerId]], 5.5)), false);
+                gv_71C054E5[playerId] = UnitFromId(608);
+                gv_5F6F4890[1] = playerId;
+                UnitCreateEffectUnit(UnitFromId(608), "effectclickss2", UnitFromId(608));
+                TriggerEnable(gt_6E4F8EAE, true);
+                TriggerEnable(gt_CC047C8E, true);
+                }
+        }
+        else if ((gv_131E8983[playerId] == 43)){
+
+            if ((UnitGetOwner(UnitFromId(1657007678)) == 0)){
+                libNtve_gf_ShowHideUnit(UnitFromId(1657007678), true);
+                UnitSetOwner(UnitFromId(1657007678), playerId, true);
+                UnitSetPosition(UnitFromId(1657007678), RegionRandomPoint(RegionCircle(teamPoints[gv_9EEEA78D[playerId]], 5.5)), false);
+                gv_71C054E5[playerId] = UnitFromId(1657007678);
+                gv_D07DF7B9[0] = playerId;
+                UnitCreateEffectUnit(UnitFromId(1657007678), "effectclickss", UnitFromId(1657007678));
+                TriggerEnable(gt_9F080E6C, true);
+            }
+            else{
+                libNtve_gf_ShowHideUnit(UnitFromId(168525155), true);
+                UnitSetOwner(UnitFromId(168525155), playerId, true);
+                UnitSetPosition(UnitFromId(168525155), RegionRandomPoint(RegionCircle(teamPoints[gv_9EEEA78D[playerId]], 5.5)), false);
+                gv_71C054E5[playerId] = UnitFromId(168525155);
+                gv_D07DF7B9[1] = playerId;
+                UnitCreateEffectUnit(UnitFromId(168525155), "effectclickss", UnitFromId(168525155));
+                TriggerEnable(gt_64FD760E, true);
+            }
+        }
+    }
+    else
+    {
+        //直接创建英雄
+        libNtve_gf_CreateUnitsWithDefaultFacing(1, gv_367C7760[gv_131E8983[playerId]],
+                c_unitCreateIgnorePlacement, playerId, RegionRandomPoint(RegionCircle(teamPoints[gv_9EEEA78D[playerId]], 5.5)));
+        gv_71C054E5[playerId] = UnitLastCreated();                   
+    }
+    gv_305DA55D[playerId] = true;
+    //单位设置队伍颜色
+    if ((gv_9EEEA78D[playerId] == 0))
+    {
+        UnitSetTeamColorIndex(gv_71C054E5[playerId], 5);
+    }
+    else
+    {
+        UnitSetTeamColorIndex(gv_71C054E5[playerId], 8);
+    }
+    //------------------------------------------------------------------------------------
+    //启用或禁用技能
+    gf_ED9D4333(gv_71C054E5[playerId], playerId);
+    UnitSelect(gv_71C054E5[playerId], playerId, true);
+    //添加行为
+            
+    //老兵行为
+    UnitBehaviorAddPlayer(gv_71C054E5[playerId], "dbdo_ex", playerId, 1);
+            
+    UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie", playerId, 1);
+    UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie4", playerId, 1);
+    UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie42", playerId, 1);
+    UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie2", playerId, 1);
+
+    //移动每个玩家的视角到单位
+    CameraPan(playerId, UnitGetPosition(gv_71C054E5[playerId]), 0.85, -1, 25.0, false);
+
+    gv_55A8AB50[playerId] += 1;
+    //两边队伍剩余人数
+    gv_48E7CC05[gv_9EEEA78D[playerId]] += 1;
+
+    UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie25", playerId, 1);
+    UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie23", playerId, 1);
+    UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie24res", playerId, 1);        
+    
+    //快乐冲锋
+    gf_20271FB9(playerId);
                 
-//                 //老兵行为
-//                 UnitBehaviorAddPlayer(gv_71C054E5[playerId], "dbdo_ex", playerId, 1);
-                
-//                 UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie", playerId, 1);
-//                 UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie4", playerId, 1);
-//                 UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie42", playerId, 1);
-//                 UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie2", playerId, 1);
-//                 DialogSetVisible(gv_782416F1, PlayerGroupSingle(playerId), true);
+    if ((gv_131E8983[playerId] == 1) && (gv_BB156610.lv_0195430E[playerId][0] == 1))
+    {
+        UnitBehaviorAdd(gv_71C054E5[playerId], "nodie3", gv_71C054E5[playerId], 1);
+        UnitBehaviorAdd(gv_71C054E5[playerId], "nodie32", gv_71C054E5[playerId], 1);
+        UnitBehaviorAdd(gv_71C054E5[playerId], "nodie322", gv_71C054E5[playerId], 1);
+        UnitBehaviorRemove(gv_71C054E5[playerId], "nodie", 1);
+        UnitBehaviorRemove(gv_71C054E5[playerId], "nodie4", 1);
+        UnitBehaviorRemove(gv_71C054E5[playerId], "nodie42", 1);
+    }
+    if ((gv_131E8983[playerId] == 49) && (gv_BB156610.lv_0195430E[playerId][0] == 0))
+    {
+        UnitBehaviorAdd(gv_71C054E5[playerId], "dbdo49_1_0t_16", gv_71C054E5[playerId], 1);
+        UnitBehaviorAdd(gv_71C054E5[playerId], "dbdo49_1_0t_506", gv_71C054E5[playerId], 1);
+        UnitBehaviorAdd(gv_71C054E5[playerId], "dbdo49_1_0t_600", gv_71C054E5[playerId], 1);
+        UnitBehaviorRemove(gv_71C054E5[playerId], "nodie", 1);
+        UnitBehaviorRemove(gv_71C054E5[playerId], "nodie4", 1);
+        UnitBehaviorRemove(gv_71C054E5[playerId], "nodie42", 1);
+    }
+    if ((gv_131E8983[playerId] == 1) && (gv_BB156610.lv_0195430E[playerId][0] == 1))
+    {
+        UnitBehaviorAdd(gv_71C054E5[playerId], "nodie3", gv_71C054E5[playerId], 1);
+        UnitBehaviorAdd(gv_71C054E5[playerId], "nodie32", gv_71C054E5[playerId], 1);
+        UnitBehaviorAdd(gv_71C054E5[playerId], "nodie322", gv_71C054E5[playerId], 1);
+        UnitBehaviorRemove(gv_71C054E5[playerId], "nodie", 1);
+        UnitBehaviorRemove(gv_71C054E5[playerId], "nodie4", 1);
+        UnitBehaviorRemove(gv_71C054E5[playerId], "nodie42", 1);
+    }
+    if ((gv_131E8983[playerId] == 1) && (gv_BB156610.lv_0195430E[playerId][0] == 0))
+    {
+        UnitBehaviorAdd(gv_71C054E5[playerId], "siyadammm", gv_71C054E5[playerId], 1);
+    }
+    if ((gv_131E8983[playerId] == 10))
+    {
+        TriggerEnable(gt_24D8433E, true);
+    }
+    if ((gv_131E8983[playerId] == 10) && (gv_BB156610.lv_0195430E[playerId][0] == 0))
+    {
+        UnitBehaviorAdd(gv_71C054E5[playerId], "dbdo_10_1_0t", gv_71C054E5[playerId], 1);
+    }
+    if ((gv_131E8983[playerId] == 14))
+    {
+        if ((gv_BB156610.lv_0195430E[playerId][0] == 0))
+        {
+            TechTreeUpgradeAddLevel(playerId, "dbup_14_1_0t", 1);
+        }
+        if ((gv_BB156610.lv_0195430E[playerId][0] == 1) && (gv_BB156610.lv_0195430E[playerId][1] == 1) && (gv_BB156610.lv_0195430E[playerId][3] == 1))
+        {
+            TechTreeUpgradeAddLevel(playerId, "dbup_14_2_4r", 1);
+        }
+    }
+    if ((gv_131E8983[playerId] == 19) && (gv_BB156610.lv_0195430E[playerId][0] == 0))
+    {
+        UnitBehaviorAdd(gv_71C054E5[playerId], "dbdo_19_1_0t_03", gv_71C054E5[playerId], 1);
+    }
+    if ((gv_131E8983[playerId] == 8))
+    {
+        TriggerEnable(gt_D5601087, true);
+        TriggerEnable(gt_07C5E602, true);
+    }
+    if ((gv_131E8983[playerId] == 8) && (gv_BB156610.lv_0195430E[playerId][0] == 0))
+    {
+        UnitBehaviorAddPlayer(gv_71C054E5[playerId], "dbdo_08_1_0t", playerId, 1);
+        libNtve_gf_CreateUnitsWithDefaultFacing(1, "dbyu08_1_0t", c_unitCreateIgnorePlacement, playerId, UnitGetPosition(gv_71C054E5[playerId]));
+        gv_E7EDB9D8[playerId] = UnitLastCreated();
+        UnitStatusBarOverride(UnitLastCreated(), c_unitStatusGroupOwner);
+    }
+    if ((gv_69CED423[playerId] >= 1))
+    {
+        CameraFollowUnitGroup(playerId, libNtve_gf_ConvertUnitToUnitGroup(gv_71C054E5[playerId]), true, false);
+    }
+    else
+    {
+        CameraFollowUnitGroup(playerId, libNtve_gf_ConvertUnitToUnitGroup(gv_71C054E5[playerId]), false, false);
+    }
+    //玩家技能可升级点数+1
+    gv_63B35897[playerId] = 1;
+    //没有用的函数
+    gf_E21FB1A1(gv_71C054E5[playerId]);
+    //技能升级函数
+    gf_91088DA7(playerId);
+    //技能组
+    gf_C71F331B(playerId);
+    //初始属性加点
+    gf_C4DA1C21(playerId);
+    //技能组第二部分
+    gf_08CCA537(playerId);
+    //天赋
+    gf_D5AA5B4B(playerId);
+    //天赋
+    gf_63372EA8(playerId);
+    //天赋
+    showMsg(1,BoolToString(gv_BB156610.lv_48849745[playerId][gv_55AE090B.lv_5305D027][gv_55AE090B.lv_6B3F8B25]));
 
-//                 //移动每个玩家的视角到单位
-//                 CameraPan(playerId, UnitGetPosition(gv_71C054E5[playerId]), 0.85, -1, 25.0, false);
-//                 gv_55A8AB50[playerId] += 1;
-//                 gv_48E7CC05[gv_9EEEA78D[playerId]] += 1;
-//                 UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie25", playerId, 1);
-//                 UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie23", playerId, 1);
-//                 UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie24res", playerId, 1);
-                
-//                 //快乐冲锋
-//                 gf_20271FB9(playerId);
-                
-//                 if ((gv_131E8983[playerId] == 1) && (gv_BB156610.lv_0195430E[playerId][0] == 1))
-//                 {
-//                     UnitBehaviorAdd(gv_71C054E5[playerId], "nodie3", gv_71C054E5[playerId], 1);
-//                     UnitBehaviorAdd(gv_71C054E5[playerId], "nodie32", gv_71C054E5[playerId], 1);
-//                     UnitBehaviorAdd(gv_71C054E5[playerId], "nodie322", gv_71C054E5[playerId], 1);
-//                     UnitBehaviorRemove(gv_71C054E5[playerId], "nodie", 1);
-//                     UnitBehaviorRemove(gv_71C054E5[playerId], "nodie4", 1);
-//                     UnitBehaviorRemove(gv_71C054E5[playerId], "nodie42", 1);
-//                 }
-//                 if ((gv_131E8983[playerId] == 49) && (gv_BB156610.lv_0195430E[playerId][0] == 0))
-//                 {
-//                     UnitBehaviorAdd(gv_71C054E5[playerId], "dbdo49_1_0t_16", gv_71C054E5[playerId], 1);
-//                     UnitBehaviorAdd(gv_71C054E5[playerId], "dbdo49_1_0t_506", gv_71C054E5[playerId], 1);
-//                     UnitBehaviorAdd(gv_71C054E5[playerId], "dbdo49_1_0t_600", gv_71C054E5[playerId], 1);
-//                     UnitBehaviorRemove(gv_71C054E5[playerId], "nodie", 1);
-//                     UnitBehaviorRemove(gv_71C054E5[playerId], "nodie4", 1);
-//                     UnitBehaviorRemove(gv_71C054E5[playerId], "nodie42", 1);
-//                 }
-//                 if ((gv_131E8983[playerId] == 1) && (gv_BB156610.lv_0195430E[playerId][0] == 1))
-//                 {
-//                     UnitBehaviorAdd(gv_71C054E5[playerId], "nodie3", gv_71C054E5[playerId], 1);
-//                     UnitBehaviorAdd(gv_71C054E5[playerId], "nodie32", gv_71C054E5[playerId], 1);
-//                     UnitBehaviorAdd(gv_71C054E5[playerId], "nodie322", gv_71C054E5[playerId], 1);
-//                     UnitBehaviorRemove(gv_71C054E5[playerId], "nodie", 1);
-//                     UnitBehaviorRemove(gv_71C054E5[playerId], "nodie4", 1);
-//                     UnitBehaviorRemove(gv_71C054E5[playerId], "nodie42", 1);
-//                 }
-//                 if ((gv_131E8983[playerId] == 1) && (gv_BB156610.lv_0195430E[playerId][0] == 0))
-//                 {
-//                     UnitBehaviorAdd(gv_71C054E5[playerId], "siyadammm", gv_71C054E5[playerId], 1);
-//                 }
-//                 if ((gv_131E8983[playerId] == 10))
-//                 {
-//                     TriggerEnable(gt_24D8433E, true);
-//                 }
-//                 if ((gv_131E8983[playerId] == 10) && (gv_BB156610.lv_0195430E[playerId][0] == 0))
-//                 {
-//                     UnitBehaviorAdd(gv_71C054E5[playerId], "dbdo_10_1_0t", gv_71C054E5[playerId], 1);
-//                 }
-//                 if ((gv_131E8983[playerId] == 14))
-//                 {
-//                     if ((gv_BB156610.lv_0195430E[playerId][0] == 0))
-//                     {
-//                         TechTreeUpgradeAddLevel(playerId, "dbup_14_1_0t", 1);
-//                     }
-//                     if ((gv_BB156610.lv_0195430E[playerId][0] == 1) && (gv_BB156610.lv_0195430E[playerId][1] == 1) && (gv_BB156610.lv_0195430E[playerId][3] == 1))
-//                     {
-//                         TechTreeUpgradeAddLevel(playerId, "dbup_14_2_4r", 1);
-//                     }
-//                 }
-//                 if ((gv_131E8983[playerId] == 19) && (gv_BB156610.lv_0195430E[playerId][0] == 0))
-//                 {
-//                     UnitBehaviorAdd(gv_71C054E5[playerId], "dbdo_19_1_0t_03", gv_71C054E5[playerId], 1);
-//                 }
-//                 if ((gv_131E8983[playerId] == 8))
-//                 {
-//                     TriggerEnable(gt_D5601087, true);
-//                     TriggerEnable(gt_07C5E602, true);
-//                 }
-//                 if ((gv_131E8983[playerId] == 8) && (gv_BB156610.lv_0195430E[playerId][0] == 0))
-//                 {
-//                     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "dbdo_08_1_0t", playerId, 1);
-//                     libNtve_gf_CreateUnitsWithDefaultFacing(1, "dbyu08_1_0t", c_unitCreateIgnorePlacement, playerId, UnitGetPosition(gv_71C054E5[playerId]));
-//                     gv_E7EDB9D8[playerId] = UnitLastCreated();
-//                     UnitStatusBarOverride(UnitLastCreated(), c_unitStatusGroupOwner);
-//                 }
-//                 if ((gv_69CED423[playerId] >= 1))
-//                 {
-//                     CameraFollowUnitGroup(playerId, libNtve_gf_ConvertUnitToUnitGroup(gv_71C054E5[playerId]), true, false);
-//                 }
-//                 else
-//                 {
-//                     CameraFollowUnitGroup(playerId, libNtve_gf_ConvertUnitToUnitGroup(gv_71C054E5[playerId]), false, false);
-//                 }
-//                 //玩家技能可升级点数+1
-//                 gv_63B35897[playerId] = 1;
-//                 //没有用的函数
-//                 gf_E21FB1A1(gv_71C054E5[playerId]);
-//                 //技能升级函数
-//                 gf_91088DA7(playerId);
-//                 //技能组
-//                 gf_C71F331B(playerId);
-//                 //初始属性加点
-//                 gf_C4DA1C21(playerId);
-//                 //技能组第二部分
-//                 gf_08CCA537(playerId);
-//                 //天赋
-//                 gf_D5AA5B4B(playerId);
-//                 //天赋
-//                 gf_63372EA8(playerId);
-//                 //天赋
-//                 gf_17113C81(gv_71C054E5[playerId]);
-//                 //天赋
-//                 gf_1DA6D503(gv_71C054E5[playerId]);
-//                 UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropLifePercent, 100.0);
-//                 //除四季外 其他英雄重生后回复85%能量
-//                 if ((UnitGetType(gv_71C054E5[playerId]) != "dbHero43"))
-//                 {
-//                     UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropEnergyPercent, 85.0);
-//                 }
-//                 else
-//                 {
-//                     UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropEnergyPercent, 0.0);
-//                 }
-//                 gf_67CE0F82(gv_71C054E5[playerId]);
-//         gf_5B3578B1();
-//         gf_1A8469C6();
-//         gf_85CE78E1();
-//         //作者自定义的测试模式
-//         if ((gv_6AE4610B == true))
-//         {
-//             PlayerModifyPropertyInt(1, c_playerPropMinerals, c_playerPropOperAdd, 100000);
-//             playerId = 2;
-//             for (; ((auto3BBF4BB6_ai >= 0 && playerId <= auto3BBF4BB6_ae) || (auto3BBF4BB6_ai < 0 && playerId >= auto3BBF4BB6_ae)); playerId += auto3BBF4BB6_ai)
-//             {
-//                 UnitBehaviorAdd(gv_71C054E5[playerId], "nodie222", gv_71C054E5[playerId], 1);
-//             }
-//             UnitBehaviorAdd(gv_71C054E5[1], "nodie22", gv_71C054E5[1], 1);
-//             VisRevealerCreate(1, RegionEntireMap());
-//             playerId = 2;
-//             for (; ((auto194959B9_ai >= 0 && playerId <= auto194959B9_ae) || (auto194959B9_ai < 0 && playerId >= auto194959B9_ae)); playerId += auto194959B9_ai)
-//             {
-//                 UnitBehaviorRemove(gv_71C054E5[playerId], "nodie2", 1);
-//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_q", 1);
-//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_w", 1);
-//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_w2", 1);
-//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_e", 1);
-//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_e2", 1);
-//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_e22", 1);
-//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_r", 1);
-//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_r2", 1);
-//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_r22", 1);
-//                 TechTreeUpgradeAddLevel(playerId, "dhup_geum_r222", 1);
-//                 TechTreeUpgradeAddLevel(playerId, "dbup_ablv_q_plus", 1);
-//                 TechTreeUpgradeAddLevel(playerId, "dbup_ablv_w_plus", 1);
-//                 TechTreeUpgradeAddLevel(playerId, "dbup_ablv_e_plus", 1);
-//                 TechTreeUpgradeAddLevel(playerId, "dbup_ablv_r_plus", 1);
-//             }
-//         }
-//         gv_BB284D6D = 1;
-//         //timer
-//         TriggerExecute(gt_50AA3CE2, false, false);
+    gf_17113C81(gv_71C054E5[playerId]);
+    //天赋
+    gf_1DA6D503(gv_71C054E5[playerId]);
+    UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropLifePercent, 100.0);
+    //除四季外 其他英雄重生后回复85%能量
+    if ((UnitGetType(gv_71C054E5[playerId]) != "dbHero43"))
+    {
+        UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropEnergyPercent, 85.0);
+    }
+    else
+    {
+        UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropEnergyPercent, 0.0);
+    }
+    gf_67CE0F82(gv_71C054E5[playerId]);
+    gf_5B3578B1();
+    gf_1A8469C6();
+    gf_85CE78E1();
 
-//         //作者handle
-//         TriggerExecute(gt_D05F9FF2, false, false);
-//         //ui
-//         TriggerExecute(gt_0315FDBE, false, false);
+    gv_BB284D6D = 1;
 
-//         //?????
-//         Wait(0.2, c_timeGame);
-//         DialogSetVisible(gv_17071D73, PlayerGroupAll(), false);
-//         Wait(0.1, c_timeGame);
-//         DialogSetVisible(gv_17071D73, PlayerGroupAll(), false);
-//         Wait(0.1, c_timeGame);
-//         DialogSetVisible(gv_17071D73, PlayerGroupAll(), false);
+    TriggerExecute(gt_0315FDBE, false, false);
+    gf_5B3968D5();
+}
 
-//         gf_AA586BEC((StringExternal("Param/Value/572E854E") + (IntToText(gv_8D37EDF7) +
-//          StringExternal("Button/Tooltip/db_txt_preset_zameText_80"))), 3.6, false);
-//         gf_AA586BEC(StringExternal("Param/Value/D2C5FC8E"), 5.5, false);
-//         if ((gv_5F6F4890[0] == 0))
-//         {
-//             UnitRemove(UnitFromId(20));
-//         }
-//         if ((gv_5F6F4890[1] == 0))
-//         {
-//             UnitRemove(UnitFromId(608));
-//         }
-//         if ((gv_D07DF7B9[0] == 0))
-//         {
-//             UnitRemove(UnitFromId(1657007678));
-//         }
-//         if ((gv_D07DF7B9[1] == 0))
-//         {
-//             UnitRemove(UnitFromId(168525155));
-//         }
-//         gf_5B3968D5();
-  
-// }
+void summonDummy(int playerId){
+    
+    libNtve_gf_CreateUnitsWithDefaultFacing(1,"dbHero00",0,11,UnitGetPosition(queryPlayerHeroUnit(playerId)));
+
+    UnitSetPropertyInt(UnitLastCreated(),c_unitPropLifeMax,10000);
+    UnitSetPropertyInt(UnitLastCreated(),c_unitPropLifeRegen,2000);
+    UnitSetPropertyInt(UnitLastCreated(),c_unitPropLifeArmor,0);
+    UnitSetPropertyInt(UnitLastCreated(),c_unitPropEnergyArmor,0);
+    
+    UnitIssueOrder(UnitLastCreated(), Order(AbilityCommand("stop", 0)), c_orderQueueAddToFront);
+}

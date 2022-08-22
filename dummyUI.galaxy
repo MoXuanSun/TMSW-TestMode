@@ -273,15 +273,15 @@ void buildHeroSummonUI(){
         DEFAULTS.DEFAULT_PLAYERGROUP);
 
     createNBBIRelative(Dialogs.main_menu.summonAllyHeroBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
-        Dialogs.main_menu.heroSelectBtn.border,padding,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,"未实现",
-        "+敌方",DEFAULTS.DEFAULT_FONTSTYLE,
+        Dialogs.main_menu.heroSelectBtn.border,padding,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,"生成友方英雄",
+        "+友方",DEFAULTS.DEFAULT_FONTSTYLE,
         DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP,false);
 
     createNBBIRelative(Dialogs.main_menu.summonEnemyHeroBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
-        Dialogs.main_menu.summonAllyHeroBtn.border,padding,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,"未实现",
-        "+友方",DEFAULTS.DEFAULT_FONTSTYLE,
+        Dialogs.main_menu.summonAllyHeroBtn.border,padding,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,"生成敌方英雄",
+        "+敌方",DEFAULTS.DEFAULT_FONTSTYLE,
         DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP,false);
@@ -430,7 +430,7 @@ void createMainMenu(){
 
     runtimeUI();
 
-    buildAbilitySwitchingUI();
+    // buildAbilitySwitchingUI();
 
     // histroyConsoleUI();
   

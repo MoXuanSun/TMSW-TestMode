@@ -5,9 +5,8 @@ int timerReflashCooldown = 10;
 
 int heroSummon = 19;
 
-string botHero = "dbHero38";
+string botHero = "dbHero00";
 
-//-------------------------------------------------------------------------------
 timer damageTimer = TimerCreate();
 timer resetTimer = TimerCreate();
 bool timerInit;
@@ -20,180 +19,170 @@ unit botUnit;
 
 fixed botUnitDamagedTotal;
 
-string[100] upgradesMainPlayerHas;
-int[100] upgradesPlayerHasLevel;
+string[10][100] upgradesPlayerHas;
+int[10][100] upgradesPlayerHasLevel;
 
 bool flagEmeny;
 
-//-----------------------------------------------------------------
+bool dummyHudInit();
+void onPostInit();
 
-//预初始化
-void onPreInit(){
+//如果是假人则展示hud,如果是玩家则切换ui--覆盖gt_5E391F04
+// bool onUnitClick(bool t, bool r){
+//     int ePlayer = EventPlayer();
+//     unit ePlayerOldUnit = queryPlayerHeroUnit(ePlayer);
+//     int eUnit = EventUnit();
+//     unit eUnitOwner = UnitGetOwner(eUnit);
     
-    PlayerModifyPropertyInt(1,c_playerPropMinerals,c_playerPropOperAdd,1000000);
-    PlayerModifyPropertyInt(2,c_playerPropMinerals,c_playerPropOperAdd,1000000);
+//     int i = 0;
+//     int mphpLong;
 
-    libNtve_gf_CreateUnitsWithDefaultFacing(1,botHero,0,2,PointFromName("Practice Mode Computer2"));
-    botUnit = UnitLastCreated();
-    UnitSetPropertyInt(botUnit,c_unitPropLifeMax,10000);
-    UnitSetPropertyInt(botUnit,c_unitPropLifeRegen,2000);
-    UnitSetPropertyInt(botUnit,c_unitPropLifeArmor,0);
-    UnitSetPropertyInt(botUnit,c_unitPropEnergyArmor,0);
-    
-    UnitIssueOrder(botUnit, Order(AbilityCommand("stop", 0)), c_orderQueueAddToFront);
+//     //dummyPlayer
+//     if (eUnitOwner == 11){
+//         showHideDummyHud(true);
+//     }else{
+//         eUnit = queryPlayerHeroUnit(eUnitOwner);
 
-    //玩家 - heroid
-    gv_131E8983[2] = 38;
-    
-    //玩家队伍 故意设置 引发错误以便防止生成
-    gv_9EEEA78D[2] = 2;
+        
 
-    gv_71C054E5[2] = botUnit;
+//         UnitSelect(ePlayerOldUnit,ePlayer,false);
+//         UnitSelect(eUnit,ePlayer,true);
+//     }
+// }
 
-    //----------------------------------------------------------------------------------------
-    
-    //全图视野
-    VisRevealerCreate(1, RegionEntireMap());
+int playerPicked;
 
-}
+bool onPanelClickGame(bool t, bool r){
+    int eDialogControl = EventDialogControl();
+    int rootDialog = DialogControlGetDialog(eDialogControl);
 
-//初始化
-void onInit(){
-
-    int lv_0A3CB682;
-    int lv_BF93475E;
-
-    int i;
-
-    TriggerEnable(gt_0531D4CC,false);
-    TriggerEnable(gt_FE0119F2,false);
-    
-    TimerPause(gv_8930AB6D,true);
-
-    TriggerAddEventChatMessage(TriggerCreate("onCommand"),1,null,false);
-    TriggerAddEventUpgradeLevelChanged(TriggerCreate("onUpgradeLevelChanged"),1);  
-    TriggerAddEventPlayerPropChange(TriggerCreate("onPlayerSpendMinerals"),1,c_playerPropMinerals);
-    TriggerAddEventDialogControl(TriggerCreate("onPanelClcik"),1,c_invalidDialogControlId,c_triggerControlEventTypeClick);
-    TriggerAddEventPlayerEffectUsed(TriggerCreate("onSPEffectUsed"),1,null);
-    TriggerAddEventUnitDamaged(TriggerCreate("onDamageMelee"),null,c_unitDamageTypeMelee,c_unitDamageEither,null); 
-    TriggerAddEventUnitDamaged(TriggerCreate("onDamageRanged"),null,c_unitDamageTypeRanged,c_unitDamageEither,null); 
-    TriggerAddEventUnitDamaged(TriggerCreate("onDamageSpell"),null,c_unitDamageTypeSpell,c_unitDamageEither,null);
-    TriggerAddEventUnitDamaged(TriggerCreate("onDamageSplash"),null,c_unitDamageTypeSplash,c_unitDamageEither,null);
-
-    //隐藏再临和克劳
-    libNtve_gf_ShowHideUnit(UnitFromId(608), false);
-    libNtve_gf_ShowHideUnit(UnitFromId(20), false);
-    libNtve_gf_ShowHideUnit(UnitFromId(1657007678), false);
-    libNtve_gf_ShowHideUnit(UnitFromId(168525155), false);
-
-    TriggerExecute(gt_CC470061, false, true);
-    GameSetLighting("Char2", 1.4);
-    TriggerExecute(gt_CA75246F, false, false);
-    TriggerExecute(gt_0C458B09, false, true);
-    gv_12D739B9 = 13;
-    TriggerEnable(gt_F16108BA, false);
-    lv_BF93475E = gf_09762527(0);//active player conunt
-    TriggerExecute(gt_610A1DC5, false, true);
-    gf_654885B9();
-    gv_12D739B9 = 13;
-    
-    //装填字符
-    TriggerExecute(gt_6F6A2EA8, false, true);
-    TriggerExecute(gt_48BC82B7, false, true);
-    TriggerExecute(gt_21F1D4C9, false, true);
-    TriggerExecute(gt_9142A6D9, false, true);
-    TriggerExecute(gt_44B0C1F1, false, true);
-    TriggerExecute(gt_6F15A027, false, true);
-    TriggerExecute(gt_2DC208BE, false, true);
-
-    //assets
-    TriggerExecute(gt_A42AFADF, true, true);
-    TriggerExecute(gt_67FDA500, true, true);
-    TriggerExecute(gt_A21467A7, true, true);
-
-    //车
-    TriggerExecute(gt_6C7F4620, false, true);
-
-    //英雄选择界面
-    panelCycle(c_UIType_heroSelect);
-}
-
-//后初始化 -- 英雄生成结束后1秒调用
-void onPostInit(){
-
-    libNtve_gf_ShareVisionofUnit(botUnit,true,1);
-
-    libNtve_gf_SetAllianceOneWay(2,1,libNtve_ge_AllianceSetting_Ally);   
-
-    UnitAbilityEnable(gv_71C054E5[1],"dbnu_spell_2_0",false);
-    UnitAbilityShow(gv_71C054E5[1],"dbnu_spell_2_0",false);
-
-    UnitAbilityEnable(gv_71C054E5[1],"dbnu_spell_2_1",true);
-    UnitAbilityShow(gv_71C054E5[1],"dbnu_spell_2_1",true);
-    createDialogs();
-
-    TriggerExecute(gt_0315FDBE, false, false);
-    
-    gf_5B3578B1();
-    gf_1A8469C6();
-    gf_85CE78E1();
-
-    gv_BB284D6D = 1;
-    //timer
-    TriggerExecute(gt_50AA3CE2, false, false);
-
-    //ui
-    TriggerExecute(gt_0315FDBE, false, false);
-
-    DialogSetVisible(gv_17071D73, PlayerGroupAll(), false);
-    gf_5B3968D5();
-}
-
-
-void reflashPlayer(int player){
+    string currentAbility;
     int i;
     int j;
 
-    for (;i<100;i+=1){
-        if (upgradesMainPlayerHas[i] == ""){
-            break;
+    if (eDialogControl == Dialogs.main_menu.heroSelectBtn.btn){
+        //英雄选择界面
+        panelCycle(c_UIType_heroSelect); 
+    }
+    else if (rootDialog == gv_277B64A1){
+        DataTableSetInt(true,"heroId",(EventDialogControl() - gv_749EC876[0][0]) / 3);
+
+        gameSoundPlayer(v_heroSelect);
+        libNtve_gf_SetDialogItemImage(Dialogs.main_menu.heroSelectBtn.img,gv_AA1BDB6C[DataTableGetInt(true,"heroId")],defaultPlayerGroup);
+        libNtve_gf_SetDialogItemTooltip(Dialogs.main_menu.heroSelectBtn.btn,
+            StringExternal(("Button/Tooltip/btn_line_ability_" + gf_45491ABD(DataTableGetInt(true,"heroId")) + "_s")),defaultPlayerGroup);
+
+        panelCycle(c_UIType_heroSelect);
+    }
+    else if (eDialogControl == Dialogs.main_menu.summonAllyHeroBtn.btn){
+        DataTableSetInt(true,"player",autoPickPlayer(true));
+        onSummonHeroBtnClick();
+        panelCycle(c_UIType_talentSelect);
+    }
+    else if (eDialogControl == Dialogs.main_menu.summonEnemyHeroBtn.btn){
+        DataTableSetInt(true,"player",autoPickPlayer(false));
+        onSummonHeroBtnClick();
+        panelCycle(c_UIType_talentSelect);
+    }
+    else if (rootDialog == gv_BB156610.lv_5C8CC8E9[0] ||
+        rootDialog == gv_BB156610.lv_5C8CC8E9[1] ||
+        rootDialog == gv_BB156610.lv_5C8CC8E9[2] ||
+        rootDialog == gv_BB156610.lv_5C8CC8E9[3] ||
+        rootDialog == gv_BB156610.lv_5C8CC8E9[4]){
+        onTalentSelectPanelClick();
+    }
+    //技能选择
+    else if (rootDialog == gv_BB156610.lv_DC4A4CA5[0] ||
+        rootDialog == gv_BB156610.lv_DC4A4CA5[1] ||
+        rootDialog == gv_BB156610.lv_DC4A4CA5[2] || 
+        rootDialog == gv_BB156610.lv_DC4A4CA5[3] ||
+        rootDialog == gv_BB156610.lv_DC4A4CA5[4]){
+        onHeroSkillPickPanelClick();
+    }
+    //选择按钮
+    else if (eDialogControl == SELECT_BTN){
+        if (DialogIsVisible(gv_BB156610.lv_5C8CC8E9[3], 1)){
+            panelCycle(c_UIType_talentSelect);
+            panelCycle(c_UIType_SKillSelect);
         }
-        libNtve_gf_SetUpgradeLevelForPlayer(player,upgradesMainPlayerHas[i],0);
+        else if (DialogIsVisible(gv_BB156610.lv_DC4A4CA5[0], 1)){
+            panelCycle(c_UIType_SKillSelect);
+            // loadArane();
+            playerSummonHero();
+            // gf_D78F0E01(12);
+            // Wait(5,c_timeReal);
+            // DialogSetPosition(gv_9CE94DA6,c_anchorCenter,0,0);
+            // DialogSetVisible(gv_9CE94DA6,defaultPlayerGroup,true);
+        }
+    } 
+    //-----------------------------------------------------------------    
+    else if (eDialogControl == Dialogs.main_menu.noCoolDownBtn.btn){
+        UnitClearCooldowns(gv_71C054E5[1],true);
+    }
+    else if (eDialogControl == Dialogs.main_menu.upgradeHeroBtn.btn){
+        UnitXPSetCurrentLevel(gv_71C054E5[1],null,MinI(UnitXPGetCurrentLevel(gv_71C054E5[1],null) + 1,36));
     }
 
-    UnitXPSetXPForLevel(gv_71C054E5[player],"dbdo_ex",0,0);
 
-    //玩家等级
-    gv_893C301B[player] = 0;
-    //玩家可用技能点
-    gv_63B35897[1] = 0;
-
-    for (i = 0; i < 5 ; i+=1){
-        //玩家英雄对应技能等级
-        gv_D0B36B8F[1][(i + 1)] += 1;
-        //玩家英雄技能上次升级对应的玩家英雄等级
-        gv_203166CD[1][(i + 1)] = gv_893C301B[1];
-        //判断英雄技能是否学习过
-        gv_5DDEB9BD[1][i] = 0;
-    }
-
+    return true;
 }
+//-----------------------------------------------------------------
 
-bool onUpgradeLevelChanged(bool testConds, bool runActions){
-    int i = 0;
+// void reflashPlayer(int player){
+//     int i;
+//     int j;
 
-    for (;i<100;i+=1){
-        if (upgradesMainPlayerHas[i] == EventUpgradeName()){
-            upgradesPlayerHasLevel[i] += EventUpgradeLevelDelta();
-            break;
-        }
-        if (upgradesMainPlayerHas[i] == ""){
-            upgradesMainPlayerHas[i] = EventUpgradeName();
-            upgradesPlayerHasLevel[i] += EventUpgradeLevelDelta();
-            break;
-        }
+//     for (;i<100;i+=1){
+//         if (upgradesPlayerHas[player][i] == ""){
+//             break;
+//         }
+//         libNtve_gf_SetUpgradeLevelForPlayer(player,upgradesPlayerHas[i],0);
+//     }
+
+//     UnitXPSetXPForLevel(gv_71C054E5[player],"dbdo_ex",0,0);
+
+//     //玩家等级
+//     gv_893C301B[player] = 0;
+//     //玩家可用技能点
+//     gv_63B35897[1] = 0;
+
+//     for (i = 0; i < 5 ; i+=1){
+//         //玩家英雄对应技能等级
+//         gv_D0B36B8F[1][(i + 1)] += 1;
+//         //玩家英雄技能上次升级对应的玩家英雄等级
+//         gv_203166CD[1][(i + 1)] = gv_893C301B[1];
+//         //判断英雄技能是否学习过
+//         gv_5DDEB9BD[1][i] = 0;
+//     }
+
+// }
+
+// bool onUpgradeLevelChanged(bool testConds, bool runActions){
+//     int i = 0;
+
+//     for (;i<100;i+=1){
+//         if (upgradesPlayerHas[EventPlayer()][i] == EventUpgradeName()){
+//             upgradesPlayerHasLevel[i] += EventUpgradeLevelDelta();
+//             break;
+//         }
+//         if (upgradesPlayerHas[EventPlayer()][i] == ""){
+//             upgradesPlayerHas[i] = EventUpgradeName();
+//             upgradesPlayerHasLevel[i] += EventUpgradeLevelDelta();
+//             break;
+//         }
+//     }
+
+//     return true;
+// }
+
+bool onSPEffectUsed(bool t, bool r){
+    string eEffect = EventPlayerEffectUsed();
+
+    //克劳
+    if (eEffect == "dbhy_19b" || eEffect == "dbhy_19" ){
+        showMsg(1,"可出刀");
     }
-
+    
     return true;
 }
 
@@ -220,9 +209,9 @@ bool onCommand(bool t,bool r){
     else if(cmd == "u"){
         libNtve_gf_SetUpgradeLevelForPlayer(1,param,StringToInt(param2));
     }
-    else if (cmd == "r"){
-        reflashPlayer(1);
-    }
+    // else if (cmd == "r"){
+    //     reflashPlayer(1);
+    // }
     else if (cmd == "lv"){
         UnitXPSetCurrentLevel(gv_71C054E5[1],null,MinI(UnitXPGetCurrentLevel(gv_71C054E5[1],null) + 1,36));
     }
@@ -265,6 +254,7 @@ bool onCommand(bool t,bool r){
     return true;
 }
 
+//------------------------------------------damageDisplayer-----------------------------------------
 
 int textTag;
 
@@ -289,10 +279,10 @@ void damageShow(fixed damageAmount, unit damagingUnit, unit damagedUnit, int dam
     string playerHeroNameDamaged = TextToString(UnitTypeGetName(UnitGetType(damagedUnit)));
 
      //有一个隐藏单位 每次受到伤害都会给那个单位同样打一个伤害 应该是作者的反作弊 这里需要判断一下过滤掉
-    if (UnitGetType(damagedUnit) == "dbHero00" || (damagingUnit != gv_71C054E5[1] && UnitGetOwner(damagingUnit) == 1) || damageAmount == 0){
+    if (UnitGetType(damagedUnit) == "dbHero00" || (damagingUnit != queryPlayerHeroUnit(1) || UnitGetOwner(damagingUnit) != 1) || damageAmount == 0){
         return;
     }
-    //物理伤害
+    //物理伤害d
     if (damageType == c_unitDamageTypeMelee || damageType == c_unitDamageTypeRanged){
         showMsg(1,"tick:"+FixedToString(MaxF(TimerGetElapsed(damageTimer),1.0),2)+"->伤害为物理伤害,伤害为"+FixedToString(damageAmount,2));
     }
@@ -311,7 +301,7 @@ void damageShow(fixed damageAmount, unit damagingUnit, unit damagedUnit, int dam
     textTag = TextTagCreate(StringToText("上一次伤害="+FixedToString(damageAmount,2)+",DPS="+
         FixedToString((botUnitDamagedTotal / MaxF(TimerGetElapsed(damageTimer),1.0)),2)+",总伤害="+
         FixedToString(botUnitDamagedTotal,2)+",时间="+FixedToString(MaxF(TimerGetElapsed(damageTimer),1.0),2)),30, 
-            UnitGetPosition(damagedUnit), 1.0, true, true, PlayerGroupAll());
+            UnitGetPosition(damagedUnit), 1.0, true, true, defaultPlayerGroup);
     TextTagAttachToUnit(TextTagLastCreated(), damagedUnit, 1.125);
 }
 
@@ -348,226 +338,89 @@ bool onPlayerSpendMinerals(bool t, bool r){
     return true;
 }
 
-void onTalentOptPanelClick(){
-    int i;
-    int j;
+//-------------------------------------------------------------------------------------
 
-    int player = 1;
-
-    //暴力判断找到控件对应数组的位置
-    for (i = 0; i < 18; i += 1)
-    {
-        for (j = 0; j < 5; j += 1)
-        {
-            if (EventDialogControl() == gv_BB156610.lv_18A4806A[j][i])
-            {
-                //如果已经选中
-                if (gv_BB156610.lv_48849745[player][j][i])
-                {
-                    gv_BB156610.lv_48849745[player][j][i] = false;
-                    if (j == 0)
-                    {
-                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_0_yellow.dds", PlayerGroupAll());
-                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(96.08, 98.43, 70.98), PlayerGroupAll());
-                    }
-                    else if (j == 1)
-                    {
-                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_1_red.dds", PlayerGroupAll());
-                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(82.35, 50.98, 48.24), PlayerGroupAll());
-                    }
-                    else if (j == 2)
-                    {
-                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_2_violet.dds", PlayerGroupAll());
-                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(88.24, 70.20, 98.43), PlayerGroupAll());
-                    }
-                    else if (j == 3)
-                    {
-                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_3_green.dds", PlayerGroupAll());
-                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(72.16, 98.43, 70.98), PlayerGroupAll());
-                    }
-                    else if (j == 4)
-                    {
-                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_4_teal.dds", PlayerGroupAll());
-                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(70.98, 93.33, 98.43), PlayerGroupAll());
-                    }
-                    DialogControlSetVisible(gv_BB156610.lv_51B06619[j][i], PlayerGroupSingle(player), false);
-                    DialogControlSetEnabled(gv_BB156610.lv_E2A89576[j][i], PlayerGroupSingle(player), true);
-                    DialogControlSetEnabled(gv_BB156610.lv_DEE7AA8A[j][i], PlayerGroupSingle(player), true);
-                }
-                //如果没有被选择
-                else
-                {
-                    gv_BB156610.lv_48849745[player][j][i] = true;
-                    if (j == 0)
-                    {
-                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_0_yellow_com.dds", PlayerGroupSingle(player));
-                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(89.41, 94.90, 24.31), PlayerGroupSingle(player));
-                    }
-                    else if (j == 1)
-                    {
-                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_1_red_com.dds", PlayerGroupSingle(player));
-                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(60.78, 22.75, 20.00), PlayerGroupSingle(player));
-                    }
-                    else if (j == 2)
-                    {
-                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_2_violet_com.dds", PlayerGroupSingle(player));
-                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(73.33, 30.20, 96.86), PlayerGroupSingle(player));
-                    }
-                    else if (j == 3)
-                    {
-                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_3_green_com.dds", PlayerGroupSingle(player));
-                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(34.90, 95.69, 31.76), PlayerGroupSingle(player));
-                    }
-                    else if (j == 4)
-                    {
-                        libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[j][i], "character\\newroon\\border\\my_roon_system_border_4_teal_com.dds", PlayerGroupSingle(player));
-                        libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[j][i], Color(30.98, 85.10, 96.86), PlayerGroupSingle(player));
-                    }
-                    DialogControlSetVisible(gv_BB156610.lv_51B06619[j][i], PlayerGroupSingle(player), true);
-                    DialogControlSetEnabled(gv_BB156610.lv_E2A89576[j][i], PlayerGroupSingle(player), true);
-                    DialogControlSetEnabled(gv_BB156610.lv_DEE7AA8A[j][i], PlayerGroupSingle(player), true);
-                }
-            }
-        }
-    }
-}
-
-bool onPanelClcik(bool t, bool r){
-    int eDialogControl = EventDialogControl();
-    int rootDialog = DialogControlGetDialog(eDialogControl);
-
-    string currentAbility;
-    int i;
-    int j;
-
-    if (rootDialog == gv_277B64A1)
-    {
-        panelCycle(c_UIType_heroSelect);
-
-        heroSummon = (EventDialogControl() - gv_749EC876[0][0]) / 3;
-        
-        gv_E8AAF5C5 = true;
-        gv_65C11E79 = 3;
-        gv_8558D5EF = 1;
-        //1ban0直接选
-        gv_B37F1D3F = 0;
-        gv_DA579AA4 = 2;
+bool onUnitDied(bool t, bool r){
     
-        //玩家 - heroid
-        gv_131E8983[1] = heroSummon;
+    libNtve_gf_ShowHideUnit(EventUnit(),true);
+    // Wait(8,c_timeGame);
+    // UnitSetPropertyInt(EventUnit(),)
     
-        //玩家队伍
-        gv_9EEEA78D[1] = 1;
-
-        //加点、技能信息，成长树初始化
-        TriggerExecute(gt_C7E3A592, false, true);
-        TriggerExecute(gt_84BE2900, false, true);
-        TriggerExecute(gt_53B638C3, false, true);
-        TriggerExecute(gt_B15050B7, false, true);
-
-        TriggerExecute(gt_F00C0934, false, true);
-        TriggerExecute(gt_64FBF599, false, true);
-        TriggerExecute(gt_27ED109B, false, true);
-
-        TriggerExecute(gt_449346FA, false, true);
-        TriggerExecute(gt_936A4CD0, false, true);
-        TriggerExecute(gt_4763C627, false, true);
-
-        TriggerExecute(gt_7B46B8A2, false, true);
-        TriggerExecute(gt_E09377E6, false, true);
-        TriggerExecute(gt_21AB3C1E, false, true);
-        initStarStrs();
-        panelCycle(c_UIType_talentSelect);
-    }
-
-    else if (rootDialog == gv_BB156610.lv_5C8CC8E9[0] ||
-        rootDialog == gv_BB156610.lv_5C8CC8E9[1] ||
-        rootDialog == gv_BB156610.lv_5C8CC8E9[2] ||
-        rootDialog == gv_BB156610.lv_5C8CC8E9[3] ||
-        rootDialog == gv_BB156610.lv_5C8CC8E9[4])
-    {
-        onTalentOptPanelClick();
-    }
-
-    else if (eDialogControl == SELECT_BTN)
-    {
-        if (DialogIsVisible(gv_BB156610.lv_5C8CC8E9[3], 1)){
-            panelCycle(c_UIType_talentSelect);
-            
-            panelCycle(c_UIType_SKillSelect);
-        }
-        else if (DialogIsVisible(gv_BB156610.lv_DC4A4CA5[0], 1)){
-            gf_D78F0E01(12);
-            Wait(1.0,c_timeReal);
-            onPostInit();
-        }
-     
-    } 
-    
-    else if (eDialogControl == Dialogs.main_menu.noCoolDownBtn.btn){
-        // currentAbility = "";
-        // for (;i<50;i+=1){
-        //     if (UnitAbilityGet(gv_71C054E5[1],i) != ""){
-        //         currentAbility = UnitAbilityGet(gv_71C054E5[1],i);
-        //         showMsg(1,currentAbility);
-        //         Wait(1,c_timeGame);
-        //         if (currentAbility != "stop" || currentAbility != "attack" || currentAbility != "move"){
-        //             libNtve_gf_UnitAbilityRemoveCooldown(gv_71C054E5[1],
-        //                 currentAbility,"Abil/" +currentAbility);
-        //         }
-
-        //         if (currentAbility == "dbnu_spell_1_0"){
-        //              UnitClearCooldowns(gv_71C054E5[1],true);
-        //         }
-        //     }
-            
-        // }
-        UnitClearCooldowns(gv_71C054E5[1],true);
-    }
-
-    else if (eDialogControl == Dialogs.main_menu.upgradeHeroBtn.btn){
-        UnitXPSetCurrentLevel(gv_71C054E5[1],null,MinI(UnitXPGetCurrentLevel(gv_71C054E5[1],null) + 1,36));
-    }
-
-    //技能选择
-    else if (rootDialog == gv_BB156610.lv_DC4A4CA5[0] ||
-        rootDialog == gv_BB156610.lv_DC4A4CA5[1] ||
-        rootDialog == gv_BB156610.lv_DC4A4CA5[2] || 
-        rootDialog == gv_BB156610.lv_DC4A4CA5[3] ||
-        rootDialog == gv_BB156610.lv_DC4A4CA5[4]){
-
-            for (i = 0; i < 5; i += 1) {
-
-                for (j = 0; j < 5; j += 1) {
-                    //判断是哪一个技能按键
-                    if (eDialogControl == gv_BB156610.lv_52872E19[i][j]){
-                        //转置一下
-                        gf_2784DE6E(1, j, i);  
-                    }
-                }
-        
-                // gv_BB156610.lv_0195430E[player][i] = StringToInt(StringWord(str,101 + i));
-                // j = gv_BB156610.lv_0195430E[player][i];
-        
-                // DialogControlSetEnabled(gv_BB156610.lv_429AF84E[i][j], PlayerGroupSingle(player), true);
-                // DialogControlSetEnabled(gv_BB156610.lv_0F36D2DD[i][j], PlayerGroupSingle(player), true);
-                // libNtve_gf_SetDialogItemImage(gv_BB156610.lv_0F36D2DD[i][j], "character\\newroon\\border\\my_roon_system_border_white.dds", PlayerGroupSingle(player));
-                // DialogControlSetVisible(gv_BB156610.lv_0B0B9E92[i][j], PlayerGroupSingle(player), true);               
-            }
-
-            }
     return true;
 }
 
-bool onSPEffectUsed(bool t, bool r){
-    string eEffect = EventPlayerEffectUsed();
-
-    //克劳
-    if (eEffect == "dbhy_19b" || eEffect == "dbhy_19" ){
-        showMsg(1,"可出刀");
-    }
+//预初始化--初始panel生成前调用
+void onPreInit(){
     
-    return true;
+    PlayerModifyPropertyInt(1,c_playerPropMinerals,c_playerPropOperAdd,1000000);
+    PlayerModifyPropertyInt(2,c_playerPropMinerals,c_playerPropOperAdd,1000000);
+
+    libNtve_gf_CreateUnitsWithDefaultFacing(1,botHero,0,11,PointFromName("Practice Mode Computer2"));
+    botUnit = UnitLastCreated();
+    UnitSetPropertyInt(botUnit,c_unitPropLifeMax,10000);
+    UnitSetPropertyInt(botUnit,c_unitPropLifeRegen,2000);
+    UnitSetPropertyInt(botUnit,c_unitPropLifeArmor,0);
+    UnitSetPropertyInt(botUnit,c_unitPropEnergyArmor,0);
+    
+    UnitIssueOrder(botUnit, Order(AbilityCommand("stop", 0)), c_orderQueueAddToFront);
+
+    //玩家 - heroid
+    // gv_131E8983[2] = 38;
+    
+    // //玩家队伍 故意设置 引发错误以便防止生成
+    // gv_9EEEA78D[2] = 2;
+
+    // gv_71C054E5[2] = botUnit;
+
+    //----------------------------------------------------------------------------------------
+    
+    //全图视野
+    VisRevealerCreate(1, RegionEntireMap());
+
+}
+
+//初始化
+void onInit(){
+    //关闭roundticker
+    TriggerEnable(gt_FE0119F2,false);
+    TimerPause(gv_8930AB6D,true);
+
+    TriggerAddEventChatMessage(TriggerCreate("onCommand"),1,null,false);
+    TriggerAddEventUpgradeLevelChanged(TriggerCreate("onUpgradeLevelChanged"),1);  
+    TriggerAddEventPlayerPropChange(TriggerCreate("onPlayerSpendMinerals"),1,c_playerPropMinerals);
+    TriggerAddEventPlayerEffectUsed(TriggerCreate("onSPEffectUsed"),1,null);
+    TriggerAddEventDialogControl(TriggerCreate("onPanelClickGame"),1,c_invalidDialogControlId,c_triggerControlEventTypeClick);
+    TriggerAddEventUnitDied(TriggerCreate("onUnitDied"),null);
+
+    TriggerAddEventUnitDamaged(TriggerCreate("onDamageMelee"),null,c_unitDamageTypeMelee,c_unitDamageEither,null); 
+    TriggerAddEventUnitDamaged(TriggerCreate("onDamageRanged"),null,c_unitDamageTypeRanged,c_unitDamageEither,null); 
+    TriggerAddEventUnitDamaged(TriggerCreate("onDamageSpell"),null,c_unitDamageTypeSpell,c_unitDamageEither,null);
+    TriggerAddEventUnitDamaged(TriggerCreate("onDamageSplash"),null,c_unitDamageTypeSplash,c_unitDamageEither,null);
+
+    initGameSettings();
+    initGameData();
+    initAlliances();
+
+    loadArane();
+    Wait(1.0,c_timeGame);
+    onPostInit();
+
+
+}
+
+//后初始化 -- 英雄生成结束后1秒调用
+void onPostInit(){
+
+    libNtve_gf_ShareVisionofUnit(botUnit,true,1);
+    libNtve_gf_SetAllianceOneWay(2,1,libNtve_ge_AllianceSetting_Ally);   
+
+    //切换兴奋剂
+    UnitAbilityEnable(gv_71C054E5[1],"dbnu_spell_2_0",false);
+    UnitAbilityShow(gv_71C054E5[1],"dbnu_spell_2_0",false);
+    UnitAbilityEnable(gv_71C054E5[1],"dbnu_spell_2_1",true);
+    UnitAbilityShow(gv_71C054E5[1],"dbnu_spell_2_1",true);
+
+    createDialogs();
 }
 
 void dummyInit(){
