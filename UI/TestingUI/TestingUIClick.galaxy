@@ -1,0 +1,85 @@
+//GongSun_ink 2022
+
+//英雄选择界面点击触发
+void onSummonHeroBtnClick(){
+    int player = getPlayerLastPicked();
+
+    gv_131E8983[player] = getHeroLastSelected();
+    
+    //玩家队伍
+    gv_9EEEA78D[player] = MinI(FixedToInt(player / 6),1);
+    
+    gv_A6CEA227[0][0] = 1;
+    
+    //初始化数据
+    initDataForPlayer();
+
+}
+
+bool onTestingUIClick(bool t, bool r){
+    int eDialogControl = EventDialogControl();
+
+    if (summoning){
+        return true;
+    }
+
+    if (eDialogControl == Dialogs.main_menu.heroSelectBtn.btn){
+        //英雄选择界面
+        GamePanelShow(c_UIType_heroSelect,true,testModePlayerGroup); 
+    }
+    if (eDialogControl == Dialogs.main_menu.summonAllyHeroBtn.btn){
+        if (DataTableGetInt(true,"heroId") == 0){
+            showMsg(1,"请先选择英雄");
+            return true;
+        }
+        summoning = true;
+        DataTableSetInt(true,"player",pickPlayer(true));
+        onSummonHeroBtnClick();
+        GamePanelShow(c_UIType_talentSelect,true,testModePlayerGroup);
+    }
+    if (eDialogControl == Dialogs.main_menu.summonEnemyHeroBtn.btn){
+        if (DataTableGetInt(true,"heroId") == 0){
+            showMsg(1,"请先选择英雄");
+            return true;
+        }
+        summoning = true;
+        DataTableSetInt(true,"player",pickPlayer(false));
+        onSummonHeroBtnClick();
+        GamePanelShow(c_UIType_talentSelect,true,testModePlayerGroup);
+    }
+    if (eDialogControl == Dialogs.main_menu.upgradeHeroBtn.btn){
+        UnitXPSetCurrentLevel(getTestPlayerCurrentSelectedUnit(),null,MinI(UnitXPGetCurrentLevel(DataTableGetUnit(true,"heroselected"),null) + 1,36));
+    }
+    if (eDialogControl == Dialogs.main_menu.noCoolDownBtn.btn){
+        UnitClearCooldowns(getTestPlayerCurrentSelectedUnit(),true);
+    }
+    if (eDialogControl == Dialogs.main_menu.fullmana.btn){
+        UnitSetPropertyFixed(getTestPlayerCurrentSelectedUnit(),c_unitPropEnergyPercent,100.0);
+    }
+    if (eDialogControl == Dialogs.main_menu.removeHeroBtn.btn){
+        
+    }
+    if (eDialogControl == Dialogs.main_menu.nextRound.btn){
+        
+    }
+    if (eDialogControl == Dialogs.main_menu.lastRound.btn){
+        
+    }
+
+    return true;
+}
+
+
+void initTestingUITrigger(){
+    trigger t = TriggerCreate("onTestingUIClick");
+    TriggerAddEventDialogControl(t,testModePlayer,Dialogs.main_menu.heroSelectBtn.btn,c_triggerControlEventTypeClick);
+    TriggerAddEventDialogControl(t,testModePlayer,Dialogs.main_menu.summonAllyHeroBtn.btn,c_triggerControlEventTypeClick);
+    TriggerAddEventDialogControl(t,testModePlayer,Dialogs.main_menu.summonEnemyHeroBtn.btn,c_triggerControlEventTypeClick);
+    TriggerAddEventDialogControl(t,testModePlayer,Dialogs.main_menu.upgradeHeroBtn.btn,c_triggerControlEventTypeClick);
+    TriggerAddEventDialogControl(t,testModePlayer,Dialogs.main_menu.noCoolDownBtn.btn,c_triggerControlEventTypeClick);
+    TriggerAddEventDialogControl(t,testModePlayer,Dialogs.main_menu.fullmana.btn,c_triggerControlEventTypeClick);
+    TriggerAddEventDialogControl(t,testModePlayer,Dialogs.main_menu.removeHeroBtn.btn,c_triggerControlEventTypeClick);
+    TriggerAddEventDialogControl(t,testModePlayer,Dialogs.main_menu.nextRound.btn,c_triggerControlEventTypeClick);
+    TriggerAddEventDialogControl(t,testModePlayer,Dialogs.main_menu.lastRound.btn,c_triggerControlEventTypeClick);
+    DataTableSetTrigger(true,"tirgger-onTestingUIClick",t);
+}

@@ -1,0 +1,172 @@
+//GongSun_ink 2022
+
+void initAlliances(){
+    int i = 1;
+
+    playergroup tempPlayerGroup;
+
+    PlayerOptionOverride(1, "selectuncontrolable", "1");
+    
+    for (; i < 6 ; i +=1){
+        PlayerGroupAdd(tempPlayerGroup,i);
+        PlayerGroupAdd(tempPlayerGroup,i + 5);
+        PlayerGroupAdd(gv_12BC5A6E[0],i);
+        PlayerGroupAdd(gv_12BC5A6E[1],i + 5);
+
+        gv_9EEEA78D[i] = 0;
+        gv_9EEEA78D[i + 5] = 1;
+    }
+    
+    //dummyplayer
+    PlayerGroupAdd(tempPlayerGroup,11);
+
+    libNtve_gf_SetPlayerGroupAlliance(tempPlayerGroup, libNtve_ge_AllianceSetting_EnemyWithSharedVision);
+    libNtve_gf_SetPlayerGroupAlliance(gv_12BC5A6E[0], libNtve_ge_AllianceSetting_AllyWithSharedVisionAndControl);
+    libNtve_gf_SetPlayerGroupAlliance(gv_12BC5A6E[1], libNtve_ge_AllianceSetting_AllyWithSharedVisionAndControl);
+    for (i=1;i<6;i+=1){
+        PlayerSetAlliance(i+5,c_allianceIdControl,1,true); 
+    }
+
+    // PlayerSetAlliance(i,c_allianceIdControl,playerid + 5,true); 
+}
+
+
+void initGameSettings(){
+    //加载bank
+    TriggerExecute(gt_CC470061, false, true);
+    GameSetLighting("Char2", 1.4);
+    TriggerExecute(gt_CA75246F, false, false);
+    TriggerExecute(gt_0C458B09, false, true);
+    gv_12D739B9 = 13;
+    TriggerEnable(gt_F16108BA, false);
+    TriggerExecute(gt_610A1DC5, false, true);
+    //视角调整
+    gf_654885B9();
+    gv_12D739B9 = 13;
+}
+
+void loadArane(){
+
+    gv_65C11E79 = 13;
+
+    //点击触发器
+    TriggerEnable(gt_B5F15D4C, true);
+    gameSoundPlayer(v_roundInit);
+   
+    DialogControlFadeTransparency(gv_D3F35143, PlayerGroupAll(), 2.0, 100.0);
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeInventoryPanel, true);
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeInfoPanel, true);
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeCommandPanel, true);
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeMinimapPanel, true);
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeResourcePanel, true);
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeMenuBar, true);
+
+    CameraLockInput(1, false);
+    // TriggerExecute(gt_ED707C50, false, true);
+
+    // TriggerExecute(gt_85BAD3D9, false, true);
+    //开始播放音乐
+    gf_1C2570FD(1);
+
+    //血条、经验条和属性栏
+    TriggerExecute(gt_1C5C641A, true, true);
+    //?
+    TriggerExecute(gt_9B48566C, true, true);
+    //升级按钮创建
+    TriggerExecute(gt_6C558B0C, true, true);
+    //天赋？
+    TriggerExecute(gt_7988D49E, false, true);
+    //tab
+    TriggerExecute(gt_EFE165C0, true, true);
+    //加点ui -- 需要动态更新
+    TriggerExecute(gt_C723D23B, true, true);
+    //?
+    TriggerExecute(gt_D3F02B96, true, true);
+    //参数录入
+    TriggerExecute(gt_A6596446, true, true);
+    //创建英雄信息ui
+    TriggerExecute(gt_0C3CB411, true, true);
+
+    //信息
+    TriggerExecute(gt_33A76FD1, true, true);
+    //bank
+    TriggerExecute(gt_8F0F4A51, false, false);
+    //ui
+
+    //setings etc
+    TriggerExecute(gt_39E9F3AC, false, true);
+    TriggerExecute(gt_7E1E7511, false, true);
+    TriggerExecute(gt_63B72605, false, true);
+    TriggerExecute(gt_C04D8CFD, false, true);
+    //血量 护盾显示更新
+    TriggerEnable(gt_A334548C, true);
+    //显示别人的英雄信息
+    TriggerEnable(gt_5E391F04, true);
+
+    //创建致命伤害显示ui
+    TriggerExecute(gt_BEAA2115, false, false);
+    TriggerExecute(gt_6A0C33ED, false, false);
+    //隐藏皮肤选择界面
+    DialogSetVisible(gv_17071D73, PlayerGroupAll(), false);
+
+    //ui
+    TriggerExecute(gt_0315FDBE, false, false);
+
+    //timer
+    // TriggerExecute(gt_50AA3CE2, false, false);
+
+    
+    // // loadDummyHud();
+
+    // gv_BB284D6D = 1;
+}
+
+void initGameData(){
+
+    //隐藏克劳和四季
+    libNtve_gf_ShowHideUnit(UnitFromId(608), false);
+    libNtve_gf_ShowHideUnit(UnitFromId(20), false);
+    libNtve_gf_ShowHideUnit(UnitFromId(1657007678), false);
+    libNtve_gf_ShowHideUnit(UnitFromId(168525155), false);
+
+    //装填字符
+    TriggerExecute(gt_6F6A2EA8, false, true);
+    TriggerExecute(gt_48BC82B7, false, true);
+    TriggerExecute(gt_21F1D4C9, false, true);
+    TriggerExecute(gt_9142A6D9, false, true);
+    TriggerExecute(gt_44B0C1F1, false, true);
+    TriggerExecute(gt_6F15A027, false, true);
+    TriggerExecute(gt_2DC208BE, false, true);
+
+    //assets
+    TriggerExecute(gt_A42AFADF, true, true);
+    TriggerExecute(gt_67FDA500, true, true);
+    TriggerExecute(gt_A21467A7, true, true);
+
+    //车模型 
+    // TriggerExecute(gt_6C7F4620, false, true);
+
+    gv_E8AAF5C5 = true;
+    gv_65C11E79 = 3;
+    gv_8558D5EF = 1;
+    //1ban0直接选
+    gv_B37F1D3F = 0;
+    gv_DA579AA4 = 2;
+
+}
+
+void disableTriggers(){
+    //回合
+    TriggerEnable(gt_FE0119F2,false);
+    //回合计时器
+    TimerPause(gv_8930AB6D,true);
+    //关闭测试模式下单位点击
+    TriggerEnable(gt_5E391F04,false);
+    TriggerEnable(gt_CF5EF86B,false);
+    //关闭单位死亡
+    TriggerEnable(gt_B8AD6CA8,false);
+    //关闭升级效果
+    TriggerEnable(gt_5773FD46,false);
+    //关闭升级触发器
+    TriggerEnable(gt_D0366A97,false);
+}

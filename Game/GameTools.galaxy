@@ -1,0 +1,54 @@
+//GongSun_ink 2022
+
+int queryPlayerHeroId(int playerId){
+    return gv_131E8983[playerId];
+}
+
+unit queryPlayerHeroUnit(int playerId){
+    return gv_71C054E5[playerId];
+}
+
+unit getTestPlayerCurrentSelectedUnit(){
+    return DataTableGetUnit(true,"heroselected");
+}
+
+int getHeroLastSelected(){
+    return DataTableGetInt(true,"heroId");
+}
+
+int getPlayerLastPicked(){
+    return DataTableGetInt(true,"player");
+}
+
+void gameSoundPlayer(int type){
+    if (type == v_additionalSelect){
+        SoundPlay(SoundLink("sounduistarclick",-1),testModePlayerGroup,100.0,0.0);
+    }
+    else if (type == v_heroSelect){
+        SoundPlay(SoundLink("sounduistar12",-1),testModePlayerGroup,100.0,0.0);
+    }
+    else if (type == v_roundInit){
+        SoundPlay(SoundLink("UI_ConsoleIn_Prot2", -1), PlayerGroupAll(), 100.0, 0.0);
+    }
+}
+
+int getHeroIdByUnit(unit inUnit){
+    return StringToInt(StringSub(UnitGetType(inUnit),7,8));
+}
+
+void debug(string message){
+    UIDisplayMessage(testModePlayerGroup,c_messageAreaSubtitle,StringToText("debug--"+message));
+}
+
+void removeHero(){
+
+}
+
+void ReflashPlayer(){
+
+}
+
+void removeHeroAndReflashPlayer(){
+
+}
+

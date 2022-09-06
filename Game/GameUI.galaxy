@@ -1,0 +1,402 @@
+//GongSun_ink 2022
+
+void updateHeroPropProgressBar(int player, unit inUnit, int type){
+    
+    if (type == PROGRESS_TYPE_LIFE){
+        gf_2AF0A3EE(player, inUnit, gv_5C4043F8.lv_23D09B56, c_unitPropLifePercent, gv_5C4043F8.lv_24D62004, c_unitPropLife, c_unitPropLifeMax);
+    }
+    else if (type == PROGRESS_TYPE_ENERGY){
+        gf_2AF0A3EE(player, inUnit, gv_5C4043F8.lv_472F835E, c_unitPropEnergyPercent, gv_5C4043F8.lv_D9B13017, c_unitPropEnergy, c_unitPropEnergyMax);
+    }
+    else{
+        
+    }
+
+}
+
+void statusBar(int player,unit inUnit){
+    updateHeroPropProgressBar(player, inUnit, PROGRESS_TYPE_LIFE);
+    updateHeroPropProgressBar(player, inUnit, PROGRESS_TYPE_ENERGY);
+}
+
+//选择
+void talentSelectUI(int row, int column, bool select, playergroup p){
+    if (select){
+        if (column == 0)
+        {
+            libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[column][row], "character\\newroon\\border\\my_roon_system_border_0_yellow_com.dds", p);
+            libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[column][row], Color(89.41, 94.90, 24.31), p);
+        }
+        else if (column == 1)
+        {
+            libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[column][row], "character\\newroon\\border\\my_roon_system_border_1_red_com.dds", p);
+            libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[column][row], Color(60.78, 22.75, 20.00), p);
+        }
+        else if (column == 2)
+        {
+            libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[column][row], "character\\newroon\\border\\my_roon_system_border_2_violet_com.dds", p);
+            libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[column][row], Color(73.33, 30.20, 96.86), p);
+        }
+        else if (column == 3)
+        {
+            libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[column][row], "character\\newroon\\border\\my_roon_system_border_3_green_com.dds", p);
+            libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[column][row], Color(34.90, 95.69, 31.76), p);
+        }
+        else if (column == 4)
+        {
+            libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[column][row], "character\\newroon\\border\\my_roon_system_border_4_teal_com.dds", p);
+            libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[column][row], Color(30.98, 85.10, 96.86), p);
+        }
+        DialogControlSetEnabled(gv_BB156610.lv_51B06619[column][row], p, true);
+        DialogControlSetEnabled(gv_BB156610.lv_E2A89576[column][row], p, true);
+        DialogControlSetEnabled(gv_BB156610.lv_DEE7AA8A[column][row], p, true);
+    }
+    else{  
+        if (column == 0)
+        {
+            libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[column][row], "character\\newroon\\border\\my_roon_system_border_0_yellow.dds", p);
+            libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[column][row], Color(96.08, 98.43, 70.98), p);
+        }
+        else if (column == 1)
+        {
+            libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[column][row], "character\\newroon\\border\\my_roon_system_border_1_red.dds", p);
+            libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[column][row], Color(82.35, 50.98, 48.24), p);
+        }
+        else if (column == 2)
+        {
+            libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[column][row], "character\\newroon\\border\\my_roon_system_border_2_violet.dds", p);
+            libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[column][row], Color(88.24, 70.20, 98.43), p);
+        }
+        else if (column == 3)
+        {
+            libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[column][row], "character\\newroon\\border\\my_roon_system_border_3_green.dds", p);
+            libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[column][row], Color(72.16, 98.43, 70.98), p);
+        }
+        else if (column == 4)
+        {
+            libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[column][row], "character\\newroon\\border\\my_roon_system_border_4_teal.dds", p);
+            libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[column][row], Color(70.98, 93.33, 98.43), p);
+        }
+        DialogControlSetEnabled(gv_BB156610.lv_51B06619[column][row], p, false);
+        DialogControlSetEnabled(gv_BB156610.lv_E2A89576[column][row], p, true);
+        DialogControlSetEnabled(gv_BB156610.lv_DEE7AA8A[column][row], p, true);
+    }
+}
+//启用
+void talentEnableUI(int row, int column, bool enable, playergroup p){
+
+    if (gv_BB156610.lv_18A4806A[column][row] != c_invalidDialogControlId){
+        DialogControlSetEnabled(gv_BB156610.lv_18A4806A[column][row], p, enable);
+    }
+    talentSelectUI(row,column,false,p);
+    DialogControlSetEnabled(gv_BB156610.lv_E2A89576[column][row], p, enable);
+    DialogControlSetEnabled(gv_BB156610.lv_DEE7AA8A[column][row], p, enable);
+}
+
+//测试模式下，点击其他玩家的单位时需要展示其他玩家的升级窗口
+void upgradeBtnShow(int index,bool show, playergroup p){
+    DialogControlSetVisible(gv_99F9B79B[index], p, show);
+    DialogControlSetVisible(gv_81AD7FB9[index], p, show);
+}
+
+void upgradeBtnEnable(int index, bool show,playergroup p){
+    DialogControlSetEnabled(gv_99F9B79B[index], p, show);
+}
+
+void storeUpgradeBtn(int player, int index, bool show){
+    DataTableSetBool(true,IntToString(player)+"_"+IntToString(index), show);
+}
+
+// void makeAbilityUpgrade(int player){
+
+//     int index;
+//     int[4] intervalLevels;
+//     int[4] levelsNeed;
+//     bool flag;
+
+//     for (; index < 4; index += 1)
+//     {
+//         if ((gv_385F7DDF[player].lv_938D9C7F[(index + 1)][gv_BB156610.lv_0195430E[player][(index + 1)]] == 6))
+//         //技能最大等级6
+//         {
+//             intervalLevels[index] = 0;
+//             levelsNeed[index] = 1;
+//         }
+//         else if ((gv_385F7DDF[player].lv_938D9C7F[(index + 1)][gv_BB156610.lv_0195430E[player][(index + 1)]] == 5))
+//         //技能最大等级5
+//         {
+//             intervalLevels[index] = 3;
+//             levelsNeed[index] = 4;
+//         }
+//         else if ((gv_385F7DDF[player].lv_938D9C7F[(index + 1)][gv_BB156610.lv_0195430E[player][(index + 1)]] == 4))
+//         //技能最大等级4
+//         {
+//             intervalLevels[index] = 4;
+//             levelsNeed[index] = 8;
+//         }
+//         else if ((gv_385F7DDF[player].lv_938D9C7F[(index + 1)][gv_BB156610.lv_0195430E[player][(index + 1)]] == 3))
+//         //技能最大等级3
+//         {
+//             intervalLevels[index] = 5;
+//             levelsNeed[index] = 13;
+//         }    
+//         //1.判断玩家英雄的技能等级是否小于其最大等级
+//         //2.玩家等级-玩家上一次升级该技能的等级 每隔n级可以升级该技能
+//         //3.判断玩家等级是否大于技能学习所需等级
+//         if ((gv_D0B36B8F[player][(index + 1)] < 
+//             gv_385F7DDF[player].lv_938D9C7F[(index + 1)][gv_BB156610.lv_0195430E[player][(index + 1)]]) 
+//         && ((gv_893C301B[player] - gv_203166CD[player][index]) >= intervalLevels[index]) 
+//         && (gv_893C301B[player] >= levelsNeed[index])){
+//             flag = true;
+//             gv_6E454E1F[player] += 1;
+//             //保存升级按钮
+//             storeUpgradeBtn(player,index,true);
+    
+//             //除1级外 更新tooptip
+//             if ((gv_893C301B[player] == 1))
+//             {
+//             }
+//             else
+//             {
+//                 gf_87B66828(player, index);
+//             }
+
+//             DialogControlSetPropertyAsText(gv_99F9B79B[index],c_triggerControlPropertyTooltip,PlayerGroupSingle(testModePlayer),
+//                 DialogControlGetPropertyAsText(gv_99F9B79B[index],c_triggerControlPropertyTooltip,player));
+            
+//         }
+//     }
+//     // 如果没有技能可以升级 重置升级点数 bug：如果升级过快，前面的技能还没有加点，后面的等级如果没有技能可以提升时则会导致技能点归零 出现bug
+//     if (!flag)
+//     {
+//         gv_63B35897[player] = 0;
+//     }
+// }
+
+//player可以是playershow的队友或者敌人，这个函数会记录player当前可以点击哪个升级框，并让其对playershow隐藏
+void storeUpgradeBtns(int player, playergroup p){
+    int i;
+    for (;i < 4; i+=1){
+        storeUpgradeBtn(player,i, DataTableGetBool(true,IntToString(player)+"_"+IntToString(i)));
+        upgradeBtnShow(i,false,p);
+        upgradeBtnEnable(i,false,p);
+    }
+}
+
+//player可以是playershow的队友或者敌人，这个函数会读取player当前可以点击哪个升级框，并让其对playershow显示
+void restoreUpgradeBtns(int player, playergroup p){
+    int i;
+    for (;i<4;i+=1){
+        upgradeBtnShow(i,DataTableGetBool(true,IntToString(player)+"_"+IntToString(i)),p);
+        upgradeBtnEnable(i,DataTableGetBool(true,IntToString(player)+"_"+IntToString(i)),p);
+    }
+}
+
+
+void updateAbilityPickPanel(int player, playergroup p){
+    int init_i;
+    int column;
+    int row;
+    string[5] abilityArray;
+    int abilityCount;
+    string heroFullType = gf_45491ABD(gv_131E8983[player]);
+
+    abilityArray[0] = "0t";
+    abilityArray[1] = "1q";
+    abilityArray[2] = "2w";
+    abilityArray[3] = "3e";
+    abilityArray[4] = "4r";
+    //先全部隐藏
+    for (; column < 5 ; column += 1){
+        DialogControlSetVisible(gv_BB156610.lv_429AF84E[column][row], p, false);
+        DialogControlSetVisible(gv_BB156610.lv_0F36D2DD[column][row], p, false);
+        DialogControlSetVisible(gv_BB156610.lv_9E2557F2[column][row], p, false);
+        DialogControlSetVisible(gv_BB156610.lv_52872E19[column][row], p, false);
+    }
+    
+    for (column = 0 ; column < 5 ; column += 1)
+    {
+        abilityCount = gv_385F7DDF[player].lv_1F4AC30A[column];
+        //注意必须是小于等于 这个数组赋值时0代表该列有一个技能
+        for (; row <= abilityCount; row += 1)
+        {  
+            debug(IntToString(abilityCount));
+            gv_385F7DDF[player].lv_26F27239[column][row] = (("character\\btn\\" + heroFullType + "_" + IntToString((row + 1)) + "_" + abilityArray[column] + ".dds"));
+            libNtve_gf_SetDialogItemImage(gv_BB156610.lv_429AF84E[column][row], gv_385F7DDF[player].lv_26F27239[column][row], p);
+            libNtve_gf_SetDialogItemText(gv_BB156610.lv_9E2557F2[column][row], StringExternal(("Button/Name/dbbu" + heroFullType + "_" + IntToString((row + 1)) + "_" + abilityArray[column])), p);
+            libNtve_gf_SetDialogItemTooltip(gv_BB156610.lv_52872E19[column][row], StringExternal(("Button/Tooltip/dbbu" + heroFullType + "_" + IntToString((row + 1)) + "_" + abilityArray[column])), p);
+            DialogControlSetVisible(gv_BB156610.lv_429AF84E[column][row], p, true);
+            DialogControlSetVisible(gv_BB156610.lv_0F36D2DD[column][row], p, true);
+            DialogControlSetVisible(gv_BB156610.lv_9E2557F2[column][row], p, true);
+            DialogControlSetVisible(gv_BB156610.lv_52872E19[column][row], p, true);
+        }
+        row = 0;
+    }
+}
+
+//每个技能只能选择一个 所以不需要多一个enable函数
+void abilityPickBtnUI(int row, int column, bool select, playergroup p){
+    int i;
+    int j;
+
+    if (select){
+        for (;  i <= 4 ; i += 1)
+        {
+            if (i == row){
+                //源代码是隐藏起来了 导致看不到tooltip
+                DialogControlSetVisible(gv_BB156610.lv_52872E19[column][i], p, true);
+                libNtve_gf_SetDialogItemImage(gv_BB156610.lv_0F36D2DD[column][i], "character\\newroon\\border\\my_roon_system_border_white.dds", p);
+                DialogControlSetVisible(gv_BB156610.lv_0B0B9E92[column][i], p, true);
+                continue;
+            }
+            DialogControlSetEnabled(gv_BB156610.lv_52872E19[column][i], p, false);
+            DialogControlSetEnabled(gv_BB156610.lv_429AF84E[column][i], p, false);
+            DialogControlSetEnabled(gv_BB156610.lv_0F36D2DD[column][i], p, false);
+        }
+
+    }else{
+        for (; i <= 4 ; i += 1)
+        {
+            if (i == row){
+                //不操作隐藏展示，防止多余的按钮被展示出来
+                // DialogControlSetVisible(gv_BB156610.lv_52872E19[column][i], p, true);
+                libNtve_gf_SetDialogItemImage(gv_BB156610.lv_0F36D2DD[column][i], "GamesUis\\MyG_BTN_Alpha.dds", p);
+                DialogControlSetVisible(gv_BB156610.lv_0B0B9E92[column][i], p, false);
+                continue;
+            }
+            DialogControlSetEnabled(gv_BB156610.lv_52872E19[column][i], p, true);
+            DialogControlSetEnabled(gv_BB156610.lv_429AF84E[column][i], p, true);
+            DialogControlSetEnabled(gv_BB156610.lv_0F36D2DD[column][i], p, true);
+        }
+    }
+}
+
+bool isAbilityBtnVisiable(int row, int column, int player){
+    //初始就是可见的
+    return !DialogControlIsVisible(gv_BB156610.lv_0B0B9E92[column][row],player);
+}
+
+void GamePanelShow(int type, playergroup p, bool show){
+
+    int offsetX;
+    int row;
+    int column;
+
+    if (type == c_UIType_heroSelect){
+        if (gv_277B64A1 == c_invalidDialogId){
+            TriggerExecute(gt_7903E3D3, true, true);
+        }
+        DialogSetVisible(gv_277B64A1,p,show);
+    }
+    else if (type == c_UIType_talentSelect){
+        if (gv_BB156610.lv_5C8CC8E9[0] == c_invalidDialogId)
+        {
+            TriggerExecute(gt_509C5828, true, true);
+            offsetX = 50;
+            DialogSetPosition(gv_BB156610.lv_5C8CC8E9[0], c_anchorLeft, 0, 0);   
+            DialogSetPositionRelative(gv_BB156610.lv_5C8CC8E9[1], c_anchorCenter, gv_BB156610.lv_5C8CC8E9[0], c_anchorRight, (offsetX + 280 / 2), 0);    
+            DialogSetPositionRelative(gv_BB156610.lv_5C8CC8E9[2], c_anchorCenter, gv_BB156610.lv_5C8CC8E9[1], c_anchorRight, (offsetX + 280 / 2), 0);    
+            DialogSetPositionRelative(gv_BB156610.lv_5C8CC8E9[3], c_anchorCenter, gv_BB156610.lv_5C8CC8E9[2], c_anchorRight, (offsetX + 280 / 2), 0);
+            DialogSetPositionRelative(gv_BB156610.lv_5C8CC8E9[4], c_anchorCenter, gv_BB156610.lv_5C8CC8E9[3], c_anchorRight, (offsetX + 280 / 2), 0);
+        
+            for (row = 0; row < 18; row += 1){
+                for (column = 0; column < 5; column += 1){
+                    talentEnableUI(row,column,true,p);
+                }
+            }
+        }
+        if (SELECT_BTN == c_invalidDialogId)
+        {
+            DialogCreate(240, 80, c_anchorCenter, 0, 0, true);
+    
+            DialogSetPositionRelative(DialogLastCreated(), c_anchorCenter, gv_BB156610.lv_5C8CC8E9[2], c_anchorTop, 0, -100);
+    
+            DialogSetImageVisible(DialogLastCreated(), false);
+    
+            DialogSetVisible(DialogLastCreated(), p, true);
+    
+            libNtve_gf_CreateDialogItemButton(DialogLastCreated(), 232, 74, c_anchorCenter, 0, 0, null, StringToText("确认"), "");
+            libNtve_gf_SetDialogItemImage(DialogControlLastCreated(), "GamesUis\\MyG_BTN_Alpha.dds", p);
+            libNtve_gf_SetDialogItemImage2(DialogControlLastCreated(), "GamesUis\\MyG_All_Blue.dds", p);
+    
+            SELECT_BTN = DialogControlLastCreated();
+            DialogControlSetEnabled(SELECT_BTN, p, true);
+        }
+
+        DialogControlSetVisible(SELECT_BTN, p, show);
+
+        DialogSetVisible(gv_BB156610.lv_5C8CC8E9[0], p, show);
+        DialogSetVisible(gv_BB156610.lv_5C8CC8E9[1], p, show);
+        DialogSetVisible(gv_BB156610.lv_5C8CC8E9[2], p, show);
+        DialogSetVisible(gv_BB156610.lv_5C8CC8E9[3], p, show);
+        DialogSetVisible(gv_BB156610.lv_5C8CC8E9[4], p, show);
+        for (row = 0; row < 18; row += 1){
+            for (column = 0; column < 5; column += 1){
+                talentSelectData(row,column,false,getPlayerLastPicked());
+                talentSelectUI(row,column,false,p);
+            }
+        }       
+    }
+    else if (type == c_UIType_SKillSelect){
+        
+        if (gv_BB156610.lv_DC4A4CA5[0] == c_invalidDialogId){
+            TriggerExecute(gt_597AD091,false,true);
+            offsetX = 50;
+            DialogSetPosition(gv_BB156610.lv_DC4A4CA5[0], c_anchorLeft, 0, 0);   
+            DialogSetPositionRelative(gv_BB156610.lv_DC4A4CA5[1], c_anchorCenter, gv_BB156610.lv_DC4A4CA5[0], c_anchorRight, (offsetX + 280 / 2), 0);    
+            DialogSetPositionRelative(gv_BB156610.lv_DC4A4CA5[2], c_anchorCenter, gv_BB156610.lv_DC4A4CA5[1], c_anchorRight, (offsetX + 280 / 2), 0);    
+            DialogSetPositionRelative(gv_BB156610.lv_DC4A4CA5[3], c_anchorCenter, gv_BB156610.lv_DC4A4CA5[2], c_anchorRight, (offsetX + 280 / 2), 0);
+            DialogSetPositionRelative(gv_BB156610.lv_DC4A4CA5[4], c_anchorCenter, gv_BB156610.lv_DC4A4CA5[3], c_anchorRight, (offsetX + 280 / 2), 0);
+        }
+            //更新技能图标并显示
+        updateAbilityPickPanel(getPlayerLastPicked(),p);
+        
+        for (row = 0; row < 5; row += 1){
+            for (column = 0; column < 5; column += 1){
+                abilityPickBtnUI(row,column,false,p);
+            }
+        }     
+  
+        DialogControlSetVisible(SELECT_BTN, p, show);
+        DialogSetVisible(gv_BB156610.lv_DC4A4CA5[0], p, show);
+        DialogSetVisible(gv_BB156610.lv_DC4A4CA5[1], p, show);
+        DialogSetVisible(gv_BB156610.lv_DC4A4CA5[2], p, show);
+        DialogSetVisible(gv_BB156610.lv_DC4A4CA5[3], p, show);
+        DialogSetVisible(gv_BB156610.lv_DC4A4CA5[4], p, show);
+        
+    }
+} 
+
+// void loadDummyHud(){
+//     int ePlayer = 1;
+//     int eUnitOwner = 11;
+//     int mphpSize;
+//     int i;
+
+//     gf_0B99E26F(ePlayer, eUnitOwner);
+//     //头像
+//     libNtve_gf_SetDialogItemImage(gv_2DED9336[1], gv_AA1BDB6C[38], p);
+//     //等级
+//     libNtve_gf_SetDialogItemText(gv_2DED9336[2], StringToText("?"), p);
+//     //颜色
+//     libNtve_gf_SetDialogItemColor(gv_2DED9336[3], Color(100,0,0), p);
+//     //玩家名
+//     libNtve_gf_SetDialogItemText(gv_2DED9336[3], StringToText("木偶"), p);
+//     //属性设置
+//     for (; i < 7 ; i += 1)
+//     {
+//         libNtve_gf_SetDialogItemText(gv_D33859CA[i], FixedToText(0,2), p);
+//     }
+
+//     libNtve_gf_SetDialogItemText(gv_D33859CA[8], (IntToText(1000000) + (StringExternal("Param/Value/858C3123") + IntToText(1000000))), p);
+//     libNtve_gf_SetDialogItemText(gv_D33859CA[9], (IntToText(1000000) + (StringExternal("Param/Value/7EE57AF9") + IntToText(1000000))), p);
+    
+//     mphpSize = MaxI(FixedToInt(268.0 * (100) * 0.01),1);
+//     DialogControlSetSize(gv_2DED9336[4], p, mphpSize, 16);
+//     mphpSize = MaxI(FixedToInt(268.0 * (100) * 0.01),1);
+//     DialogControlSetSize(gv_2DED9336[5], p, mphpSize, 16);
+// }
+
+// void showHideDummyHud(bool show){
+//     DialogSetVisible(gv_4EE04C84, testModePlayerGroup, show);
+// }

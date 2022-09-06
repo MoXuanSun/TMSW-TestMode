@@ -1,0 +1,168 @@
+//GongSun_ink 2022
+
+
+int createNormalImgControl(int rootDialog,int width, int height, int anchor, 
+    int offsetX, int offsetY, string img){
+
+    return libNtve_gf_CreateDialogItemImage(rootDialog, width, height,
+        anchor, offsetX, offsetY, EMP_TEXT, img, c_triggerImageTypeNormal, false, Color(100, 100, 100), c_triggerBlendModeNormal);
+}
+
+int createNormalImgControlWithRelativePosition(int rootDialog,int width, int height,int relative,
+     int relativeAnchor, int offsetX, int offsetY, string img, 
+     playergroup inPlayergroup){
+    
+    createNormalImgControl(rootDialog,width,height,c_anchorCenter,0,0,img);
+
+    DialogControlSetPositionRelative(DialogControlLastCreated(), inPlayergroup, c_anchorCenter,
+        relative, relativeAnchor, offsetX, offsetY);
+    
+    return DialogControlLastCreated();
+}
+
+int createNormalBtnControl(int rootDialog,int width, int height,int anchor, 
+    int offsetX, int offsetY, string tooltip, string title,
+    string btnImg, string btnHoverImg, playergroup inPlayergroup){
+
+    libNtve_gf_CreateDialogItemButton(rootDialog, width, height, anchor, offsetX, offsetY,
+        StringToText(tooltip), StringToText(title), btnHoverImg);
+
+    libNtve_gf_SetDialogItemImage(DialogControlLastCreated(),btnImg,inPlayergroup);
+
+    return DialogControlLastCreated();
+}
+
+int createNormalBtnControlWithRelativePosition(int rootDialog,int width, int height, int relative , 
+    int relativeAnchor, int offsetX, int offsetY, string tooltip, 
+    string title,string btnImg, string btnHoverImg, playergroup inPlayergroup){
+
+    createNormalBtnControl(rootDialog, width, height, c_anchorCenter, 0, 0,
+        tooltip, title, btnImg ,btnHoverImg, inPlayergroup);
+    
+    DialogControlSetPositionRelative(DialogControlLastCreated(), inPlayergroup, c_anchorCenter,
+        relative, relativeAnchor, offsetX, offsetY);
+
+    return DialogControlLastCreated();
+}
+
+void createmBtn(structref<mBtn> mBtnRef,
+    int rootDialog,
+    int borderWidth,int borderHeight, int imgWidth , int imgHeight, int btnWidth, int btnHeight ,
+    int anchor , int offsetXFromEdge, int offsetYFromEdge , 
+    string borderDDS, string img,
+    string tooltip, string title, string fontStyle,
+    string btnImg, string btnHoverImg, 
+    playergroup inPlayergroup){
+
+    //默认值
+    if (rootDialog == -1){
+        rootDialog = DialogLastCreated();
+    }
+    if (borderDDS == null){
+        borderDDS = "Assets\\Textures\\btn-border-equipment_help.dds";
+    }
+    if (inPlayergroup == null){
+        inPlayergroup = PlayerGroupActive();
+    }   
+    if (img == null){
+        img = "GamesUis\\MyG_BTN_Alpha.dds";
+    }
+    if (btnImg == null){
+        btnImg = "GamesUis\\MyG_BTN_Alpha.dds";
+    }
+    if (btnHoverImg == null){
+        btnHoverImg = "GamesUis\\MyG_All_Blue.dds";
+    }
+
+    mBtnRef.border = createNormalImgControl(rootDialog,borderWidth,borderHeight,anchor,offsetXFromEdge,offsetYFromEdge,borderDDS);
+
+    mBtnRef.img = createNormalImgControlWithRelativePosition(rootDialog,imgWidth,imgHeight,mBtnRef.border
+            ,c_anchorCenter,0,0,
+            img,inPlayergroup);
+
+    if (fontStyle != null && title != null){
+        mBtnRef.btn = createNormalBtnControlWithRelativePosition(rootDialog,btnWidth,btnHeight,mBtnRef.border
+            ,c_anchorCenter,0,0,
+            tooltip,null,btnImg,btnHoverImg,inPlayergroup);
+
+        libNtve_gf_SetDialogItemStyle(mBtnRef.btn,fontStyle,inPlayergroup);
+        
+        libNtve_gf_SetDialogItemText(mBtnRef.btn,StringToText(title),inPlayergroup);
+
+    }else{
+        mBtnRef.btn = createNormalBtnControlWithRelativePosition(rootDialog,btnWidth,btnHeight,mBtnRef.border
+            ,c_anchorCenter,0,0,
+            tooltip,title,btnImg,btnHoverImg,inPlayergroup);
+    }
+
+    if (title == null){
+        DialogControlFadeTransparency(mBtnRef.btn,inPlayergroup,0,45.0);
+    }
+            
+}
+
+void createmBtnRelative(structref<mBtn> mBtnRef,
+    int rootDialog,
+    int borderWidth,int borderHeight, int imgWidth , int imgHeight, int btnWidth, int btnHeight ,
+    int ref , int offsetXFromEdge, int offsetYFromEdge , 
+    string borderDDS, string img,
+    string tooltip, string title, string fontStyle, 
+    string btnImg, string btnHoverImg, 
+    playergroup inPlayergroup,
+    bool nextLine){
+
+    //默认值
+    if (rootDialog == -1){
+        rootDialog = DialogLastCreated();
+    }
+    if (borderDDS == null){
+        borderDDS = "Assets\\Textures\\btn-border-equipment_help.dds";
+    }
+    if (inPlayergroup == null){
+        inPlayergroup = PlayerGroupActive();
+    }    
+    if (img == null){
+        img ="GamesUis\\MyG_BTN_Alpha.dds";
+    }
+    if (btnImg == null){
+        btnImg = "GamesUis\\MyG_BTN_Alpha.dds";
+    }
+    if (btnHoverImg == null){
+        btnHoverImg = "GamesUis\\MyG_All_Blue.dds";
+    }
+
+    //因为函数dialogcontrolgetwidth必须传入一个player参数，故使用playergroupplayer从inPlayergroup获得一个玩家
+    if (nextLine){
+        mBtnRef.border = createNormalImgControlWithRelativePosition(rootDialog,borderWidth,borderHeight
+            ,ref,c_anchorBottom,offsetXFromEdge
+            ,DialogControlGetWidth(ref,PlayerGroupPlayer(inPlayergroup,1)) / 2 + TEST_UI_PADDING,
+            borderDDS,inPlayergroup);
+    }else{
+        mBtnRef.border = createNormalImgControlWithRelativePosition(rootDialog,borderWidth,borderHeight
+            ,ref,c_anchorRight,DialogControlGetWidth(ref,PlayerGroupPlayer(inPlayergroup,1)) / 2 + TEST_UI_PADDING
+            ,offsetYFromEdge,
+            borderDDS,inPlayergroup);
+    }
+    
+    mBtnRef.img = createNormalImgControlWithRelativePosition(rootDialog,imgWidth,imgHeight,mBtnRef.border
+        ,c_anchorCenter,0,0,
+        img,inPlayergroup);
+        
+    if (fontStyle != null && title != null){
+        mBtnRef.btn = createNormalBtnControlWithRelativePosition(rootDialog,btnWidth,btnHeight,mBtnRef.border
+            ,c_anchorCenter,0,0,
+            tooltip,title,btnImg,btnHoverImg,inPlayergroup);
+
+        libNtve_gf_SetDialogItemStyle(mBtnRef.btn,fontStyle,inPlayergroup);
+
+    }else{
+        mBtnRef.btn = createNormalBtnControlWithRelativePosition(rootDialog,btnWidth,btnHeight,mBtnRef.border
+            ,c_anchorCenter,0,0,
+            tooltip,title,btnImg,btnHoverImg,inPlayergroup);
+    }
+
+    if (title == null){
+        DialogControlFadeTransparency(mBtnRef.btn,inPlayergroup,0,45.0);
+    }
+    
+}

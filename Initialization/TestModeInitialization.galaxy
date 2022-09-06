@@ -1,0 +1,41 @@
+//GongSun_ink 2022
+
+//--------------------------------------------------------------------------------------------------------------
+
+//最开始调用
+void onPreInit(){
+
+    DEFAULTS.DEFAULT_PLAYERGROUP = testModePlayerGroup;
+    
+   
+}
+
+//初始化测试模式数据
+void onInit(){
+    
+    initGameSettings();
+    initGameData();
+    initAlliances();
+
+    createTestingDialogs();
+    initTestingUITrigger();
+    initUpgradeHooker();
+
+    initGameUITrigger();
+
+    loadArane();
+
+    disableTriggers();
+}
+
+//进入游戏后
+void onPostInit(){
+    VisRevealerCreate(1, RegionEntireMap());
+}
+
+//初始化
+void dummyInit(){
+    onPreInit();
+    onInit();
+    onPostInit();
+}

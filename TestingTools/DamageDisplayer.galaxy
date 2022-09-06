@@ -1,0 +1,91 @@
+//GongSun_ink 2022
+
+int textTag;
+
+void tryReflashTimers(){
+    if (!timerInit){
+        TimerStart(damageTimer,9999,false,c_timeGame);
+        TimerStart(resetTimer,5,false,c_timeGame);
+        timerInit = true;
+    }
+
+    if (TimerGetRemaining(resetTimer) == 0.0){
+        TimerRestart(resetTimer);
+        TimerRestart(damageTimer);
+        botUnitDamagedTotal = 0;
+    }else{
+        TimerRestart(resetTimer);
+    }
+}
+
+void damageShow(fixed damageAmount, unit damagingUnit, unit damagedUnit, int damageType){
+    string playerHeroNameDamaging = TextToString(UnitTypeGetName(UnitGetType(damagingUnit)));
+    string playerHeroNameDamaged = TextToString(UnitTypeGetName(UnitGetType(damagedUnit)));
+
+     //有一个隐藏单位 每次受到伤害都会给那个单位同样打一个伤害 应该是作者的反作弊 这里需要判断一下过滤掉
+    if (UnitGetType(damagedUnit) == "dbHero00" || (damagingUnit != queryPlayerHeroUnit(1) || UnitGetOwner(damagingUnit) != 1) || damageAmount == 0){
+        return;
+    }
+    //物理伤害d
+    if (damageType == c_unitDamageTypeMelee || damageType == c_unitDamageTypeRanged){
+        showMsg(1,"tick:"+FixedToString(MaxF(TimerGetElapsed(damageTimer),1.0),2)+"->伤害为物理伤害,伤害为"+FixedToString(damageAmount,2));
+    }
+    //法术伤害
+    else if(damageType == c_unitDamageTypeSpell){
+        showMsg(1,"tick:"+FixedToString(MaxF(TimerGetElapsed(damageTimer),1.0),2)+"->伤害为法术伤害,伤害为"+FixedToString(damageAmount,2));
+    }
+    //真实伤害
+    else if(damageType == c_unitDamageTypeSplash){
+        showMsg(1,"tick:"+FixedToString(MaxF(TimerGetElapsed(damageTimer),1.0),2)+"->伤害为真实伤害,伤害为"+FixedToString(damageAmount,2));
+    }
+
+    botUnitDamagedTotal += damageAmount;
+
+    TextTagDestroy(textTag);
+    textTag = TextTagCreate(StringToText("上一次伤害="+FixedToString(damageAmount,2)+",DPS="+
+        FixedToString((botUnitDamagedTotal / MaxF(TimerGetElapsed(damageTimer),1.0)),2)+",总伤害="+
+        FixedToString(botUnitDamagedTotal,2)+",时间="+FixedToString(MaxF(TimerGetElapsed(damageTimer),1.0),2)),30, 
+            UnitGetPosition(damagedUnit), 1.0, true, true, testModePlayerGroup);
+    TextTagAttachToUnit(TextTagLastCreated(), damagedUnit, 1.125);
+}
+
+bool onDamageMelee(bool t, bool r){
+    tryReflashTimers();
+    damageShow(EventUnitDamageAmount(),EventUnitDamageSourceUnit(),EventUnit(),c_unitDamageTypeMelee);
+    return true;
+}
+
+bool onDamageRanged(bool t, bool r){
+    tryReflashTimers();
+    damageShow(EventUnitDamageAmount(),EventUnitDamageSourceUnit(),EventUnit(),c_unitDamageTypeRanged);
+    return true;
+}
+
+bool onDamageSpell(bool t, bool r){
+    tryReflashTimers();
+    damageShow(EventUnitDamageAmount(),EventUnitDamageSourceUnit(),EventUnit(),c_unitDamageTypeSpell);
+    return true;
+}
+
+bool onDamageSplash(bool t, bool r){
+    tryReflashTimers();
+    damageShow(EventUnitDamageAmount(),EventUnitDamageSourceUnit(),EventUnit(),c_unitDamageTypeSplash);
+    return true;
+}
+
+void initDamageDisplayerTrigger(){
+    trigger t = TriggerCreate("onDamageMelee");
+    trigger t1 = TriggerCreate("onDamageRanged");
+    trigger t2 = TriggerCreate("onDamageSpell");
+    trigger t3 = TriggerCreate("onDamageSplash");
+
+    TriggerAddEventUnitDamaged(t,null,c_unitDamageTypeMelee,c_unitDamageEither,null); 
+    TriggerAddEventUnitDamaged(t1,null,c_unitDamageTypeRanged,c_unitDamageEither,null); 
+    TriggerAddEventUnitDamaged(t2,null,c_unitDamageTypeSpell,c_unitDamageEither,null);
+    TriggerAddEventUnitDamaged(t3,null,c_unitDamageTypeSplash,c_unitDamageEither,null);
+
+    DataTableSetTrigger(true,"onDamageMelee",t);
+    DataTableSetTrigger(true,"onDamageRanged",t1);
+    DataTableSetTrigger(true,"onDamageSpell",t2);
+    DataTableSetTrigger(true,"onDamageSplash",t3);
+}   

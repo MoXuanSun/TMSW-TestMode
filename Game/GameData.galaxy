@@ -1,0 +1,13 @@
+//GongSun_ink 2022
+
+void talentSelectData(int row, int column, bool select, int player){
+    gv_BB156610.lv_48849745[player][column][row] = select;
+}
+
+bool isTalentSelected(int row, int column, int player){
+    return gv_BB156610.lv_48849745[player][column][row];
+}
+
+void abilityPickData(int row, int column, int player){
+    gv_BB156610.lv_0195430E[player][column] = row;
+}

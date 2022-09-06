@@ -1,0 +1,12 @@
+//GongSun_ink 2022
+
+bool onSPEffectUsed(bool t, bool r){
+    string eEffect = EventPlayerEffectUsed();
+
+    //克劳
+    if (eEffect == "dbhy_19b" || eEffect == "dbhy_19" ){
+        showMsg(1,"可出刀");
+    }
+    
+    return true;
+}
