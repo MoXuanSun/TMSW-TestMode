@@ -102,7 +102,6 @@ void gameSoundPlayer(int type);
 int getHeroIdByUnit(unit inUnit);
 void debug(string message);
 // void callUpgradeFunc(int dialogControlId, int player);
-void makeAbilityUpgrade(int player);
 void removeHero();
 void ReflashPlayer();
 void removeHeroAndReflashPlayer();
@@ -147,11 +146,11 @@ void upgradeBtnEnable(int index, bool show,playergroup p);
 void storeUpgradeBtn(int player, int index, bool show);
 void storeUpgradeBtns(int player, playergroup p);
 void restoreUpgradeBtns(int player, playergroup p);
+void makeAbilityUpgrade(int player);
 void updateAbilityPickPanel(int player, playergroup p);
 void abilityPickBtnUI(int row, int column, bool select, playergroup p);
 bool isAbilityBtnVisiable(int row, int column, int player);
 void GamePanelShow(int type, bool show, playergroup p);
-// void makeAbilityUpgrade(int player);
 
 //GameData
 bool isTalentSelected(int row, int column, int player);
