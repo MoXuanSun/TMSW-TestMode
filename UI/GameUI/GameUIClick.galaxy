@@ -16,7 +16,6 @@ void onHeroSkillPickPanelClick(){
                     abilityPickBtnUI(row,column,false,testModePlayerGroup);
                     abilityPickData(0,column,getPlayerLastPicked());
                 }
-                // debug("row="+IntToString(row)+"  column="+IntToString(column));
             }
         }    
     }
@@ -100,44 +99,50 @@ bool onGameUIClick(bool t, bool r){
     return true;
 }
 
+
+
 bool onUnitClick(bool t, bool r){
     unit eUnit = EventUnit();
     int newUnitOwner = UnitGetOwner(eUnit);
     int i;
 
+    if (newUnitOwner == 0){
+        showHideDummyHud(true,testModePlayerGroup);
+        return true;
+    }
+    
     //取消选择
     UnitSelect(getTestPlayerCurrentSelectedUnit(), testModePlayer, false);
     //移除不可选中效果
     UnitBehaviorRemove(eUnit, "nodie2", 1);
     UIAlertUnit("MyClickLocations", testModePlayer, EMP_TEXT, null, eUnit);
-
-    storeUpgradeBtns(UnitGetOwner(getTestPlayerCurrentSelectedUnit()),testModePlayerGroup);
-
+    storeUpgradeBtns(UnitGetOwner(getTestPlayerCurrentSelectedUnit()));
     //--------------------------
     //选择新单位
     UnitSelect(eUnit, testModePlayer, true);
-    DataTableSetUnit(true,"heroselected",eUnit);
-    
-    libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_D11CB209, (("character\\interface\\face\\interface_face_" 
-         + IntToString(gv_131E8983[newUnitOwner]) + ".dds")), testModePlayerGroup);
-    statusBar(testModePlayer,eUnit);
-    libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_A9C8BA19, "GamesUis\\frame_mp_bar_frame.dds", testModePlayerGroup);
-    libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_472F835E, "GamesUis\\frame_mp_bar_image.dds", testModePlayerGroup);
-    libNtve_gf_SetDialogItemImage(gv_169C778B[0], gv_AA1BDB6C[gv_131E8983[newUnitOwner]], testModePlayerGroup);
-    libNtve_gf_SetDialogItemText(gv_169C778B[1], UnitTypeGetName(UnitGetType(gv_71C054E5[newUnitOwner])), testModePlayerGroup);
-
+    setTestPlayerCurrentSelectedUnit(eUnit);
+    updateGameUI(newUnitOwner,testModePlayerGroup);
     restoreUpgradeBtns(newUnitOwner,testModePlayerGroup);
 
+    return true;
+}
+
+bool onKeyEsc(bool t, bool r){
+
+    showHideDummyHud(false,testModePlayerGroup);
+    
     return true;
 }
 
 void initGameUITrigger(){
     trigger t = TriggerCreate("onGameUIClick");
     trigger t1 = TriggerCreate("onUnitClick");
+    trigger t2 = TriggerCreate("onKeyEsc");
 
     TriggerAddEventDialogControl(t,1,c_invalidDialogControlId,c_triggerControlEventTypeClick);
     TriggerAddEventUnitClick(t1,null,testModePlayer);
-    
+    TriggerAddEventKeyPressed(t2,testModePlayer,c_keyEscape, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+
     DataTableSetTrigger(true,"trigger-onGameUIClick",t);
     DataTableSetTrigger(true,"onUnitClick",t1);
 }

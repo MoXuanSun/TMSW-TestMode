@@ -3,12 +3,12 @@
 //TestMode conf
 const int testModePlayer = 1;
 playergroup testModePlayerGroup = PlayerGroupSingle(testModePlayer);
-int timerReflashCooldown = 10;
+int damageDisplayerReflash = 5;
 int heroSummon = 19;
 string botHero = "dbHero38";
 timer damageTimer = TimerCreate();
 timer resetTimer = TimerCreate();
-bool timerInit;
+bool timerInit; 
 int mineralsSpent;
 string lastBehaviorAdded;
 unit botUnit;
@@ -17,7 +17,7 @@ bool flagEmeny;
 //正在为选择的英雄选择天赋
 bool summoning;
 
-//WARNING----DO NOT CHANGE CODE BELOW THIS LINE IF IT IS NOT NECESSARY----WARNING
+//WARNING!!----DO NOT CHANGE CODE BELOW THIS LINE IF IT IS NOT NECESSARY----CAUTION!!
 
 //TestingUI
 const int TEST_UI_PADDING = 10;
@@ -93,9 +93,10 @@ void createmBtnRelative(structref<mBtn> mBtnRef,
     bool nextLine);
 
 //GameTools
-int queryPlayerHeroId(int playerId);
-unit queryPlayerHeroUnit(int playerId);
+int getPlayerHeroId(int playerId);
+unit getPlayerHeroUnit(int playerId);
 unit getTestPlayerCurrentSelectedUnit();
+void setTestPlayerCurrentSelectedUnit(unit inUnit);
 int getHeroLastSelected();
 int getPlayerLastPicked();
 void gameSoundPlayer(int type);
@@ -106,7 +107,7 @@ void removeHero();
 void ReflashPlayer();
 void removeHeroAndReflashPlayer();
 
-//GameUI
+// //GameUI
 const int c_UIType_heroSelect = 1;
 const int c_UIType_talentSelect = 2;
 const int c_UIType_additionalSkillSelect = 3;
@@ -126,9 +127,14 @@ const int c_PropType_ap = 2;
 const int c_PropType_antiAd = 3;
 const int c_PropType_antiAp = 4;
 const int c_PropType_hp = 5;
-const int c_PropType_hpRegen = 8;
-const int c_PropType_mana = 6;
-const int c_PropType_manaRegen = 7;
+const int c_PropType_hpRegen = 6;
+const int c_PropType_mana = 7;
+const int c_PropType_manaRegen = 8;
+const int c_PropType_coolDown = 9;
+const int c_PropType_crit = 10;
+const int c_PropType_speed = 11;
+const int c_PropType_atkSpeed = 12;
+const int c_PropType_atkRange = 13;
 
 const int c_upgradeBtn_q = 0;
 const int c_upgradeBtn_w = 1;
@@ -138,13 +144,13 @@ const int c_upgradeBtn_r = 3;
 int SELECT_BTN;
 
 void updateHeroPropProgressBar(int player,unit inUnit, int type);
-void statusBar(int player,unit inUnit);
+void updateStatusBar(int player,unit inUnit);
 void talentSelectUI(int row, int column, bool select, playergroup p);
 void talentEnableUI(int row, int column, bool enable, playergroup p);
 void upgradeBtnShow(int index,bool show, playergroup p);
 void upgradeBtnEnable(int index, bool show,playergroup p);
 void storeUpgradeBtn(int player, int index, bool show);
-void storeUpgradeBtns(int player, playergroup p);
+void storeUpgradeBtns(int player);
 void restoreUpgradeBtns(int player, playergroup p);
 void makeAbilityUpgrade(int player);
 void updateAbilityPickPanel(int player, playergroup p);
@@ -155,6 +161,27 @@ void GamePanelShow(int type, bool show, playergroup p);
 //GameData
 bool isTalentSelected(int row, int column, int player);
 
+//DamageDisplayer
+string damageDisplayerPreFix = "ddp";
+string damageDisplayerPreFixForTextTag = "ddp";
+
+//time = timestamp
+int c_damageDisplayer_timeLast = 1;
+int c_damageDisplayer_timeStart = 2;
+int c_damageDisplayer_timeTotal = 3;
+
+int c_damageDisplayer_damageLast = 4;
+int c_damageDisplayer_damegetotal = 5;
+
+int c_damagedisplayer_texttagDps = 6;
+int c_damagedisplayer_texttagLast = 7;
+int c_damagedisplayer_texttagTotal = 8;
+
+string damageDisplayerKey(string unittag, int suffix);
+
+
 //Ability
+
+
 
 //WARNING END

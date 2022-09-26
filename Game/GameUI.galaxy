@@ -14,7 +14,7 @@ void updateHeroPropProgressBar(int player, unit inUnit, int type){
 
 }
 
-void statusBar(int player,unit inUnit){
+void updateStatusBar(int player,unit inUnit){
     updateHeroPropProgressBar(player, inUnit, PROGRESS_TYPE_LIFE);
     updateHeroPropProgressBar(player, inUnit, PROGRESS_TYPE_ENERGY);
 }
@@ -103,93 +103,6 @@ void upgradeBtnEnable(int index, bool show,playergroup p){
     DialogControlSetEnabled(gv_99F9B79B[index], p, show);
 }
 
-void storeUpgradeBtn(int player, int index, bool show){
-    DataTableSetBool(true,IntToString(player)+"_"+IntToString(index), show);
-}
-
-
-//player可以是playershow的队友或者敌人，这个函数会记录player当前可以点击哪个升级框，并让其对playergroup隐藏
-void storeUpgradeBtns(int player, playergroup p){
-    int i;
-    for (;i < 4; i+=1){
-        storeUpgradeBtn(player,i, DataTableGetBool(true,IntToString(player)+"_"+IntToString(i)));
-        upgradeBtnShow(i,false,p);
-        upgradeBtnEnable(i,false,p);
-    }
-}
-
-//player可以是playershow的队友或者敌人，这个函数会读取player当前可以点击哪个升级框，并让其对playergroup隐藏
-void restoreUpgradeBtns(int player, playergroup p){
-    int i;
-    for (;i<4;i+=1){
-        upgradeBtnShow(i,DataTableGetBool(true,IntToString(player)+"_"+IntToString(i)),p);
-        upgradeBtnEnable(i,DataTableGetBool(true,IntToString(player)+"_"+IntToString(i)),p);
-    }
-}
-
-void makeAbilityUpgrade(int player){
-
-    int index;
-    int[4] intervalLevels;
-    int[4] levelsNeed;
-    bool flag;
-
-    for (; index < 4; index += 1)
-    {
-        if ((gv_385F7DDF[player].lv_938D9C7F[(index + 1)][gv_BB156610.lv_0195430E[player][(index + 1)]] == 6))
-        //技能最大等级6
-        {
-            intervalLevels[index] = 0;
-            levelsNeed[index] = 1;
-        }
-        else if ((gv_385F7DDF[player].lv_938D9C7F[(index + 1)][gv_BB156610.lv_0195430E[player][(index + 1)]] == 5))
-        //技能最大等级5
-        {
-            intervalLevels[index] = 3;
-            levelsNeed[index] = 4;
-        }
-        else if ((gv_385F7DDF[player].lv_938D9C7F[(index + 1)][gv_BB156610.lv_0195430E[player][(index + 1)]] == 4))
-        //技能最大等级4
-        {
-            intervalLevels[index] = 4;
-            levelsNeed[index] = 8;
-        }
-        else if ((gv_385F7DDF[player].lv_938D9C7F[(index + 1)][gv_BB156610.lv_0195430E[player][(index + 1)]] == 3))
-        //技能最大等级3
-        {
-            intervalLevels[index] = 5;
-            levelsNeed[index] = 13;
-        }    
-        //1.判断玩家英雄的技能等级是否小于其最大等级
-        //2.玩家等级-玩家上一次升级该技能的等级 每隔n级可以升级该技能
-        //3.判断玩家等级是否大于技能学习所需等级
-        if ((gv_D0B36B8F[player][(index + 1)] < 
-            gv_385F7DDF[player].lv_938D9C7F[(index + 1)][gv_BB156610.lv_0195430E[player][(index + 1)]]) 
-        && ((gv_893C301B[player] - gv_203166CD[player][index]) >= intervalLevels[index]) 
-        && (gv_893C301B[player] >= levelsNeed[index])){
-            flag = true;
-            gv_6E454E1F[player] += 1;
-            //保存升级按钮
-            storeUpgradeBtn(player,index,true);
-    
-            //除1级外 更新tooptip
-            if ((gv_893C301B[player] == 1))
-            {
-            }
-            else
-            {
-                gf_87B66828(player, index);
-            }
-            
-        }
-    }
-    // 如果没有技能可以升级 重置升级点数 bug：如果升级过快，前面的技能还没有加点，后面的等级如果没有技能可以提升时则会导致技能点归零 出现bug
-    if (!flag)
-    {
-        gv_63B35897[player] = 0;
-    }
-}
-
 void updateAbilityPickPanel(int player, playergroup p){
     int init_i;
     int column;
@@ -204,20 +117,23 @@ void updateAbilityPickPanel(int player, playergroup p){
     abilityArray[3] = "3e";
     abilityArray[4] = "4r";
     //先全部隐藏
+    
     for (; column < 5 ; column += 1){
-        DialogControlSetVisible(gv_BB156610.lv_429AF84E[column][row], p, false);
-        DialogControlSetVisible(gv_BB156610.lv_0F36D2DD[column][row], p, false);
-        DialogControlSetVisible(gv_BB156610.lv_9E2557F2[column][row], p, false);
-        DialogControlSetVisible(gv_BB156610.lv_52872E19[column][row], p, false);
+        //row=0 每次循环重置一遍
+        for (row = 0; row < 5; row += 1){
+            DialogControlSetVisible(gv_BB156610.lv_429AF84E[column][row], p, false);
+            DialogControlSetVisible(gv_BB156610.lv_0F36D2DD[column][row], p, false);
+            DialogControlSetVisible(gv_BB156610.lv_9E2557F2[column][row], p, false);
+            DialogControlSetVisible(gv_BB156610.lv_52872E19[column][row], p, false);
+        }
     }
     
     for (column = 0 ; column < 5 ; column += 1)
     {
         abilityCount = gv_385F7DDF[player].lv_1F4AC30A[column];
         //注意必须是小于等于 这个数组赋值时0代表该列有一个技能
-        for (; row <= abilityCount; row += 1)
+        for (row = 0 ; row <= abilityCount; row += 1)
         {  
-            debug(IntToString(abilityCount));
             gv_385F7DDF[player].lv_26F27239[column][row] = (("character\\btn\\" + heroFullType + "_" + IntToString((row + 1)) + "_" + abilityArray[column] + ".dds"));
             libNtve_gf_SetDialogItemImage(gv_BB156610.lv_429AF84E[column][row], gv_385F7DDF[player].lv_26F27239[column][row], p);
             libNtve_gf_SetDialogItemText(gv_BB156610.lv_9E2557F2[column][row], StringExternal(("Button/Name/dbbu" + heroFullType + "_" + IntToString((row + 1)) + "_" + abilityArray[column])), p);
@@ -227,11 +143,10 @@ void updateAbilityPickPanel(int player, playergroup p){
             DialogControlSetVisible(gv_BB156610.lv_9E2557F2[column][row], p, true);
             DialogControlSetVisible(gv_BB156610.lv_52872E19[column][row], p, true);
         }
-        row = 0;
     }
 }
 
-//每个技能只能选择一个 所以不需要多一个enable函数
+//每列技能只能选择一个 所以不需要多一个enable函数
 void abilityPickBtnUI(int row, int column, bool select, playergroup p){
     int i;
     int j;
@@ -327,12 +242,17 @@ void GamePanelShow(int type, bool show, playergroup p){
         DialogSetVisible(gv_BB156610.lv_5C8CC8E9[2], p, show);
         DialogSetVisible(gv_BB156610.lv_5C8CC8E9[3], p, show);
         DialogSetVisible(gv_BB156610.lv_5C8CC8E9[4], p, show);
-        for (row = 0; row < 18; row += 1){
-            for (column = 0; column < 5; column += 1){
-                talentSelectData(row,column,false,getPlayerLastPicked());
-                talentSelectUI(row,column,false,p);
-            }
-        }       
+        
+        //刷新
+        if (show){
+            for (row = 0; row < 18; row += 1){
+                for (column = 0; column < 5; column += 1){
+                    // talentSelectData(row,column,false,getPlayerLastPicked());
+                    talentSelectUI(row,column,false,p);
+                }
+            }  
+        }
+            
     }
     else if (type == c_UIType_SKillSelect){
         
@@ -364,36 +284,101 @@ void GamePanelShow(int type, bool show, playergroup p){
     }
 } 
 
-// void loadDummyHud(){
-//     int ePlayer = 1;
-//     int eUnitOwner = 11;
-//     int mphpSize;
-//     int i;
+void loadDummyHud(playergroup p){
+    int i;
+    int mphpSize;
 
-//     gf_0B99E26F(ePlayer, eUnitOwner);
-//     //头像
-//     libNtve_gf_SetDialogItemImage(gv_2DED9336[1], gv_AA1BDB6C[38], p);
-//     //等级
-//     libNtve_gf_SetDialogItemText(gv_2DED9336[2], StringToText("?"), p);
-//     //颜色
-//     libNtve_gf_SetDialogItemColor(gv_2DED9336[3], Color(100,0,0), p);
-//     //玩家名
-//     libNtve_gf_SetDialogItemText(gv_2DED9336[3], StringToText("木偶"), p);
-//     //属性设置
-//     for (; i < 7 ; i += 1)
-//     {
-//         libNtve_gf_SetDialogItemText(gv_D33859CA[i], FixedToText(0,2), p);
-//     }
+    //头像
+    //hud头像
+    libNtve_gf_SetDialogItemImage(gv_2DED9336[1], gv_AA1BDB6C[38], p);
+    //等级
+    libNtve_gf_SetDialogItemText(gv_2DED9336[2], StringToText("???"), p);
+    //颜色
+    libNtve_gf_SetDialogItemColor(gv_2DED9336[3], Color(100,0,0), p);
+    //玩家名
+    libNtve_gf_SetDialogItemText(gv_2DED9336[3], StringToText("别看了，你打不动我"), p);
+    //属性设置
+    for (; i < 7 ; i += 1)
+    {
+        libNtve_gf_SetDialogItemText(gv_D33859CA[i], IntToText(0), p);
+    }
 
-//     libNtve_gf_SetDialogItemText(gv_D33859CA[8], (IntToText(1000000) + (StringExternal("Param/Value/858C3123") + IntToText(1000000))), p);
-//     libNtve_gf_SetDialogItemText(gv_D33859CA[9], (IntToText(1000000) + (StringExternal("Param/Value/7EE57AF9") + IntToText(1000000))), p);
+    libNtve_gf_SetDialogItemText(gv_D33859CA[8], (IntToText(1000000) + (StringExternal("Param/Value/858C3123") + IntToText(1000000))), p);
+    libNtve_gf_SetDialogItemText(gv_D33859CA[9], (IntToText(0) + (StringExternal("Param/Value/7EE57AF9") + IntToText(0))), p);
     
-//     mphpSize = MaxI(FixedToInt(268.0 * (100) * 0.01),1);
-//     DialogControlSetSize(gv_2DED9336[4], p, mphpSize, 16);
-//     mphpSize = MaxI(FixedToInt(268.0 * (100) * 0.01),1);
-//     DialogControlSetSize(gv_2DED9336[5], p, mphpSize, 16);
-// }
+    mphpSize = MaxI(FixedToInt(268.0 * (100) * 0.01),1);
+    DialogControlSetSize(gv_2DED9336[4], p, mphpSize, 16);
+}
 
-// void showHideDummyHud(bool show){
-//     DialogSetVisible(gv_4EE04C84, testModePlayerGroup, show);
-// }
+void showHideDummyHud(bool show, playergroup p){
+    if (show){
+        libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_D11CB209, (("character\\interface\\face\\interface_face_" 
+        + IntToString(38) + ".dds")), p);
+    }
+    DialogSetVisible(gv_4EE04C84, p, show);
+}
+
+//更新下方的小图标
+void updateTalentDisplay(int player, playergroup p){
+    int i;
+
+    //更新UI
+    //前6个
+    for (i = 0; i < 5; i += 1)
+    {
+        if ((i != gv_BB156610.lv_54CFCAA4[player]))
+        {
+            gf_E8DB52E3(player, i, 0);
+        }
+    }
+    //最后一个
+    gf_E8DB52E3(player, gv_BB156610.lv_54CFCAA4[player], 1);
+
+    for (i = 0 ; i < 7 ; i +=1){
+        DialogControlSetPropertyAsText(gv_CEBF1A9E[i],c_triggerControlPropertyTooltip,p,DialogControlGetPropertyAsText(gv_CEBF1A9E[i],c_triggerControlPropertyTooltip,player));
+        DialogControlSetPropertyAsString(gv_CEBF1A9E[i],c_triggerControlPropertyImage,p,DialogControlGetPropertyAsString(gv_CEBF1A9E[i],c_triggerControlPropertyImage,player));
+    }
+
+}
+
+//更新状态栏、等级栏、头像和天赋小图标
+void updateGameUI(int player, playergroup p){
+
+    //右侧数值栏数据
+    libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_F7AB6B6C], FixedToText(gv_9CB902A4[player][gv_15A72892.lv_89BFC1C4], 2), p);
+    libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_48BAA708], (FixedToText(gv_9CB902A4[player][gv_15A72892.lv_0B7B7C1E], 2) + StringExternal("Param/Value/6B419391")), p);
+    libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_A11FEB9A], (FixedToText(gv_9CB902A4[player][gv_15A72892.lv_4EF6DA1D], 2) + StringExternal("Param/Value/089CE3E2")), p);
+    libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_E5CB298F], FixedToText(gv_9CB902A4[player][gv_15A72892.lv_5F19A6B6], 2), p);
+    libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_574F2C04], FixedToText(gv_9CB902A4[player][gv_15A72892.lv_368F8749], 2), p);
+    libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_CFF33789], (FixedToText(gv_9CB902A4[player][gv_15A72892.lv_F549A9A2], 0) + StringExternal("Param/Value/1800D7A0")), p);
+    libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_EE677681], (FixedToText(gv_9CB902A4[player][gv_15A72892.lv_513A585F], 0) + StringExternal("Param/Value/C7314030")), p);
+    libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_E292F199], FixedToText(UnitWeaponRange(gv_71C054E5[player], 1), 2), p);
+    if ((gv_131E8983[player] == 7)){
+        if ((gv_BB156610.lv_0195430E[player][0] == 0))
+        {
+            libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_3B4D4295], FixedToText(UnitWeaponDamage(gv_71C054E5[player], 1, c_unitAttributeHeroic, false), 2), p);
+        }
+        else
+        {   
+            libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_3B4D4295], FixedToText(UnitWeaponDamage(gv_71C054E5[player], 2, c_unitAttributeHeroic, false), 2), p);
+        }
+    }
+    else{
+        libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_3B4D4295], FixedToText(UnitWeaponDamage(gv_71C054E5[player], 1, c_unitAttributeHeroic, false), 2), p);
+    }
+    
+    libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_D11CB209, (("character\\interface\\face\\interface_face_" 
+        + IntToString(getPlayerHeroId(player)) + ".dds")), p);
+    
+    updateStatusBar(PlayerGroupPlayer(p,1),getPlayerHeroUnit(player));
+
+    libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_A9C8BA19, "GamesUis\\frame_mp_bar_frame.dds", p);
+    libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_472F835E, "GamesUis\\frame_mp_bar_image.dds", p);
+    libNtve_gf_SetDialogItemImage(gv_169C778B[0], gv_AA1BDB6C[getPlayerHeroId(player)], p);
+    libNtve_gf_SetDialogItemText(gv_169C778B[1], UnitTypeGetName(UnitGetType(gv_71C054E5[player])), p);
+    //等级显示
+    libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_75EF4F32, (IntToText(gv_893C301B[player]) +
+        StringExternal("Param/Value/E919CF14")), p);
+
+    updateTalentDisplay(player,p);
+}

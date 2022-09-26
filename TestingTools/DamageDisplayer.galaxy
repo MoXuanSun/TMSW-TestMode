@@ -1,75 +1,93 @@
 //GongSun_ink 2022
 
-int textTag;
-
-void tryReflashTimers(){
-    if (!timerInit){
-        TimerStart(damageTimer,9999,false,c_timeGame);
-        TimerStart(resetTimer,5,false,c_timeGame);
-        timerInit = true;
-    }
-
-    if (TimerGetRemaining(resetTimer) == 0.0){
-        TimerRestart(resetTimer);
-        TimerRestart(damageTimer);
-        botUnitDamagedTotal = 0;
-    }else{
-        TimerRestart(resetTimer);
-    }
-}
-
-void damageShow(fixed damageAmount, unit damagingUnit, unit damagedUnit, int damageType){
+void updateDamageDisplayer(fixed damageAmount, unit damagingUnit, unit damagedUnit, int damageType){
     string playerHeroNameDamaging = TextToString(UnitTypeGetName(UnitGetType(damagingUnit)));
     string playerHeroNameDamaged = TextToString(UnitTypeGetName(UnitGetType(damagedUnit)));
+    string damagedUnitTag = IntToString(UnitGetTag(damagedUnit));
 
-     //有一个隐藏单位 每次受到伤害都会给那个单位同样打一个伤害 应该是作者的反作弊 这里需要判断一下过滤掉
-    if (UnitGetType(damagedUnit) == "dbHero00" || (damagingUnit != queryPlayerHeroUnit(1) || UnitGetOwner(damagingUnit) != 1) || damageAmount == 0){
+    fixed timeTotal;
+    fixed timeStart;
+    fixed timeLast;
+
+    fixed damageLast;
+    fixed dps;
+    fixed damageTotal;
+
+    //有一个隐藏单位 每次受到伤害都会给那个单位同样打一个伤害 应该是作者的反作弊 这里需要判断一下过滤掉
+    if (UnitGetType(damagedUnit) == "dbHero00" || damageAmount == 0){
         return;
     }
-    //物理伤害d
-    if (damageType == c_unitDamageTypeMelee || damageType == c_unitDamageTypeRanged){
-        showMsg(1,"tick:"+FixedToString(MaxF(TimerGetElapsed(damageTimer),1.0),2)+"->伤害为物理伤害,伤害为"+FixedToString(damageAmount,2));
+    
+    //是否刷新
+    if (GameGetMissionTime() - DataTableGetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_timeLast)) > 5.0 
+        || DataTableGetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_timeLast)) == 0){
+        timeStart = GameGetMissionTime();
+        timeLast = GameGetMissionTime();
+        timeTotal = 0;
+
+        damageLast = damageAmount;
+        damageTotal = damageAmount;
+        dps = damageAmount;
+
+        DataTableSetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_timeLast), timeLast);
+        DataTableSetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_timeStart), timeStart);
+        // DataTableSetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_timeTotal), timeTotal);
+
+        DataTableSetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_damegetotal), damageTotal);
+        DataTableSetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_damageLast), damageLast);
     }
-    //法术伤害
-    else if(damageType == c_unitDamageTypeSpell){
-        showMsg(1,"tick:"+FixedToString(MaxF(TimerGetElapsed(damageTimer),1.0),2)+"->伤害为法术伤害,伤害为"+FixedToString(damageAmount,2));
-    }
-    //真实伤害
-    else if(damageType == c_unitDamageTypeSplash){
-        showMsg(1,"tick:"+FixedToString(MaxF(TimerGetElapsed(damageTimer),1.0),2)+"->伤害为真实伤害,伤害为"+FixedToString(damageAmount,2));
+    else {
+        timeStart = DataTableGetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_timeStart));
+        timeLast = GameGetMissionTime();
+        timeTotal = GameGetMissionTime() - timeStart;
+
+        damageLast = damageAmount;
+        damageTotal = DataTableGetFixed(true,damageDisplayerKey(damagedUnitTag, c_damageDisplayer_damegetotal)) + damageAmount;
+        dps = damageTotal / MaxF(timeTotal, 1);
+    
+        DataTableSetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_timeLast), timeLast);
+        // DataTableSetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_timeTotal), timeTotal);
+       
+        DataTableSetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_damageLast), damageLast);
+        DataTableSetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_damegetotal), damageTotal);
+
     }
 
-    botUnitDamagedTotal += damageAmount;
+    // //物理伤害d
+    // if (damageType == c_unitDamageTypeMelee || damageType == c_unitDamageTypeRanged){
+    //     showMsg(1,"tick:"+FixedToString(MaxF(timeLast - timeStart,1.0),2)+"->伤害为物理伤害,伤害为"+FixedToString(damageAmount,2));
+    // }
+    // //法术伤害
+    // else if(damageType == c_unitDamageTypeSpell){
+    //     showMsg(1,"tick:"+FixedToString(MaxF(timeLast - timeStart,1.0),2)+"->伤害为法术伤害,伤害为"+FixedToString(damageAmount,2));
+    // }
+    // //真实伤害
+    // else if(damageType == c_unitDamageTypeSplash){
+    //     showMsg(1,"tick:"+FixedToString(MaxF(timeLast - timeStart,1.0),2)+"->伤害为真实伤害,伤害为"+FixedToString(damageAmount,2));
+    // }
 
-    TextTagDestroy(textTag);
-    textTag = TextTagCreate(StringToText("上一次伤害="+FixedToString(damageAmount,2)+",DPS="+
-        FixedToString((botUnitDamagedTotal / MaxF(TimerGetElapsed(damageTimer),1.0)),2)+",总伤害="+
-        FixedToString(botUnitDamagedTotal,2)+",时间="+FixedToString(MaxF(TimerGetElapsed(damageTimer),1.0),2)),30, 
-            UnitGetPosition(damagedUnit), 1.0, true, true, testModePlayerGroup);
-    TextTagAttachToUnit(TextTagLastCreated(), damagedUnit, 1.125);
+    TextTagSetText(DataTableGetInt(true,damageDisplayerKey(damagedUnitTag,c_damagedisplayer_texttagLast)), StringToText("上一次="+FixedToString(damageLast,2)));
+    TextTagSetText(DataTableGetInt(true,damageDisplayerKey(damagedUnitTag,c_damagedisplayer_texttagDps)), StringToText("DPS="+FixedToString(dps,2)));
+    TextTagSetText(DataTableGetInt(true,damageDisplayerKey(damagedUnitTag,c_damagedisplayer_texttagTotal)), StringToText("总伤害="+FixedToString(damageTotal,2)));
 }
 
 bool onDamageMelee(bool t, bool r){
-    tryReflashTimers();
-    damageShow(EventUnitDamageAmount(),EventUnitDamageSourceUnit(),EventUnit(),c_unitDamageTypeMelee);
+    updateDamageDisplayer(EventUnitDamageAmount(),EventUnitDamageSourceUnit(),EventUnit(),c_unitDamageTypeMelee);
     return true;
 }
 
 bool onDamageRanged(bool t, bool r){
-    tryReflashTimers();
-    damageShow(EventUnitDamageAmount(),EventUnitDamageSourceUnit(),EventUnit(),c_unitDamageTypeRanged);
+    updateDamageDisplayer(EventUnitDamageAmount(),EventUnitDamageSourceUnit(),EventUnit(),c_unitDamageTypeRanged);
     return true;
 }
 
 bool onDamageSpell(bool t, bool r){
-    tryReflashTimers();
-    damageShow(EventUnitDamageAmount(),EventUnitDamageSourceUnit(),EventUnit(),c_unitDamageTypeSpell);
+    updateDamageDisplayer(EventUnitDamageAmount(),EventUnitDamageSourceUnit(),EventUnit(),c_unitDamageTypeSpell);
     return true;
 }
 
 bool onDamageSplash(bool t, bool r){
-    tryReflashTimers();
-    damageShow(EventUnitDamageAmount(),EventUnitDamageSourceUnit(),EventUnit(),c_unitDamageTypeSplash);
+    updateDamageDisplayer(EventUnitDamageAmount(),EventUnitDamageSourceUnit(),EventUnit(),c_unitDamageTypeSplash);
     return true;
 }
 

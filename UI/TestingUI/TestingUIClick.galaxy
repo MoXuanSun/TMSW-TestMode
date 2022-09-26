@@ -18,6 +18,7 @@ void onSummonHeroBtnClick(){
 
 bool onTestingUIClick(bool t, bool r){
     int eDialogControl = EventDialogControl();
+    int playerPick;
 
     if (summoning){
         return true;
@@ -27,42 +28,53 @@ bool onTestingUIClick(bool t, bool r){
         //英雄选择界面
         GamePanelShow(c_UIType_heroSelect,true,testModePlayerGroup); 
     }
-    if (eDialogControl == Dialogs.main_menu.summonAllyHeroBtn.btn){
+    else if (eDialogControl == Dialogs.main_menu.summonAllyHeroBtn.btn){
         if (DataTableGetInt(true,"heroId") == 0){
             showMsg(1,"请先选择英雄");
             return true;
         }
+        playerPick = pickPlayer(true);
+        if (playerPick == -1){
+            showMsg(1,"该阵容已满，请移除英雄");
+            return true;
+        }
         summoning = true;
-        DataTableSetInt(true,"player",pickPlayer(true));
+        DataTableSetInt(true,"player",playerPick);
         onSummonHeroBtnClick();
         GamePanelShow(c_UIType_talentSelect,true,testModePlayerGroup);
     }
-    if (eDialogControl == Dialogs.main_menu.summonEnemyHeroBtn.btn){
+    else if (eDialogControl == Dialogs.main_menu.summonEnemyHeroBtn.btn){
         if (DataTableGetInt(true,"heroId") == 0){
             showMsg(1,"请先选择英雄");
             return true;
         }
+        playerPick = pickPlayer(false);
+        if (playerPick == -1){
+            showMsg(1,"该阵容已满，请移除英雄");
+            return true;
+        }
         summoning = true;
-        DataTableSetInt(true,"player",pickPlayer(false));
+
+        DataTableSetInt(true,"player",playerPick);
         onSummonHeroBtnClick();
         GamePanelShow(c_UIType_talentSelect,true,testModePlayerGroup);
     }
-    if (eDialogControl == Dialogs.main_menu.upgradeHeroBtn.btn){
+    else if (eDialogControl == Dialogs.main_menu.upgradeHeroBtn.btn){
         UnitXPSetCurrentLevel(getTestPlayerCurrentSelectedUnit(),null,MinI(UnitXPGetCurrentLevel(DataTableGetUnit(true,"heroselected"),null) + 1,36));
     }
-    if (eDialogControl == Dialogs.main_menu.noCoolDownBtn.btn){
+    else if (eDialogControl == Dialogs.main_menu.noCoolDownBtn.btn){
         UnitClearCooldowns(getTestPlayerCurrentSelectedUnit(),true);
     }
-    if (eDialogControl == Dialogs.main_menu.fullmana.btn){
+    else if (eDialogControl == Dialogs.main_menu.fullmana.btn){
         UnitSetPropertyFixed(getTestPlayerCurrentSelectedUnit(),c_unitPropEnergyPercent,100.0);
     }
-    if (eDialogControl == Dialogs.main_menu.removeHeroBtn.btn){
+    else if (eDialogControl == Dialogs.main_menu.removeHeroBtn.btn){
         
     }
-    if (eDialogControl == Dialogs.main_menu.nextRound.btn){
+    else if (eDialogControl == Dialogs.main_menu.nextRound.btn){
         
     }
-    if (eDialogControl == Dialogs.main_menu.lastRound.btn){
+    else if (eDialogControl == Dialogs.main_menu.lastRound.btn){
         
     }
 

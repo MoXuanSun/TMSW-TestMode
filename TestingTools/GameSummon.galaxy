@@ -1,145 +1,5 @@
 //GongSun_ink 2022
 
-void setStatStrsforPlayer(int player){
-
-    string[2][16] lv_B3606C7F;
-    string[2][16] lv_E1FEB3A7;
-    string[2][16] lv_D280BB95;
-    string[2][16] lv_99015105;
-
-    string[16] lv_96618FF6;
-  
-    string[16] lv_3E40DCEF;
-
-    lv_B3606C7F[0][0] = "dbup_g_stat_str_012";
-    lv_B3606C7F[0][1] = "dbup_g_stat_str_06";
-    lv_B3606C7F[0][2] = "dbup_g_stat_str_11";
-    lv_B3606C7F[0][3] = "dbup_g_stat_str_16";
-    lv_B3606C7F[0][4] = "dbup_g_stat_str_21";
-    lv_B3606C7F[0][5] = "dbup_g_stat_str_26";
-    lv_B3606C7F[0][6] = "dbup_g_stat_str_31";
-    lv_B3606C7F[0][7] = "dbup_g_stat_str_36";
-    lv_B3606C7F[0][8] = "dbup_g_stat_str_41";
-    lv_B3606C7F[0][9] = "dbup_g_stat_str_46";
-    lv_B3606C7F[1][0] = "dbup_g_stat_int_01";
-    lv_B3606C7F[1][1] = "dbup_g_stat_int_06";
-    lv_B3606C7F[1][2] = "dbup_g_stat_int_11";
-    lv_B3606C7F[1][3] = "dbup_g_stat_int_16";
-    lv_B3606C7F[1][4] = "dbup_g_stat_int_21";
-    lv_B3606C7F[1][5] = "dbup_g_stat_int_26";
-    lv_B3606C7F[1][6] = "dbup_g_stat_int_31";
-    lv_B3606C7F[1][7] = "dbup_g_stat_int_36";
-    lv_B3606C7F[1][8] = "dbup_g_stat_int_41";
-    lv_B3606C7F[1][9] = "dbup_g_stat_int_46";
-    lv_E1FEB3A7[0][0] = "dbup_f_stat_str_01";
-    lv_E1FEB3A7[0][1] = "dbup_f_stat_str_06";
-    lv_E1FEB3A7[0][2] = "dbup_f_stat_str_11";
-    lv_E1FEB3A7[0][3] = "dbup_f_stat_str_16";
-    lv_E1FEB3A7[0][4] = "dbup_f_stat_str_21";
-    lv_E1FEB3A7[0][5] = "dbup_f_stat_str_26";
-    lv_E1FEB3A7[0][6] = "dbup_f_stat_str_31";
-    lv_E1FEB3A7[0][7] = "dbup_f_stat_str_36";
-    lv_E1FEB3A7[0][8] = "dbup_f_stat_str_41";
-    lv_E1FEB3A7[0][9] = "dbup_f_stat_str_46";
-    lv_E1FEB3A7[1][0] = "dbup_f_stat_int_01";
-    lv_E1FEB3A7[1][1] = "dbup_f_stat_int_06";
-    lv_E1FEB3A7[1][2] = "dbup_f_stat_int_11";
-    lv_E1FEB3A7[1][3] = "dbup_f_stat_int_16";
-    lv_E1FEB3A7[1][4] = "dbup_f_stat_int_21";
-    lv_E1FEB3A7[1][5] = "dbup_f_stat_int_26";
-    lv_E1FEB3A7[1][6] = "dbup_f_stat_int_31";
-    lv_E1FEB3A7[1][7] = "dbup_f_stat_int_36";
-    lv_E1FEB3A7[1][8] = "dbup_f_stat_int_41";
-    lv_E1FEB3A7[1][9] = "dbup_f_stat_int_46";
-    lv_D280BB95[1][0] = "dbup_f_stat_int_5";
-    lv_D280BB95[1][1] = "dbup_f_stat_int_062";
-    lv_D280BB95[1][2] = "dbup_f_stat_int_112";
-    lv_D280BB95[1][3] = "dbup_f_stat_int_162";
-    lv_D280BB95[1][4] = "dbup_f_stat_int_212";
-    lv_D280BB95[1][5] = "dbup_f_stat_int_262";
-    lv_D280BB95[1][6] = "dbup_f_stat_int_312";
-    lv_D280BB95[1][7] = "dbup_f_stat_int_362";
-    lv_D280BB95[1][8] = "dbup_f_stat_int_412";
-    lv_D280BB95[1][9] = "dbup_f_stat_int_462";
-    lv_99015105[0][0] = "dbup_f_stat_str_012";
-    lv_99015105[0][1] = "dbup_f_stat_str_062";
-    lv_99015105[0][2] = "dbup_f_stat_str_112";
-    lv_99015105[0][3] = "dbup_f_stat_str_162";
-    lv_99015105[0][4] = "dbup_f_stat_str_212";
-    lv_99015105[0][5] = "dbup_f_stat_str_262";
-    lv_99015105[0][6] = "dbup_f_stat_str_312";
-    lv_99015105[0][7] = "dbup_f_stat_str_362";
-    lv_99015105[0][8] = "dbup_f_stat_str_412";
-    lv_99015105[0][9] = "dbup_f_stat_str_462";
-    lv_99015105[1][0] = "dbup_f_stat_int_52";
-    lv_99015105[1][1] = "dbup_f_stat_int_0622";
-    lv_99015105[1][2] = "dbup_f_stat_int_1122";
-    lv_99015105[1][3] = "dbup_f_stat_int_1622";
-    lv_99015105[1][4] = "dbup_f_stat_int_2122";
-    lv_99015105[1][5] = "dbup_f_stat_int_2622";
-    lv_99015105[1][6] = "dbup_f_stat_int_3122";
-    lv_99015105[1][7] = "dbup_f_stat_int_3622";
-    lv_99015105[1][8] = "dbup_f_stat_int_4122";
-    lv_99015105[1][9] = "dbup_f_stat_int_4622";
-
-    gv_F8080DD9[player][0] = lv_B3606C7F[0][gf_3761C93C(gv_131E8983[player])];
-    gv_F8080DD9[player][1] = lv_B3606C7F[1][gf_3761C93C(gv_131E8983[player])];
-    gv_47EB06F2[player][0] = lv_E1FEB3A7[0][gf_3761C93C(gv_131E8983[player])];
-    gv_47EB06F2[player][1] = lv_E1FEB3A7[1][gf_3761C93C(gv_131E8983[player])];
-    gv_454FA4B8[player][1] = lv_D280BB95[1][gf_3761C93C(gv_131E8983[player])];
-    gv_85488D42[player][1] = lv_99015105[1][gf_3761C93C(gv_131E8983[player])];
-    gv_85488D42[player][0] = lv_99015105[0][gf_3761C93C(gv_131E8983[player])];
-
-    lv_3E40DCEF[0] = "dbup_i_cool_01";
-    lv_3E40DCEF[1] = "dbup_i_cool_06";
-    lv_3E40DCEF[2] = "dbup_i_cool_11";
-    lv_3E40DCEF[3] = "dbup_i_cool_16";
-    lv_3E40DCEF[4] = "dbup_i_cool_21";
-    lv_3E40DCEF[5] = "dbup_i_cool_26";
-    lv_3E40DCEF[6] = "dbup_i_cool_31";
-    lv_3E40DCEF[7] = "dbup_i_cool_36";
-    lv_3E40DCEF[8] = "dbup_i_cool_41";
-    lv_3E40DCEF[9] = "dbup_i_cool_46";
-
-    gv_EFE7171B[player] = lv_3E40DCEF[gf_3761C93C(gv_131E8983[player])];
-
-    lv_96618FF6[0] = "dbup_e_stat_str_01";
-    lv_96618FF6[1] = "dbup_e_stat_str_06";
-    lv_96618FF6[2] = "dbup_e_stat_str_11";
-    lv_96618FF6[3] = "dbup_e_stat_str_16";
-    lv_96618FF6[4] = "dbup_e_stat_str_21";
-    lv_96618FF6[5] = "dbup_e_stat_str_26";
-    lv_96618FF6[6] = "dbup_e_stat_str_31";
-    lv_96618FF6[7] = "dbup_e_stat_str_36";
-    lv_96618FF6[8] = "dbup_e_stat_str_41";
-    lv_96618FF6[9] = "dbup_e_stat_str_46";
-
-    gv_93D2AA8F[player] = lv_96618FF6[gf_3761C93C(gv_131E8983[player])];
-}
-
-void initDataForPlayer(){
-    
-    //初始化信息
-
-    //加点的需要的钱、各种stat值
-    TriggerExecute(gt_C7E3A592, false, true);
-    //属性上限
-    TriggerExecute(gt_84BE2900, false, true);
-    TriggerExecute(gt_53B638C3, false, true);
-    TriggerExecute(gt_B15050B7, false, true);
-    //技能数据
-    TriggerExecute(gt_F00C0934, false, true);
-    TriggerExecute(gt_64FBF599, false, true);
-    TriggerExecute(gt_27ED109B, false, true);
-    TriggerExecute(gt_449346FA, false, true);
-    TriggerExecute(gt_936A4CD0, false, true);
-    TriggerExecute(gt_4763C627, false, true);
-    TriggerExecute(gt_7B46B8A2, false, true);
-    TriggerExecute(gt_E09377E6, false, true);
-    TriggerExecute(gt_21AB3C1E, false, true);
-  
-    setStatStrsforPlayer(getPlayerLastPicked());
-}
 
 int pickPlayer(bool isAlly){
     bool flag;
@@ -147,19 +7,18 @@ int pickPlayer(bool isAlly){
 
     if (isAlly){  
         for (; i < 6 ; i+=1){
-           if (queryPlayerHeroId(i) == 0){
+           if (getPlayerHeroId(i) == 0){
                 showMsg(1,IntToString(i));
                 return i;
            }
         }
     }else {
         for (i = 6; i < 11 ;i+=1){
-            if (queryPlayerHeroId(i) == 0){
+            if (getPlayerHeroId(i) == 0){
                 return i;
            }
         }
     }
-    showMsg(1,"该阵容已满，请移除英雄");
     return -1;
 }
 
@@ -171,7 +30,6 @@ void playerSummonHero(){
     teamPoints[0] = PointFromId(36);
     teamPoints[1] = PointFromId(37);
     //------------------------------------
-
     
     //更新数值显示面板
     gf_3A83C136(playerId);
@@ -253,12 +111,18 @@ void playerSummonHero(){
     //------------------------------------------------------------------------------------
     //启用或禁用技能
     gf_ED9D4333(gv_71C054E5[playerId], playerId);
+    
+    //只显示操作一次
+    if (playerId == 1){
+        //显示技能栏、头像、属性栏
+        setTestPlayerCurrentSelectedUnit(gv_71C054E5[playerId]);
+        updateGameUI(playerId,testModePlayerGroup);
+        UnitSelect(gv_71C054E5[playerId], testModePlayer, true);
+        DialogSetVisible(gv_5C4043F8.lv_B91A282D, testModePlayerGroup, true);
+        DialogSetVisible(gv_5C4043F8.lv_8DEC25E2, testModePlayerGroup, true);
+        DialogSetVisible(gv_5C4043F8.lv_AF2E051A, testModePlayerGroup, true);
+    }
 
-    //移动主玩家的视角到单位
-    CameraPan(testModePlayer, UnitGetPosition(gv_71C054E5[playerId]), 0.85, -1, 25.0, false);
-    UnitSelect(getTestPlayerCurrentSelectedUnit(),testModePlayer,false);
-    UnitSelect(gv_71C054E5[playerId], testModePlayer, true);
-            
     //老兵行为
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "dbdo_ex", playerId, 1);
             
@@ -369,10 +233,11 @@ void playerSummonHero(){
     //没有用的函数
     gf_E21FB1A1(gv_71C054E5[playerId]);
     //技能升级函数
-    makeAbilityUpgrade(playerId);
+    gf_91088DA7(playerId);
     //显示升级按钮
-    restoreUpgradeBtns(playerId,testModePlayerGroup);
-
+    
+    storeUpgradeBtns(playerId);
+ 
     //技能组
     gf_C71F331B(playerId);
     //初始属性加点
@@ -401,18 +266,37 @@ void playerSummonHero(){
     
     gf_67CE0F82(gv_71C054E5[playerId]);
     gf_5B3578B1();
-    gf_1A8469C6();
-    gf_85CE78E1();
+   
+
+    
     gv_BB284D6D = 1;
     gf_5B3968D5();
 
-
-    
+    updateTalentDisplay(playerId,testModePlayerGroup);
 }
 
-void summonDummy(int playerId){
+void summonDummy(){
+
+    int last;
+    int dps;
+    int total;
+    string unitTag;
     
-    libNtve_gf_CreateUnitsWithDefaultFacing(1,"dbHero38",0,11,UnitGetPosition(queryPlayerHeroUnit(playerId)));
+    libNtve_gf_CreateUnitsWithDefaultFacing(1,"dbHero38",0,0,RegionRandomPoint(RegionCircle(PointFromName("test"), 5.5)));
+
+    last = TextTagCreate(StringToText("上一次=0.00"),20,PointWithOffset(UnitGetPosition(UnitLastCreated()),0,10),1,true,true,testModePlayerGroup);
+    dps = TextTagCreate(StringToText("DPS=0.00"),20,PointWithOffset(UnitGetPosition(UnitLastCreated()),0,10),1,true,true,testModePlayerGroup);
+    total = TextTagCreate(StringToText("总伤害=0.00"),20,PointWithOffset(UnitGetPosition(UnitLastCreated()),0,10),1,true,true,testModePlayerGroup);
+
+    TextTagAttachToUnit(last,UnitLastCreated(),3);
+    TextTagAttachToUnit(dps,UnitLastCreated(),2);
+    TextTagAttachToUnit(total,UnitLastCreated(),1);
+
+    unitTag = IntToString(UnitGetTag(UnitLastCreated()));
+
+    DataTableSetInt(true,damageDisplayerKey(unitTag,c_damagedisplayer_texttagLast),last);
+    DataTableSetInt(true,damageDisplayerKey(unitTag,c_damagedisplayer_texttagDps),dps);
+    DataTableSetInt(true,damageDisplayerKey(unitTag,c_damagedisplayer_texttagTotal),total);
 
     UnitSetPropertyInt(UnitLastCreated(),c_unitPropLifeMax,10000);
     UnitSetPropertyInt(UnitLastCreated(),c_unitPropLifeRegen,2000);
@@ -420,6 +304,7 @@ void summonDummy(int playerId){
     UnitSetPropertyInt(UnitLastCreated(),c_unitPropEnergyArmor,0);
     
     UnitIssueOrder(UnitLastCreated(), Order(AbilityCommand("stop", 0)), c_orderQueueAddToFront);
-
+    
+    
 }
 

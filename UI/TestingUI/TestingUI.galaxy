@@ -48,7 +48,7 @@ void buildHeroSummonUI(){
         DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP,false);
-
+        
 }
 
 //1.技能选择
@@ -156,6 +156,14 @@ void runtimeUI(){
             DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
             DEFAULTS.DEFAULT_BTNHOVERIMG,
             DEFAULTS.DEFAULT_PLAYERGROUP,false);
+
+    createmBtnRelative(Dialogs.main_menu.nextRound,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
+        Dialogs.main_menu.nextRound.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,
+            "添加假人", 
+            "在玩家选中的英雄旁添加一个假人",
+            DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
+            DEFAULTS.DEFAULT_BTNHOVERIMG,
+            DEFAULTS.DEFAULT_PLAYERGROUP,true);
 }
 
 void histroyConsoleUI(){

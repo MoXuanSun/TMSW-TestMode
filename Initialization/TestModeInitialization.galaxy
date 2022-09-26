@@ -7,7 +7,6 @@ void onPreInit(){
 
     DEFAULTS.DEFAULT_PLAYERGROUP = testModePlayerGroup;
     
-   
 }
 
 //初始化测试模式数据
@@ -17,15 +16,17 @@ void onInit(){
     initGameData();
     initAlliances();
 
-    createTestingDialogs();
     initTestingUITrigger();
     initUpgradeHooker();
-
+    initDamageDisplayerTrigger();
     initGameUITrigger();
 
-    loadArane();
-
     disableTriggers();
+    resortTriggerExecutingQueue();
+
+    createTestingDialogs();
+    loadArane();
+   
 }
 
 //进入游戏后
