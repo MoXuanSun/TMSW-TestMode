@@ -1,0 +1,131 @@
+//GongSun_ink 2022
+
+void updateDamageDisplayer(fixed damageAmount, unit damagingUnit, unit damagedUnit, int damageType){
+    int damagingUnitOwner = UnitGetOwner(damagingUnit);
+    int damagedUnitOwner = UnitGetOwner(damagedUnit);
+    string playerHeroNameDamaging = TextToString(UnitTypeGetName(UnitGetType(getPlayerHeroUnit(damagingUnitOwner))));
+    string playerHeroNameDamaged = TextToString(UnitTypeGetName(UnitGetType(getPlayerHeroUnit(damagedUnitOwner))));
+    string damagedUnitTag = IntToString(UnitGetTag(damagedUnit));
+
+    fixed timeTotal;
+    fixed timeStart;
+    fixed timeLast;
+
+    fixed damageLast;
+    fixed dps;
+    fixed damageTotal;
+
+    text logStr;
+
+    //有一个隐藏单位 每次受到伤害都会给那个单位同样打一个伤害 应该是作者的反作弊 这里需要判断一下过滤掉
+    if (UnitGetType(damagedUnit) == "dbHero00" || damageAmount == 0){
+        return;
+    }
+    
+    //打敌方英雄不会触发
+    if (!DataTableGetInt(true,damageDisplayerKey(damagedUnitTag,c_damagedisplayer_texttagLast)) == 0){
+            //是否刷新
+        if (GameGetMissionTime() - DataTableGetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_timeLast)) > 7.0 
+        || DataTableGetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_timeLast)) == 0){
+            timeStart = GameGetMissionTime();
+            timeLast = GameGetMissionTime();
+            timeTotal = 0;
+
+            damageLast = damageAmount;
+            damageTotal = damageAmount;
+            dps = damageAmount;
+
+            DataTableSetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_timeLast), timeLast);
+            DataTableSetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_timeStart), timeStart);
+
+            DataTableSetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_damegetotal), damageTotal);
+            DataTableSetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_damageLast), damageLast);
+        }
+        else {
+            timeStart = DataTableGetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_timeStart));
+            timeLast = GameGetMissionTime();
+            timeTotal = GameGetMissionTime() - timeStart;
+
+            damageLast = damageAmount;
+            damageTotal = DataTableGetFixed(true,damageDisplayerKey(damagedUnitTag, c_damageDisplayer_damegetotal)) + damageAmount;
+            dps = damageTotal / MaxF(timeTotal, 1);
+
+            DataTableSetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_timeLast), timeLast);
+            // DataTableSetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_timeTotal), timeTotal);
+        
+            DataTableSetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_damageLast), damageLast);
+            DataTableSetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_damegetotal), damageTotal);
+        }
+
+        TextTagSetText(DataTableGetInt(true,damageDisplayerKey(damagedUnitTag,c_damagedisplayer_texttagLast)), StringToText("上一次="+FixedToString(damageLast,2)));
+        TextTagSetText(DataTableGetInt(true,damageDisplayerKey(damagedUnitTag,c_damagedisplayer_texttagDps)), StringToText("DPS="+FixedToString(dps,2)));
+        TextTagSetText(DataTableGetInt(true,damageDisplayerKey(damagedUnitTag,c_damagedisplayer_texttagTotal)), StringToText("总伤害="+FixedToString(damageTotal,2)));
+    }
+
+    //Logger
+    
+
+    //dummy
+    if (UnitGetOwner(damagedUnit) == 0){
+        logStr = TextWithColor(StringToText(playerHeroNameDamaging),ColorFromIndex(PlayerGetColorIndex(damagingUnitOwner,true),c_teamColorDiffuse))+
+        StringToText("对") +
+        StringToText("木偶")+ 
+        StringToText("造成了");
+    }else {
+        logStr = TextWithColor(StringToText(playerHeroNameDamaging),ColorFromIndex(PlayerGetColorIndex(damagingUnitOwner,true),c_teamColorDiffuse))+
+        StringToText("对") +
+        TextWithColor(StringToText(playerHeroNameDamaged),ColorFromIndex(PlayerGetColorIndex(damagedUnitOwner,true),c_teamColorDiffuse)) +
+        StringToText("造成了");
+    }
+    //物理伤害
+    if (damageType == c_unitDamageTypeMelee || damageType == c_unitDamageTypeRanged){
+        logStr += TextWithColor(FixedToText(damageAmount,2) + StringToText("点物理伤害"),gv_C846B6A5[0]);
+    }
+    //法术伤害
+    else if(damageType == c_unitDamageTypeSpell){
+        logStr += TextWithColor(FixedToText(damageAmount,2) + StringToText("点法术伤害"),gv_C846B6A5[1]);
+    }
+    //真实伤害
+    else if(damageType == c_unitDamageTypeSplash){
+        logStr += TextWithColor(FixedToText(damageAmount,2) + StringToText("点真实伤害"),gv_C846B6A5[2]);
+    }
+
+    logger(logStr);
+}
+
+bool onDamageMelee(bool t, bool r){
+    updateDamageDisplayer(EventUnitDamageAmount(),EventUnitDamageSourceUnit(),EventUnit(),c_unitDamageTypeMelee);
+    return true;
+}
+
+bool onDamageRanged(bool t, bool r){
+    updateDamageDisplayer(EventUnitDamageAmount(),EventUnitDamageSourceUnit(),EventUnit(),c_unitDamageTypeRanged);
+    return true;
+}
+
+bool onDamageSpell(bool t, bool r){
+    updateDamageDisplayer(EventUnitDamageAmount(),EventUnitDamageSourceUnit(),EventUnit(),c_unitDamageTypeSpell);
+    return true;
+}
+
+bool onDamageSplash(bool t, bool r){
+    updateDamageDisplayer(EventUnitDamageAmount(),EventUnitDamageSourceUnit(),EventUnit(),c_unitDamageTypeSplash);
+    return true;
+}
+
+void initDamageDisplayerTrigger(){
+    trigger t = TriggerCreate("onDamageMelee");
+    trigger t1 = TriggerCreate("onDamageRanged");
+    trigger t2 = TriggerCreate("onDamageSpell");
+    trigger t3 = TriggerCreate("onDamageSplash");
+
+    TriggerAddEventUnitDamaged(t,null,c_unitDamageTypeMelee,c_unitDamageEither,null); 
+    TriggerAddEventUnitDamaged(t1,null,c_unitDamageTypeRanged,c_unitDamageEither,null); 
+    TriggerAddEventUnitDamaged(t2,null,c_unitDamageTypeSpell,c_unitDamageEither,null);
+    TriggerAddEventUnitDamaged(t3,null,c_unitDamageTypeSplash,c_unitDamageEither,null);
+
+    DataTableSetTrigger(true,"onDamageMelee",t);
+    DataTableSetTrigger(true,"onDamageRanged",t1);
+    DataTableSetTrigger(true,"onDamageSpell",t2);
+    DataTableSetTrigger(true,"onDamageSplash",t3);
+}   

@@ -1,0 +1,328 @@
+//GongSun_ink 2022
+
+//1.英雄创建时，让玩家选中此英雄，并展示技能按钮
+//2.点击其他英雄时，保存当前英雄可以点击的按钮，展示点击英雄的升级按钮
+//3.英雄升级时，展示升级按钮(由于必须选中才能升级，所以不需要判断是否选中)
+//4.一次升级后如果有多余的升级点，则再次展示升级按钮
+
+bool lock;
+
+bool tryLock(){
+    // Wait(0.625,c_timeGame);
+    if (!lock){
+        lock = true;
+        return true;
+    }
+    return false;
+}
+
+void unLock(){
+    lock = false;
+}
+
+void refractUpgradeBtns(int player, playergroup p){
+    int i;
+
+    for (;i < 4; i+=1){
+        if (DialogControlIsVisible(gv_81AD7FB9[i],player)){
+            DialogControlSetVisible(gv_81AD7FB9[i],p,true);
+            DialogControlSetVisible(gv_99F9B79B[i],p,true);
+            DialogControlSetEnabled(gv_99F9B79B[i],p,true);
+        }
+        DialogControlSetPropertyAsText(gv_99F9B79B[i],c_triggerControlPropertyTooltip,p,
+            DialogControlGetPropertyAsText(gv_99F9B79B[i],c_triggerControlPropertyTooltip,player));
+    }
+}
+
+bool UnitGainLevelAfter(bool t, bool r){
+    int currentPlayer = UnitGetOwner(getTestPlayerCurrentSelectedUnit());
+ 
+    updateStatusBar(testModePlayer,EventUnit());
+    updateGameUI(currentPlayer,testModePlayerGroup);
+    refractUpgradeBtns(currentPlayer,testModePlayerGroup); 
+    return true;
+}
+
+bool btnClickHook(bool t, bool r){
+    int edialogControl = EventDialogControl();
+    int currentRemotingPlayer = UnitGetOwner(getTestPlayerCurrentSelectedUnit());
+    int i;
+
+
+    if (!tryLock()){
+        return true;
+    }
+
+    if (edialogControl == gv_99F9B79B[0] || 
+        edialogControl == gv_99F9B79B[1] || 
+        edialogControl == gv_99F9B79B[2] || 
+        edialogControl == gv_99F9B79B[3]){
+            gameSoundPlayer(v_additionalSelect);
+            for (; i < 4 ; i += 1){
+                upgradeBtnShow(i,false,testModePlayerGroup);
+                upgradeBtnShow(i,false,PlayerGroupSingle(currentRemotingPlayer));
+            }
+
+            gf_19E65221(currentRemotingPlayer, edialogControl);
+
+            if (gv_63B35897[currentRemotingPlayer] >= 1){
+                refractUpgradeBtns(currentRemotingPlayer,testModePlayerGroup);
+            }else{
+                storeUpgradeBtns(currentRemotingPlayer);
+            }
+          
+    }
+    //data-setPlayerPropPoints(int player, int propType, int opt, int value);
+    //ui-updatePropPointUI(int player, playergroup p);
+    else if ((edialogControl == gv_F4E2C4A0[0][0]) ||
+            (edialogControl == gv_F4E2C4A0[0][1]) ||
+            (edialogControl == gv_F4E2C4A0[0][2]) || 
+            (edialogControl == gv_F4E2C4A0[0][3]) || 
+            (edialogControl == gv_F4E2C4A0[0][4]) || 
+            (edialogControl == gv_F4E2C4A0[0][5]) || 
+            (edialogControl == gv_F4E2C4A0[0][6]) || 
+            (edialogControl == gv_F4E2C4A0[0][7]) || 
+            (edialogControl == gv_F4E2C4A0[0][8]) || 
+            (edialogControl == gv_F4E2C4A0[0][9]) || 
+            (edialogControl == gv_F4E2C4A0[0][10]) || 
+            (edialogControl == gv_F4E2C4A0[0][11]) || 
+            (edialogControl == gv_F4E2C4A0[0][12]) || 
+            (edialogControl == gv_F4E2C4A0[0][13]) || 
+            (edialogControl == gv_F4E2C4A0[0][14])){
+
+            i = gf_9C62D140(edialogControl);
+
+            gf_18957680(currentRemotingPlayer, edialogControl);
+
+
+            debug(IntToString(BoolToInt(DialogControlIsEnabled(gv_F4E2C4A0[0][i],currentRemotingPlayer))));
+            debug(IntToString(BoolToInt(DialogControlIsEnabled(gv_F4E2C4A0[1][i],currentRemotingPlayer))));
+            debug(IntToString(BoolToInt(DialogControlIsEnabled(gv_F4E2C4A0[2][i],currentRemotingPlayer))));
+
+
+            // DialogControlSetEnabled(gv_F4E2C4A0[0][i],testModePlayerGroup,DialogControlIsEnabled(gv_F4E2C4A0[0][i],currentRemotingPlayer));
+            // DialogControlSetEnabled(gv_F4E2C4A0[1][i],testModePlayerGroup,DialogControlIsEnabled(gv_F4E2C4A0[1][i],currentRemotingPlayer));
+            // DialogControlSetEnabled(gv_F4E2C4A0[2][i],testModePlayerGroup,DialogControlIsEnabled(gv_F4E2C4A0[2][i],currentRemotingPlayer));
+
+            updateGameUI(currentRemotingPlayer,testModePlayerGroup);
+        }   
+
+
+    else {
+        TriggerExecute(gt_B5F15D4C,false,true);
+    }
+    
+    unLock();
+    return true;
+}
+
+bool onUpgradeHotKey(bool t, bool r){
+    int currentRemotingPlayer = UnitGetOwner(getTestPlayerCurrentSelectedUnit());
+    int eKey = EventKeyPressed();
+    bool flag;
+    int i;
+
+    if (!tryLock()){
+        return true;
+    }
+
+    //技能
+    if ((EventKeyAlt() || EventKeyControl()) && (eKey == c_keyQ || eKey == c_keyW || eKey == c_keyE || eKey == c_keyR)
+            && (gv_63B35897[currentRemotingPlayer] > 0) 
+            && (DialogControlIsVisible(gv_99F9B79B[0], testModePlayer)
+            || DialogControlIsVisible(gv_99F9B79B[1], testModePlayer)
+            || DialogControlIsVisible(gv_99F9B79B[2], testModePlayer)
+            || DialogControlIsVisible(gv_99F9B79B[3], testModePlayer))
+        ){
+            if (eKey == c_keyQ)
+            {
+                i = 0;
+            }
+            else if (eKey == c_keyW)
+            {
+                i = 1;
+            }
+            else if (eKey == c_keyE)
+            {
+                i = 2;
+            }
+            else if (eKey == c_keyR)
+            {
+                i = 3;
+            }
+           
+            if (DialogControlIsVisible(gv_99F9B79B[i],testModePlayer)){
+                gameSoundPlayer(v_additionalSelect);
+                IntLoopBegin(0,3);
+                while(!IntLoopDone()){
+                    upgradeBtnShow(IntLoopCurrent(),false,testModePlayerGroup);
+                    upgradeBtnShow(IntLoopCurrent(),false,PlayerGroupSingle(currentRemotingPlayer));
+                    IntLoopStep();
+                }
+                IntLoopEnd();
+                
+                gf_19E65221(currentRemotingPlayer, gv_99F9B79B[i]);
+
+
+                if (gv_63B35897[currentRemotingPlayer] >= 1){
+                    refractUpgradeBtns(currentRemotingPlayer,testModePlayerGroup);
+                }else{
+                    storeUpgradeBtns(currentRemotingPlayer);
+                }
+            }
+    }
+    //属性
+    else if (DialogIsVisible(gv_64E35453, testModePlayer)){
+        eKey = EventKeyPressed();
+        if (eKey == c_keyF4)
+        {
+            i = gv_288042C5.lv_BBF4A34A;//物攻
+        }
+        else if (eKey == c_keyF3)
+        {
+            i = gv_288042C5.lv_614DBFD2;
+        }
+        else if (eKey == c_keyF2)
+        {
+            i = gv_288042C5.lv_F382D06C;
+        }
+        else if (eKey == c_keyF1)
+        {
+            i = gv_288042C5.lv_5758EE3C;
+        }
+        else if (eKey == c_key4)
+        {
+            i = gv_288042C5.lv_756C1089;
+        }
+        else if (eKey == c_key3)
+        {
+            i = gv_288042C5.lv_F299331C;
+        }
+        else if (eKey == c_key2)
+        {
+            i = gv_288042C5.lv_1200580A;
+        }
+        else if (eKey == c_key1)
+        {
+            i = gv_288042C5.lv_9E2E63BB;
+        }
+        else if (eKey == c_key8)
+        {
+            i = gv_288042C5.lv_438D3873;
+        }
+        else if (eKey == c_key7)
+        {
+            i = gv_288042C5.lv_E9CF3C37;
+        }
+        else if (eKey == c_key6)
+        {
+            i = gv_288042C5.lv_C3BA0A9E;
+        }
+        else if (eKey == c_key5)
+        {
+            i = gv_288042C5.lv_235E8DEB;
+        }
+
+        if (i == gv_288042C5.lv_756C1089)
+        {
+            //4加点小于上限
+            if (gv_60E73511[currentRemotingPlayer][i] < gv_533C63F3[currentRemotingPlayer])
+            {
+                flag = true;
+            }
+        }
+        else if (i == gv_288042C5.lv_235E8DEB)
+        {
+            //检查是否选择了感悟天赋
+            if ((gv_BB156610.lv_48849745[currentRemotingPlayer][gv_55AE090B.lv_5305D027][gv_55AE090B.lv_D52E7207] == true))
+            {
+                //感悟天赋上限25点cd
+                if ((gv_60E73511[currentRemotingPlayer][gv_288042C5.lv_235E8DEB] < gv_10AEE349))
+                {
+                    flag = true;
+                }
+            }
+            else
+            {
+                if ((gv_60E73511[currentRemotingPlayer][i] < gv_D79965A1[1][i]))
+                {
+                    flag = true;
+                }
+            }
+        }
+        //移速相关
+        else if (i == gv_288042C5.lv_E9CF3C37)
+        {
+            if ((gv_BB156610.lv_48849745[currentRemotingPlayer][gv_55AE090B.lv_E9BE1477][gv_55AE090B.lv_35263ECD] == true))
+            {
+                if ((gv_60E73511[currentRemotingPlayer][gv_288042C5.lv_E9CF3C37] < gv_37008C71[currentRemotingPlayer]))
+                {
+                    flag = true;
+                }
+            }
+            else
+            {
+                if ((gv_60E73511[currentRemotingPlayer][i] < gv_D79965A1[1][i]))
+                {
+                    flag = true;
+                }
+            }
+        }
+        else
+        {
+            if ((gv_60E73511[currentRemotingPlayer][i] < gv_D79965A1[1][i]))
+            {
+                flag = true;
+            }
+        }
+        if ((flag == true))
+        {
+            gf_18957680(currentRemotingPlayer, gv_F4E2C4A0[0][i]);
+        }
+    }
+
+    updateGameUI(currentRemotingPlayer,testModePlayerGroup);
+    unLock();
+    return true;
+}
+
+
+void initUpgradeHooker(){
+    trigger t1 = TriggerCreate("btnClickHook");
+    trigger t2 = TriggerCreate("UnitGainLevelAfter");
+    trigger t3 = TriggerCreate("onUpgradeHotKey");
+
+    TriggerAddEventDialogControl(t1,c_playerAny,c_invalidDialogControlId,c_triggerControlEventTypeClick);
+
+    TriggerAddEventUnitGainLevel(t2,null);
+    
+    //属性
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_keyF1, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_keyF2, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_keyF3, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_keyF4, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_key1, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_key2, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_key3, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_key4, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_key5, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_key6, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_key7, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_key8, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+    //技能
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_keyQ, true, c_keyModifierStateIgnore, c_keyModifierStateRequire, c_keyModifierStateIgnore);
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_keyW, true, c_keyModifierStateIgnore, c_keyModifierStateRequire, c_keyModifierStateIgnore);
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_keyE, true, c_keyModifierStateIgnore, c_keyModifierStateRequire, c_keyModifierStateIgnore);
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_keyR, true, c_keyModifierStateIgnore, c_keyModifierStateRequire, c_keyModifierStateIgnore);
+    //alt
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_keyQ, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateRequire);
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_keyW, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateRequire);
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_keyE, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateRequire);
+    TriggerAddEventKeyPressed(t3, c_playerAny, c_keyR, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateRequire);
+
+
+    DataTableSetTrigger(true,"trigger-btnClickHook",t1);
+    DataTableSetTrigger(true,"trigger-UnitGainLevelAfter",t2);
+    DataTableSetTrigger(true,"trigger-onUpgradeHotKey",t3);
+
+}

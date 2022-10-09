@@ -29,21 +29,21 @@ void buildHeroSummonUI(){
     int btnWidth = 86;
     int btnHeight = 86;
 
-    createmBtn(Dialogs.main_menu.heroSelectBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
+    createmBtn(Dialogs.mainMenu.heroSelectBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
         c_anchorTopLeft,TEST_UI_PADDING,TEST_UI_PADDING,DEFAULTS.DEFAULT_BORDERDDS,gv_AA1BDB6C[0],"请选择英雄",
         DEFAULTS.DEFAULT_TITLE,DEFAULTS.DEFAULT_FONTSTYLE,DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP);
 
-    createmBtnRelative(Dialogs.main_menu.summonAllyHeroBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
-        Dialogs.main_menu.heroSelectBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,"生成友方英雄",
+    createmBtnRelative(Dialogs.mainMenu.summonAllyHeroBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
+        Dialogs.mainMenu.heroSelectBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,"生成友方英雄",
         "+友方",DEFAULTS.DEFAULT_FONTSTYLE,
         DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP,false);
 
-    createmBtnRelative(Dialogs.main_menu.summonEnemyHeroBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
-        Dialogs.main_menu.summonAllyHeroBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,"生成敌方英雄",
+    createmBtnRelative(Dialogs.mainMenu.summonEnemyHeroBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
+        Dialogs.mainMenu.summonAllyHeroBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,"生成敌方英雄",
         "+敌方",DEFAULTS.DEFAULT_FONTSTYLE,
         DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
@@ -70,7 +70,7 @@ void buildAbilitySwitchingUI(){
     DialogControlSetVisible(gv_ECE9BB7D[2], PlayerGroupAll(), true);
     DialogControlSetVisible(gv_ECE9BB7D[3], PlayerGroupAll(), true);
 
-    DialogSetPositionRelative(gv_D2306AF3,c_anchorCenter,Dialogs.main_menu.self,c_anchorLeft, 300 /2 + TEST_UI_PADDING , 96 + 48 +TEST_UI_PADDING);
+    DialogSetPositionRelative(gv_D2306AF3,c_anchorCenter,Dialogs.mainMenu.self,c_anchorLeft, 300 /2 + TEST_UI_PADDING , 96 + 48 +TEST_UI_PADDING);
  
     DialogControlSetVisible(gv_52C3727B[0],PlayerGroupAll(),false);
 
@@ -99,30 +99,30 @@ void buildTestingUI(){
     int btnHeight = 86; 
     
 
-    createmBtnRelative(Dialogs.main_menu.upgradeHeroBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
-        Dialogs.main_menu.heroSelectBtn.border,0,TEST_UI_PADDING,DEFAULTS.DEFAULT_BORDERDDS,"GamesUis\\MYG_Skill_Plus_BTN.dds",
+    createmBtnRelative(Dialogs.mainMenu.upgradeHeroBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
+        Dialogs.mainMenu.heroSelectBtn.border,0,TEST_UI_PADDING,DEFAULTS.DEFAULT_BORDERDDS,"GamesUis\\MYG_Skill_Plus_BTN.dds",
         "升级选中单位"
         ,DEFAULTS.DEFAULT_TITLE, DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP,true);
 
-    createmBtnRelative(Dialogs.main_menu.noCoolDownBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
-        Dialogs.main_menu.upgradeHeroBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,"character/newroon/new_tuc_touhou_mabub_0_line_a.dds",
+    createmBtnRelative(Dialogs.mainMenu.noCoolDownBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
+        Dialogs.mainMenu.upgradeHeroBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,"character/newroon/new_tuc_touhou_mabub_0_line_a.dds",
         "刷新选中英雄的所有技能",
         DEFAULTS.DEFAULT_TITLE, DEFAULTS.DEFAULT_FONTSTYLE , DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP,false);
 
-    createmBtnRelative(Dialogs.main_menu.fullmana,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
-        Dialogs.main_menu.noCoolDownBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,"character/newroon/new_tuc_touhou_yungam_0_line_a.dds",
+    createmBtnRelative(Dialogs.mainMenu.fullmana,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
+        Dialogs.mainMenu.noCoolDownBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,"character/newroon/new_tuc_touhou_yungam_0_line_a.dds",
         "你的能量不足",
         DEFAULTS.DEFAULT_TITLE, DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP,false);
 
-     createmBtnRelative(Dialogs.main_menu.removeHeroBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
-        Dialogs.main_menu.upgradeHeroBtn.border,0,TEST_UI_PADDING,DEFAULTS.DEFAULT_BORDERDDS,"character/newroon/new_tuc_touhou_jibae_1_line_b.dds",
-        "移除选中英雄(不可用)",
+     createmBtnRelative(Dialogs.mainMenu.removeHeroBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
+        Dialogs.mainMenu.upgradeHeroBtn.border,0,TEST_UI_PADDING,DEFAULTS.DEFAULT_BORDERDDS,"character/newroon/new_tuc_touhou_jibae_1_line_b.dds",
+        "移除选中英雄",
         DEFAULTS.DEFAULT_TITLE, DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP,true);
@@ -141,52 +141,54 @@ void runtimeUI(){
     int btnWidth = 86;
     int btnHeight = 86; 
 
-    createmBtnRelative(Dialogs.main_menu.nextRound,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
-        Dialogs.main_menu.removeHeroBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,
-            "将游戏回合数调节至下一回合，游戏的一些参数会与回合数有关(不可用)", 
+    createmBtnRelative(Dialogs.mainMenu.nextRound,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
+        Dialogs.mainMenu.removeHeroBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,
+            "将游戏回合数调节至下一回合，游戏的一些参数会与回合数有关", 
             "下一回合",
             DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
             DEFAULTS.DEFAULT_BTNHOVERIMG,
             DEFAULTS.DEFAULT_PLAYERGROUP,false);
 
-    createmBtnRelative(Dialogs.main_menu.nextRound,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
-        Dialogs.main_menu.nextRound.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,
-            "将游戏回合数调节至下一回合，游戏的一些参数会与回合数有关(不可用)", 
-            "上一回合",
+    // createmBtnRelative(Dialogs.mainMenu.nextRound,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
+    //     Dialogs.mainMenu.nextRound.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,
+    //         "将游戏回合数调节至下一回合，游戏的一些参数会与回合数有关", 
+    //         "上一回合",
+    //         DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
+    //         DEFAULTS.DEFAULT_BTNHOVERIMG,
+    //         DEFAULTS.DEFAULT_PLAYERGROUP,false);
+
+    createmBtnRelative(Dialogs.mainMenu.summonDummy,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
+        Dialogs.mainMenu.nextRound.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,
+            "在玩家选中的英雄旁添加一个假人", 
+            "添加假人",
             DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
             DEFAULTS.DEFAULT_BTNHOVERIMG,
             DEFAULTS.DEFAULT_PLAYERGROUP,false);
-
-    createmBtnRelative(Dialogs.main_menu.nextRound,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
-        Dialogs.main_menu.nextRound.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,
-            "添加假人", 
-            "在玩家选中的英雄旁添加一个假人",
-            DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
-            DEFAULTS.DEFAULT_BTNHOVERIMG,
-            DEFAULTS.DEFAULT_PLAYERGROUP,true);
 }
 
 void histroyConsoleUI(){
     int i;
 
-    DialogCreate(1000,900,c_anchorTopLeft,0,0,true);
+    Dialogs.logger.self = DialogCreate(1000,900,c_anchorTopLeft,0,0,true);
     DialogSetVisible(DialogLastCreated(),PlayerGroupAll(),true);
     // DialogSetImage(DialogLastCreated(),"GamesUis\\MyG_Frames_Character_Select2.dds");
-    DialogSetImageVisible(DialogLastCreated(),true);
+    DialogSetImageVisible(DialogLastCreated(),false);
+    DialogSetPosition(DialogLastCreated(),c_anchorTopLeft,-850,0);
 
-    libNtve_gf_CreateDialogItemButton(DialogLastCreated(),100,60,c_anchorTopLeft,20,20,
-    EMP_TEXT,StringToText("隐藏"),null);
+    Dialogs.logger.listBoxControl = DialogControlCreate(DialogLastCreated(),c_triggerControlTypeListBox);
+    DialogControlSetSize(DialogControlLastCreated(),testModePlayerGroup,850,900);
 
-
-    for (;i<30;i+=1){
-        
-    }
+    Dialogs.logger.contolBtn = libNtve_gf_CreateDialogItemButton(DialogLastCreated(),100,60,c_anchorBottomRight,50,0,
+    EMP_TEXT,StringToText("显示"),null);
+    
+    // DialogControlAddItem()
+    
 }
 
 void createMainMenu(){
 
     //1.创建主菜单
-    Dialogs.main_menu.self = DialogCreate(400,800,c_anchorTopRight,0,0,false); 
+    Dialogs.mainMenu.self = DialogCreate(400,800,c_anchorTopRight,0,0,false); 
     //2.设置可见性
     DialogSetVisible(DialogLastCreated(),PlayerGroupActive(),true);
     //3.设置背景不可见
@@ -203,7 +205,7 @@ void createMainMenu(){
 
     // buildAbilitySwitchingUI();
 
-    // histroyConsoleUI();
+    histroyConsoleUI();
   
 } 
 //----------------------------------register----------------------------

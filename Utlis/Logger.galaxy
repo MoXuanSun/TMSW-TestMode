@@ -1,0 +1,46 @@
+//GongSun_ink 2022
+
+
+void logger(text message){
+
+    text gameTime = StringToText("<c val = \"00FFFF\">[GameTime:"+FixedToString(GameGetMissionTime(),2)+"]</c> ");
+
+
+    if (DialogControlGetItemCount(Dialogs.logger.listBoxControl,testModePlayer) > 200){
+        DialogControlRemoveItem(Dialogs.logger.listBoxControl,testModePlayerGroup,0);
+    }
+
+    DialogControlRemoveItem(Dialogs.logger.listBoxControl,testModePlayerGroup,DialogControlGetItemCount(Dialogs.logger.listBoxControl,testModePlayer));
+    DialogControlAddItem(Dialogs.logger.listBoxControl,testModePlayerGroup,gameTime + message);
+
+    //每一次都添加一个空的item并选中，下一次再删除在创建，这样就可以自动滑动logger
+    DialogControlAddItem(Dialogs.logger.listBoxControl,testModePlayerGroup,EMP_TEXT);
+    
+    DialogControlSelectItem(Dialogs.logger.listBoxControl,testModePlayerGroup,
+        DialogControlGetItemCount(Dialogs.logger.listBoxControl,testModePlayer));
+}
+
+
+bool loggerAbility(bool r, bool t){
+    
+    return true;
+}
+bool loggerEffect(bool r, bool t){
+
+    return true;
+}
+bool loggerBehavior(bool r, bool t){
+
+    return true;
+}
+
+void initLogger(){
+    trigger t1 = TriggerCreate("loggerAbility");
+    trigger t2 = TriggerCreate("loggerEffect");
+    trigger t3 = TriggerCreate("loggerBehavior");
+
+
+    TriggerAddEventUnitAbility(t1,null,null,c_unitAbilStageAll,false);
+    TriggerAddEventPlayerEffectUsed(t2,c_playerAny,null);
+    TriggerAddEventUnitBehaviorChange(t3,null,null,c_unitBehaviorChangeAny);
+}

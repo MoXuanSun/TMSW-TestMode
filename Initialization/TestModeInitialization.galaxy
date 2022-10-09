@@ -19,19 +19,22 @@ void onInit(){
     initTestingUITrigger();
     initUpgradeHooker();
     initDamageDisplayerTrigger();
-    initGameUITrigger();
-
-    disableTriggers();
-    resortTriggerExecutingQueue();
+    initGameUIClickTrigger();
+    initGameUIUpdateTrigger();
+    initLogger();
+    initGameDie();
 
     createTestingDialogs();
     loadArane();
+
+    disableTriggers();
+    resortTriggerExecutingQueue();
    
 }
 
 //进入游戏后
 void onPostInit(){
-    VisRevealerCreate(1, RegionEntireMap());
+    // VisRevealerCreate(1, RegionEntireMap());
 }
 
 //初始化

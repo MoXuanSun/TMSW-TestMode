@@ -1,0 +1,37 @@
+
+
+bool onEffectUnitDie(bool r, bool t){
+    unit eUnit = getPlayerHeroUnit(EventPlayer());
+    libNtve_gf_ShowHideUnit(eUnit,false);
+
+    // debug("test111");
+    Wait(2.0,c_timeGame);
+    libNtve_gf_ShowHideUnit(eUnit,true);
+    
+    UnitBehaviorRemove(eUnit, "nodie2", 1);
+    UnitBehaviorRemove(eUnit, "jocuser", 1);
+    UnitBehaviorRemove(eUnit, "nodie24res2", 1);
+    libNtve_gf_MakeUnitInvulnerable(eUnit, false);
+    
+    UnitSetHeight(eUnit, 0.0, 0.0);
+    UnitIssueOrder(eUnit, Order(AbilityCommand("dbnu00_witchsajam", 0)), c_orderQueueReplace);
+    
+    libNtve_gf_PauseUnit(eUnit, false);
+
+    
+    UnitCreateEffectUnit(eUnit, "rountinitsss", eUnit);
+
+    UnitSetPropertyFixed(eUnit,c_unitPropLifePercent,100.0);
+    UnitSetPropertyFixed(eUnit,c_unitPropEnergyPercent,100.0);
+    
+    return true;
+}
+
+
+void initGameDie(){
+    trigger t1 = TriggerCreate("onEffectUnitDie");
+
+    TriggerAddEventPlayerEffectUsed(t1, c_playerAny, "hy_dsfd");
+    TriggerAddEventPlayerEffectUsed(t1, c_playerAny, "hy_dsfd1");
+    TriggerAddEventPlayerEffectUsed(t1, c_playerAny, "hy_dsfd3");
+}

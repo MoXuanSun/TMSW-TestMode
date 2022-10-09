@@ -26,7 +26,7 @@ void onTalentSelectPanelClick(){
     int row;
     int column;
 
-    int player = DataTableGetInt(true,"player");
+    int player = getPlayerLastPicked();
 
     gameSoundPlayer(v_additionalSelect);
     //暴力判断找到控件对应数组的位置
@@ -59,11 +59,11 @@ bool onGameUIClick(bool t, bool r){
     int rootDialog = DialogControlGetDialog(eDialogControl);
 
     if (rootDialog == gv_277B64A1){
-        DataTableSetInt(true,"heroId",(EventDialogControl() - gv_749EC876[0][0]) / 3);
+        setHeroLastSelected( (EventDialogControl() - gv_749EC876[0][0]) / 3 );
 
         gameSoundPlayer(v_heroSelect);
-        libNtve_gf_SetDialogItemImage(Dialogs.main_menu.heroSelectBtn.img,gv_AA1BDB6C[DataTableGetInt(true,"heroId")],testModePlayerGroup);
-        libNtve_gf_SetDialogItemTooltip(Dialogs.main_menu.heroSelectBtn.btn,
+        libNtve_gf_SetDialogItemImage(Dialogs.mainMenu.heroSelectBtn.img,gv_AA1BDB6C[DataTableGetInt(true,"heroId")],testModePlayerGroup);
+        libNtve_gf_SetDialogItemTooltip(Dialogs.mainMenu.heroSelectBtn.btn,
             StringExternal(("Button/Tooltip/btn_line_ability_" + gf_45491ABD(DataTableGetInt(true,"heroId")) + "_s")),testModePlayerGroup);
 
         GamePanelShow(c_UIType_heroSelect,false,testModePlayerGroup);
@@ -92,7 +92,6 @@ bool onGameUIClick(bool t, bool r){
         else if (DialogIsVisible(gv_BB156610.lv_DC4A4CA5[0], 1)){
             GamePanelShow(c_UIType_SKillSelect,false,testModePlayerGroup);
             playerSummonHero();
-            DataTableSetUnit(true,"heroselected",gv_71C054E5[getPlayerLastPicked()]);
             summoning = false;
         }
     } 
@@ -111,30 +110,40 @@ bool onUnitClick(bool t, bool r){
         return true;
     }
     
-    //取消选择
-    UnitSelect(getTestPlayerCurrentSelectedUnit(), testModePlayer, false);
-    //移除不可选中效果
-    UnitBehaviorRemove(eUnit, "nodie2", 1);
-    UIAlertUnit("MyClickLocations", testModePlayer, EMP_TEXT, null, eUnit);
-    storeUpgradeBtns(UnitGetOwner(getTestPlayerCurrentSelectedUnit()));
+    if (getTestPlayerCurrentSelectedUnit() != null){
+         //取消选择
+        UnitSelect(getTestPlayerCurrentSelectedUnit(), testModePlayer, false);
+        //移除不可选中效果
+        UnitBehaviorRemove(eUnit, "nodie2", 1);
+        UIAlertUnit("MyClickLocations", testModePlayer, EMP_TEXT, null, eUnit);
+        storeUpgradeBtns(UnitGetOwner(getTestPlayerCurrentSelectedUnit()));
+        
+        libNtve_gf_ShareVisionofUnit(getTestPlayerCurrentSelectedUnit(),false,testModePlayer);
+    }
     //--------------------------
     //选择新单位
     UnitSelect(eUnit, testModePlayer, true);
     setTestPlayerCurrentSelectedUnit(eUnit);
     updateGameUI(newUnitOwner,testModePlayerGroup);
     restoreUpgradeBtns(newUnitOwner,testModePlayerGroup);
-
+    libNtve_gf_ShareVisionofUnit(eUnit,true,testModePlayer);
     return true;
 }
 
 bool onKeyEsc(bool t, bool r){
 
     showHideDummyHud(false,testModePlayerGroup);
-    
+    GamePanelShow(c_UIType_heroSelect,false,testModePlayerGroup);
+    GamePanelShow(c_UIType_additionalPropSelect,false,testModePlayerGroup);
+    GamePanelShow(c_UIType_additionalSkillSelect,false,testModePlayerGroup);
+    GamePanelShow(c_UIType_heroSelect,false,testModePlayerGroup);
+    GamePanelShow(c_UIType_SKillSelect,false,testModePlayerGroup);
+    GamePanelShow(c_UIType_talentSelect,false,testModePlayerGroup);
+    summoning = false;
     return true;
 }
 
-void initGameUITrigger(){
+void initGameUIClickTrigger(){
     trigger t = TriggerCreate("onGameUIClick");
     trigger t1 = TriggerCreate("onUnitClick");
     trigger t2 = TriggerCreate("onKeyEsc");

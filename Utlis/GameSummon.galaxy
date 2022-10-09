@@ -8,7 +8,6 @@ int pickPlayer(bool isAlly){
     if (isAlly){  
         for (; i < 6 ; i+=1){
            if (getPlayerHeroId(i) == 0){
-                showMsg(1,IntToString(i));
                 return i;
            }
         }
@@ -40,64 +39,21 @@ void playerSummonHero(){
     //女院被动
     gf_35172460(playerId, 0);
 
-    //克劳和四季的触发器脚本只对这四个单位生效
-    if (((gv_131E8983[playerId] == 19) || (gv_131E8983[playerId] == 43))){
-        if ((UnitGetOwner(UnitFromId(1657007678)) != 0 && UnitGetOwner(UnitFromId(168525155)) != 0) || 
-            (UnitGetOwner(UnitFromId(20)) != 0 && UnitGetOwner(UnitFromId(608)) != 0)){
-            showMsg(1,"目前由于源代码限制,四季和克劳不能多于2个");
-            return;
-        }
-        if ((gv_131E8983[playerId] == 19)){
-            if ((UnitGetOwner(UnitFromId(20)) == 0)){
-                libNtve_gf_ShowHideUnit(UnitFromId(20), true);
-                UnitSetOwner(UnitFromId(20), playerId, true);
-                UnitSetPosition(UnitFromId(20), RegionRandomPoint(RegionCircle(teamPoints[gv_9EEEA78D[playerId]], 5.5)), false);
-                gv_71C054E5[playerId] = UnitFromId(20);
-                gv_5F6F4890[0] = playerId;
-                UnitCreateEffectUnit(UnitFromId(20), "effectclickss2", UnitFromId(20));
-                TriggerEnable(gt_06F46C59, true);
-                TriggerEnable(gt_B8A29486, true);
-            }
-            else{
-                libNtve_gf_ShowHideUnit(UnitFromId(608), true);
-                UnitSetOwner(UnitFromId(608), playerId, true);
-                UnitSetPosition(UnitFromId(608), RegionRandomPoint(RegionCircle(teamPoints[gv_9EEEA78D[playerId]], 5.5)), false);
-                gv_71C054E5[playerId] = UnitFromId(608);
-                gv_5F6F4890[1] = playerId;
-                UnitCreateEffectUnit(UnitFromId(608), "effectclickss2", UnitFromId(608));
-                TriggerEnable(gt_6E4F8EAE, true);
-                TriggerEnable(gt_CC047C8E, true);
-                }
-        }
-        else if ((gv_131E8983[playerId] == 43)){
-
-            if ((UnitGetOwner(UnitFromId(1657007678)) == 0)){
-                libNtve_gf_ShowHideUnit(UnitFromId(1657007678), true);
-                UnitSetOwner(UnitFromId(1657007678), playerId, true);
-                UnitSetPosition(UnitFromId(1657007678), RegionRandomPoint(RegionCircle(teamPoints[gv_9EEEA78D[playerId]], 5.5)), false);
-                gv_71C054E5[playerId] = UnitFromId(1657007678);
-                gv_D07DF7B9[0] = playerId;
-                UnitCreateEffectUnit(UnitFromId(1657007678), "effectclickss", UnitFromId(1657007678));
-                TriggerEnable(gt_9F080E6C, true);
-            }
-            else{
-                libNtve_gf_ShowHideUnit(UnitFromId(168525155), true);
-                UnitSetOwner(UnitFromId(168525155), playerId, true);
-                UnitSetPosition(UnitFromId(168525155), RegionRandomPoint(RegionCircle(teamPoints[gv_9EEEA78D[playerId]], 5.5)), false);
-                gv_71C054E5[playerId] = UnitFromId(168525155);
-                gv_D07DF7B9[1] = playerId;
-                UnitCreateEffectUnit(UnitFromId(168525155), "effectclickss", UnitFromId(168525155));
-                TriggerEnable(gt_64FD760E, true);
-            } 
-        }
-    }
-    else
-    {
-        //直接创建英雄
-        libNtve_gf_CreateUnitsWithDefaultFacing(1, gv_367C7760[gv_131E8983[playerId]],
-                c_unitCreateIgnorePlacement, playerId, RegionRandomPoint(RegionCircle(teamPoints[gv_9EEEA78D[playerId]], 5.5)));
-        gv_71C054E5[playerId] = UnitLastCreated();                   
-    }
+    libNtve_gf_CreateUnitsWithDefaultFacing(1, gv_367C7760[gv_131E8983[playerId]],
+         c_unitCreateIgnorePlacement, playerId, RegionRandomPoint(RegionCircle(teamPoints[0], 5.5)));
+    //S
+    UnitIssueOrder(UnitLastCreated(), Order(AbilityCommand("dbnu00_witchsajam", 0)), c_orderQueueAddToFront);
+    gv_71C054E5[playerId] = UnitLastCreated();         
+    
+    if (((gv_131E8983[playerId] == 19))) {
+        TriggerEnable(gt_06F46C59, true);
+        TriggerEnable(gt_B8A29486, true);
+        UnitCreateEffectUnit(gv_71C054E5[playerId], "effectclickss2", gv_71C054E5[playerId]);
+    } else if((gv_131E8983[playerId] == 43)) {
+        TriggerEnable(gt_9F080E6C, true);
+        UnitCreateEffectUnit(gv_71C054E5[playerId], "effectclickss", gv_71C054E5[playerId]);
+    } 
+    
     gv_305DA55D[playerId] = true;
     //单位设置队伍颜色
     if ((gv_9EEEA78D[playerId] == 0))
@@ -112,29 +68,20 @@ void playerSummonHero(){
     //启用或禁用技能
     gf_ED9D4333(gv_71C054E5[playerId], playerId);
     
-    //只显示操作一次
-    if (playerId == 1){
-        //显示技能栏、头像、属性栏
-        setTestPlayerCurrentSelectedUnit(gv_71C054E5[playerId]);
-        updateGameUI(playerId,testModePlayerGroup);
-        UnitSelect(gv_71C054E5[playerId], testModePlayer, true);
-        DialogSetVisible(gv_5C4043F8.lv_B91A282D, testModePlayerGroup, true);
-        DialogSetVisible(gv_5C4043F8.lv_8DEC25E2, testModePlayerGroup, true);
-        DialogSetVisible(gv_5C4043F8.lv_AF2E051A, testModePlayerGroup, true);
-    }
-
     //老兵行为
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "dbdo_ex", playerId, 1);
             
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie", playerId, 1);
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie4", playerId, 1);
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie42", playerId, 1);
-    UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie2", playerId, 1);
+    //不添加不可选中效果
+    // UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie2", playerId, 1);
 
     gv_55A8AB50[playerId] += 1;
     //两边队伍剩余人数
     gv_48E7CC05[gv_9EEEA78D[playerId]] += 1;
 
+  
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie25", playerId, 1);
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie23", playerId, 1);
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie24res", playerId, 1);        
@@ -234,10 +181,8 @@ void playerSummonHero(){
     gf_E21FB1A1(gv_71C054E5[playerId]);
     //技能升级函数
     gf_91088DA7(playerId);
-    //显示升级按钮
-    
+    //储存升级按钮    
     storeUpgradeBtns(playerId);
- 
     //技能组
     gf_C71F331B(playerId);
     //初始属性加点
@@ -249,7 +194,6 @@ void playerSummonHero(){
     //天赋
     gf_63372EA8(playerId);
     //天赋
-    // showMsg(1,BoolToString(gv_BB156610.lv_48849745[playerId][gv_55AE090B.lv_5305D027][gv_55AE090B.lv_6B3F8B25]));
     gf_17113C81(gv_71C054E5[playerId]);
     //天赋
     gf_1DA6D503(gv_71C054E5[playerId]);
@@ -264,25 +208,35 @@ void playerSummonHero(){
         UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropEnergyPercent, 0.0);
     }
     
-    gf_67CE0F82(gv_71C054E5[playerId]);
-    gf_5B3578B1();
-   
+    // gf_67CE0F82(gv_71C054E5[playerId]);
+    // gf_5B3578B1();    
 
-    
+    //第一次生成
+    if (getTestPlayerCurrentSelectedUnit() == null){
+        UnitSelect(getPlayerHeroUnit(playerId),testModePlayer,true);
+        setTestPlayerCurrentSelectedUnit(getPlayerHeroUnit(playerId));
+        updateGameUI(playerId,testModePlayerGroup);
+        DialogSetVisible(gv_5C4043F8.lv_B91A282D, testModePlayerGroup, true);
+        DialogSetVisible(gv_5C4043F8.lv_8DEC25E2, testModePlayerGroup, true);
+        DialogSetVisible(gv_5C4043F8.lv_AF2E051A, testModePlayerGroup, true);
+    }
+
+
     gv_BB284D6D = 1;
     gf_5B3968D5();
 
-    updateTalentDisplay(playerId,testModePlayerGroup);
+    //更新Tab
+    TriggerExecute(gt_EFE165C0,false,true);
 }
 
-void summonDummy(){
+void summonDummy(point p){
 
     int last;
     int dps;
     int total;
     string unitTag;
     
-    libNtve_gf_CreateUnitsWithDefaultFacing(1,"dbHero38",0,0,RegionRandomPoint(RegionCircle(PointFromName("test"), 5.5)));
+    libNtve_gf_CreateUnitsWithDefaultFacing(1,"dbHero38",0,0,RegionRandomPoint(RegionCircle(p, 5.5)));
 
     last = TextTagCreate(StringToText("上一次=0.00"),20,PointWithOffset(UnitGetPosition(UnitLastCreated()),0,10),1,true,true,testModePlayerGroup);
     dps = TextTagCreate(StringToText("DPS=0.00"),20,PointWithOffset(UnitGetPosition(UnitLastCreated()),0,10),1,true,true,testModePlayerGroup);
@@ -298,13 +252,12 @@ void summonDummy(){
     DataTableSetInt(true,damageDisplayerKey(unitTag,c_damagedisplayer_texttagDps),dps);
     DataTableSetInt(true,damageDisplayerKey(unitTag,c_damagedisplayer_texttagTotal),total);
 
-    UnitSetPropertyInt(UnitLastCreated(),c_unitPropLifeMax,10000);
+    UnitSetPropertyInt(UnitLastCreated(),c_unitPropLifeMax,100000);
     UnitSetPropertyInt(UnitLastCreated(),c_unitPropLifeRegen,2000);
     UnitSetPropertyInt(UnitLastCreated(),c_unitPropLifeArmor,0);
     UnitSetPropertyInt(UnitLastCreated(),c_unitPropEnergyArmor,0);
     
-    UnitIssueOrder(UnitLastCreated(), Order(AbilityCommand("stop", 0)), c_orderQueueAddToFront);
-    
+    UnitIssueOrder(UnitLastCreated(), Order(AbilityCommand("dbnu00_witchsajam", 0)), c_orderQueueAddToFront);
+    libNtve_gf_ShareVisionofUnit(UnitLastCreated(),true,testModePlayer);
     
 }
-

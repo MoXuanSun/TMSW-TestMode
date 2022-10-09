@@ -53,6 +53,7 @@ bool onCommand(bool t,bool r){
     }
     else if (cmd == "r"){
         UnitClearCooldowns(gv_71C054E5[1],true);
+        debug(IntToString(UnitInventoryCount(getTestPlayerCurrentSelectedUnit())));
     }
     //dummyPropa
     else if (cmd == "dpa"){

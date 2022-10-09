@@ -22,9 +22,15 @@ void setTestPlayerCurrentSelectedUnit(unit inUnit){
 int getHeroLastSelected(){
     return DataTableGetInt(true,"heroId");
 }
+void setHeroLastSelected(int heroId){
+    DataTableSetInt(true,"heroId",heroId);
+}
 //获得上一个选择的玩家
 int getPlayerLastPicked(){
     return DataTableGetInt(true,"player");
+}
+void setPlayerLastPicked(int player){
+    DataTableSetInt(true,"player",player);
 }
 
 void gameSoundPlayer(int type){
@@ -45,18 +51,6 @@ int getHeroIdByUnit(unit inUnit){
 
 void debug(string message){
     UIDisplayMessage(testModePlayerGroup,c_messageAreaSubtitle,StringToText("debug--"+message));
-}
-
-void removeHero(){
-
-}
-
-void ReflashPlayer(){
-
-}
-
-void removeHeroAndReflashPlayer(){
-
 }
 
 string damageDisplayerKey(string unittag, int suffix){

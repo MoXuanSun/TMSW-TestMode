@@ -1,11 +1,12 @@
 //GongSun_ink 2022
 
+//初始化盟友关系以及玩家的晶体矿
 void initAlliances(){
     int i = 1;
 
     playergroup tempPlayerGroup;
 
-    PlayerOptionOverride(1, "selectuncontrolable", "1");
+    PlayerOptionOverride(1, "selectuncontrolable", "0");
     
     for (; i < 6 ; i +=1){
         PlayerGroupAdd(tempPlayerGroup,i);
@@ -15,6 +16,10 @@ void initAlliances(){
 
         gv_9EEEA78D[i] = 0;
         gv_9EEEA78D[i + 5] = 1;
+
+        PlayerModifyPropertyInt(i,c_playerPropMinerals,c_playerPropOperAdd,1000000);
+        PlayerModifyPropertyInt(i+5,c_playerPropMinerals,c_playerPropOperAdd,1000000);
+
     }
     
     //dummyplayer 0
@@ -29,6 +34,17 @@ void initAlliances(){
         libNtve_gf_SetAllianceOneWay(0,i,libNtve_ge_AllianceSetting_Ally);
         libNtve_gf_SetAllianceOneWay(0,i + 5,libNtve_ge_AllianceSetting_Ally);
     }
+
+    gv_A6CEA227[0][0] = 1;
+    gv_A6CEA227[0][1] = 2;
+    gv_A6CEA227[0][2] = 3;
+    gv_A6CEA227[0][3] = 4;
+    gv_A6CEA227[0][4] = 5;
+    gv_A6CEA227[1][0] = 6;
+    gv_A6CEA227[1][1] = 7;
+    gv_A6CEA227[1][2] = 8;
+    gv_A6CEA227[1][3] = 9;
+    gv_A6CEA227[1][4] = 10;
    
     // PlayerSetAlliance(i,c_allianceIdControl,playerid + 5,true); 
 }
@@ -106,6 +122,14 @@ void disableTriggers(){
     TriggerEnable(gt_B8AD6CA8,false);
     //点击事件
     TriggerEnable(gt_B5F15D4C,false);
+    //属性条更新
+    TriggerEnable(gt_A334548C,false);
+    //属性加点快捷键
+    TriggerEnable(gt_F3331A21,false);
+    //技能加点快捷键
+    TriggerEnable(gt_74AB4E94,false);
+    
+
 }
 
 //通过开启关闭操作重新排列触发器顺序
@@ -166,7 +190,7 @@ void loadArane(){
     TriggerExecute(gt_7E1E7511, false, true);
     TriggerExecute(gt_63B72605, false, true);
     TriggerExecute(gt_C04D8CFD, false, true);
-    //血量 护盾显示更新
+    //血量 MP显示更新
     TriggerEnable(gt_A334548C, true);
     //创建致命伤害显示ui
     TriggerExecute(gt_BEAA2115, false, false);
@@ -184,4 +208,17 @@ void loadArane(){
     // gv_BB284D6D = 1;
     // UI操作 srcview\set\tip
     gf_85CE78E1();
+
+
+    IntLoopBegin(0,14);
+    while(!IntLoopDone()){
+        // libNtve_gf_SetDialogItemText(gv_F4E2C4A0[2][IntLoopCurrent()], 
+        //             IntToText(gv_60E73511[player][IntLoopCurrent()]), p);
+        DialogControlSetEnabled(gv_F4E2C4A0[0][IntLoopCurrent()],PlayerGroupAll(),true);
+        DialogControlSetEnabled(gv_F4E2C4A0[1][IntLoopCurrent()],PlayerGroupAll(),true);
+        DialogControlSetEnabled(gv_F4E2C4A0[2][IntLoopCurrent()],PlayerGroupAll(),true);
+        IntLoopStep();
+    }
+    IntLoopEnd();
+    
 }

@@ -282,6 +282,12 @@ void GamePanelShow(int type, bool show, playergroup p){
         DialogSetVisible(gv_BB156610.lv_DC4A4CA5[4], p, show);
         
     }
+    else if (type == c_UIType_additionalPropSelect){
+        
+    }
+    else if (type == c_UIType_additionalSkillSelect){
+
+    }
 } 
 
 void loadDummyHud(playergroup p){
@@ -311,10 +317,6 @@ void loadDummyHud(playergroup p){
 }
 
 void showHideDummyHud(bool show, playergroup p){
-    if (show){
-        libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_D11CB209, (("character\\interface\\face\\interface_face_" 
-        + IntToString(38) + ".dds")), p);
-    }
     DialogSetVisible(gv_4EE04C84, p, show);
 }
 
@@ -343,7 +345,7 @@ void updateTalentDisplay(int player, playergroup p){
 
 //更新状态栏、等级栏、头像和天赋小图标
 void updateGameUI(int player, playergroup p){
-
+    
     //右侧数值栏数据
     libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_F7AB6B6C], FixedToText(gv_9CB902A4[player][gv_15A72892.lv_89BFC1C4], 2), p);
     libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_48BAA708], (FixedToText(gv_9CB902A4[player][gv_15A72892.lv_0B7B7C1E], 2) + StringExternal("Param/Value/6B419391")), p);
@@ -353,7 +355,8 @@ void updateGameUI(int player, playergroup p){
     libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_CFF33789], (FixedToText(gv_9CB902A4[player][gv_15A72892.lv_F549A9A2], 0) + StringExternal("Param/Value/1800D7A0")), p);
     libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_EE677681], (FixedToText(gv_9CB902A4[player][gv_15A72892.lv_513A585F], 0) + StringExternal("Param/Value/C7314030")), p);
     libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_E292F199], FixedToText(UnitWeaponRange(gv_71C054E5[player], 1), 2), p);
-    if ((gv_131E8983[player] == 7)){
+    
+    if (getPlayerHeroId(player) == 7){
         if ((gv_BB156610.lv_0195430E[player][0] == 0))
         {
             libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_3B4D4295], FixedToText(UnitWeaponDamage(gv_71C054E5[player], 1, c_unitAttributeHeroic, false), 2), p);
@@ -363,22 +366,39 @@ void updateGameUI(int player, playergroup p){
             libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_3B4D4295], FixedToText(UnitWeaponDamage(gv_71C054E5[player], 2, c_unitAttributeHeroic, false), 2), p);
         }
     }
+    //爱丽丝攻击力显示问题
+    else if (getPlayerHeroId(player) == 8){
+        libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_3B4D4295], FixedToText(gv_9CB902A4[player][gv_B48492BD[3]], 2), p);
+    }
     else{
         libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_3B4D4295], FixedToText(UnitWeaponDamage(gv_71C054E5[player], 1, c_unitAttributeHeroic, false), 2), p);
     }
-    
+
+    //更新属性加点UI
+    IntLoopBegin(0,14);
+    while(!IntLoopDone()){
+        libNtve_gf_SetDialogItemText(gv_F4E2C4A0[2][IntLoopCurrent()], 
+                    IntToText(gv_60E73511[player][IntLoopCurrent()]), p);
+        // DialogControlSetEnabled(gv_F4E2C4A0[0][IntLoopCurrent()],p,DialogControlIsEnabled(gv_F4E2C4A0[0][IntLoopCurrent()],player));
+        // DialogControlSetEnabled(gv_F4E2C4A0[1][IntLoopCurrent()],p,DialogControlIsEnabled(gv_F4E2C4A0[1][IntLoopCurrent()],player));
+        // DialogControlSetEnabled(gv_F4E2C4A0[2][IntLoopCurrent()],p,DialogControlIsEnabled(gv_F4E2C4A0[2][IntLoopCurrent()],player));
+        IntLoopStep();
+    }
+    IntLoopEnd();
+
+    //更新英雄头像
     libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_D11CB209, (("character\\interface\\face\\interface_face_" 
         + IntToString(getPlayerHeroId(player)) + ".dds")), p);
-    
-    updateStatusBar(PlayerGroupPlayer(p,1),getPlayerHeroUnit(player));
-
     libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_A9C8BA19, "GamesUis\\frame_mp_bar_frame.dds", p);
     libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_472F835E, "GamesUis\\frame_mp_bar_image.dds", p);
+    //小头像
     libNtve_gf_SetDialogItemImage(gv_169C778B[0], gv_AA1BDB6C[getPlayerHeroId(player)], p);
     libNtve_gf_SetDialogItemText(gv_169C778B[1], UnitTypeGetName(UnitGetType(gv_71C054E5[player])), p);
     //等级显示
     libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_75EF4F32, (IntToText(gv_893C301B[player]) +
         StringExternal("Param/Value/E919CF14")), p);
-
+    //更新状态条
+    updateStatusBar(PlayerGroupPlayer(p,1),getPlayerHeroUnit(player));
+    //更新天赋显示
     updateTalentDisplay(player,p);
 }
