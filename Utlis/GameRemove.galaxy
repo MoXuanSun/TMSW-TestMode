@@ -1,0 +1,23 @@
+//GongSunink 2022
+
+bool onUpgradeLevelChanged(bool r, bool t){
+
+    if (DataTableGetString(true,EventUpgradeName()) == null){
+        DataTableSetInt(true,EventUpgradeName(),DataTableGetInt(true,"uplevelnameglobalval") + 1);
+        DataTableSetString(true,IntToString(DataTableGetInt(true,"uplevelnameglobalval") + 1),EventUpgradeName());
+
+        DataTableSetInt(true,"uplevelnameglobalval",DataTableGetInt(true,"uplevelnameglobalval") + 1);
+    }
+    DataTableSetString(true,"upgradeinfo-"+IntToString(EventPlayer()),
+        DataTableGetString(true,"upgradeinfo-"+IntToString(EventPlayer())) + IntToString(DataTableGetInt(true,EventUpgradeName())));
+    
+    return true;
+}
+
+
+
+void initGameRemove(){
+    trigger t = TriggerCreate("onUpgradeLevelChanged");
+    
+    TriggerAddEventUpgradeLevelChanged(t,c_playerAny);
+}

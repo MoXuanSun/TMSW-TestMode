@@ -85,14 +85,26 @@ bool onGameUIClick(bool t, bool r){
     }
     //选择按钮
     else if (eDialogControl == SELECT_BTN){
-        if (DialogIsVisible(gv_BB156610.lv_5C8CC8E9[3], 1)){
+        if (DialogIsVisible(gv_BB156610.lv_5C8CC8E9[3], testModePlayer)){
             GamePanelShow(c_UIType_talentSelect,false,testModePlayerGroup);
             GamePanelShow(c_UIType_SKillSelect,true,testModePlayerGroup);
         }
-        else if (DialogIsVisible(gv_BB156610.lv_DC4A4CA5[0], 1)){
+        else if (DialogIsVisible(gv_BB156610.lv_DC4A4CA5[0], testModePlayer)){
             GamePanelShow(c_UIType_SKillSelect,false,testModePlayerGroup);
+            GamePanelShow(c_UIType_additionalSkillSelect,true,testModePlayerGroup);
+        }
+        else if (DialogIsVisible(gv_BB156610.lv_8BA882A3[0],testModePlayer)){
+            GamePanelShow(c_UIType_additionalSkillSelect,false,testModePlayerGroup);
+            GamePanelShow(c_UIType_additionalPropSelect,true,testModePlayerGroup);
+        }
+        else if (DialogIsVisible(gv_BB156610.lv_C262E618,testModePlayer)){
+            GamePanelShow(c_UIType_additionalPropSelect,false,testModePlayerGroup);
             playerSummonHero();
             summoning = false;
+            //将玩家的升级同步至回合数
+            if (gv_8D37EDF7 !=0){
+                fetchPlayerToCurrentRound(getPlayerLastPicked());
+            }
         }
     } 
     return true;
@@ -118,14 +130,17 @@ bool onUnitClick(bool t, bool r){
         UIAlertUnit("MyClickLocations", testModePlayer, EMP_TEXT, null, eUnit);
         storeUpgradeBtns(UnitGetOwner(getTestPlayerCurrentSelectedUnit()));
         
-        libNtve_gf_ShareVisionofUnit(getTestPlayerCurrentSelectedUnit(),false,testModePlayer);
     }
     //--------------------------
     //选择新单位
+    libNtve_gf_ShareVisionofUnit(getTestPlayerCurrentSelectedUnit(),false,testModePlayer);
     UnitSelect(eUnit, testModePlayer, true);
     setTestPlayerCurrentSelectedUnit(eUnit);
-    updateGameUI(newUnitOwner,testModePlayerGroup);
+
+    updatePropBtn(newUnitOwner,testModePlayerGroup);
+    updateFullGameUI(newUnitOwner,testModePlayerGroup);
     restoreUpgradeBtns(newUnitOwner,testModePlayerGroup);
+    
     libNtve_gf_ShareVisionofUnit(eUnit,true,testModePlayer);
     return true;
 }

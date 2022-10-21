@@ -68,13 +68,15 @@ bool onTestingUIClick(bool t, bool r){
         UnitSetPropertyFixed(getTestPlayerCurrentSelectedUnit(),c_unitPropEnergyPercent,100.0);
     }
     else if (eDialogControl == Dialogs.mainMenu.removeHeroBtn.btn){
+        if (getTestPlayerCurrentSelectedUnit() != null){
+             removeUnitAndReflashPlayer(UnitGetOwner(getTestPlayerCurrentSelectedUnit()));
+        }
         
+       
     }
     else if (eDialogControl == Dialogs.mainMenu.nextRound.btn){
-        nextRound();
-    }
-    else if (eDialogControl == Dialogs.mainMenu.lastRound.btn){
-        
+        nextRoundGlobal();
+        updatePropBtn(UnitGetOwner(getTestPlayerCurrentSelectedUnit()),testModePlayerGroup);
     }
     else if (eDialogControl == Dialogs.mainMenu.summonDummy.btn){
         if (getTestPlayerCurrentSelectedUnit() != null){
@@ -91,6 +93,10 @@ bool onTestingUIClick(bool t, bool r){
         }
         loggerInvisableFlag = !loggerInvisableFlag;
     }
+    //暂时无法实现
+    // else if (eDialogControl == Dialogs.mainMenu.lastRound.btn){
+        
+    // }
 
     return true;
 }

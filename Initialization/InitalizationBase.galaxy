@@ -19,7 +19,6 @@ void initAlliances(){
 
         PlayerModifyPropertyInt(i,c_playerPropMinerals,c_playerPropOperAdd,1000000);
         PlayerModifyPropertyInt(i+5,c_playerPropMinerals,c_playerPropOperAdd,1000000);
-
     }
     
     //dummyplayer 0
@@ -35,6 +34,7 @@ void initAlliances(){
         libNtve_gf_SetAllianceOneWay(0,i + 5,libNtve_ge_AllianceSetting_Ally);
     }
 
+    //tab面板显示修复
     gv_A6CEA227[0][0] = 1;
     gv_A6CEA227[0][1] = 2;
     gv_A6CEA227[0][2] = 3;
@@ -128,8 +128,8 @@ void disableTriggers(){
     TriggerEnable(gt_F3331A21,false);
     //技能加点快捷键
     TriggerEnable(gt_74AB4E94,false);
-    
-
+    //爱丽丝的bug触发器
+    // TriggerEnable(gt_3C710124,false);
 }
 
 //通过开启关闭操作重新排列触发器顺序
@@ -140,27 +140,24 @@ void resortTriggerExecutingQueue(){
 }
 
 void loadArane(){
-    fixed a;
     //state 13
     gv_65C11E79 = 13;
 
     gameSoundPlayer(v_roundInit);
 
     //进入
-    CameraLockInput(testModePlayer, true);
-    CameraPan(testModePlayer,PointFromId(36),0,0,0,false);
-    CameraSetValue(testModePlayer, c_cameraValueDistance, 200, 0.0, 0, 0);
-   
-    //转场
     DialogControlFadeTransparency(gv_D3F35143, PlayerGroupAll(), 2.0, 100.0);
+
     UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeInventoryPanel, true);
     UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeInfoPanel, true);
     UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeCommandPanel, true);
     UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeMinimapPanel, true);
     UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeResourcePanel, true);
     UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeMenuBar, true);
-    
-    CameraSetValue(testModePlayer, c_cameraValueDistance, 3 + gv_E2739273[testModePlayer].lv_3275AA55 * 7 , 3.0, 0, 0);
+
+    CameraPan(testModePlayer,PointFromId(36),0,0,0,false);
+    // CameraSetValue(testModePlayer, c_cameraValueDistance, 200, 0.0, 0, 0);
+    CameraSetValue(testModePlayer, c_cameraValueDistance, 3 + gv_E2739273[testModePlayer].lv_3275AA55 * 7 , 0.0, 0, 0);
     CameraLockInput(testModePlayer, false);
 
     //血条、经验条和属性栏
@@ -200,16 +197,17 @@ void loadArane(){
     //ui
     TriggerExecute(gt_0315FDBE, false, false);
 
-    //关闭timer显示
+    //timer显示
     // TriggerExecute(gt_50AA3CE2, false, false);
 
     loadDummyHud(testModePlayerGroup);
 
     // gv_BB284D6D = 1;
-    // UI操作 srcview\set\tip
-    gf_85CE78E1();
+    // UI操作disable srcview\set\tip
+    // gf_85CE78E1();
 
 
+    //为所有玩家启用属性加点控件，原本只有玩家1启用
     IntLoopBegin(0,14);
     while(!IntLoopDone()){
         // libNtve_gf_SetDialogItemText(gv_F4E2C4A0[2][IntLoopCurrent()], 
@@ -218,6 +216,8 @@ void loadArane(){
         DialogControlSetEnabled(gv_F4E2C4A0[1][IntLoopCurrent()],PlayerGroupAll(),true);
         DialogControlSetEnabled(gv_F4E2C4A0[2][IntLoopCurrent()],PlayerGroupAll(),true);
         IntLoopStep();
+
+        
     }
     IntLoopEnd();
     

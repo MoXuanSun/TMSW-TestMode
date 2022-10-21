@@ -38,7 +38,7 @@ bool UnitGainLevelAfter(bool t, bool r){
     int currentPlayer = UnitGetOwner(getTestPlayerCurrentSelectedUnit());
  
     updateStatusBar(testModePlayer,EventUnit());
-    updateGameUI(currentPlayer,testModePlayerGroup);
+    updateFullGameUI(currentPlayer,testModePlayerGroup);
     refractUpgradeBtns(currentPlayer,testModePlayerGroup); 
     return true;
 }
@@ -47,9 +47,9 @@ bool btnClickHook(bool t, bool r){
     int edialogControl = EventDialogControl();
     int currentRemotingPlayer = UnitGetOwner(getTestPlayerCurrentSelectedUnit());
     int i;
-
-
-    if (!tryLock()){
+    
+    if (!tryLock() || currentRemotingPlayer == 0 || currentRemotingPlayer > 10){
+        unLock();
         return true;
     }
 
@@ -94,17 +94,8 @@ bool btnClickHook(bool t, bool r){
 
             gf_18957680(currentRemotingPlayer, edialogControl);
 
-
-            debug(IntToString(BoolToInt(DialogControlIsEnabled(gv_F4E2C4A0[0][i],currentRemotingPlayer))));
-            debug(IntToString(BoolToInt(DialogControlIsEnabled(gv_F4E2C4A0[1][i],currentRemotingPlayer))));
-            debug(IntToString(BoolToInt(DialogControlIsEnabled(gv_F4E2C4A0[2][i],currentRemotingPlayer))));
-
-
-            // DialogControlSetEnabled(gv_F4E2C4A0[0][i],testModePlayerGroup,DialogControlIsEnabled(gv_F4E2C4A0[0][i],currentRemotingPlayer));
-            // DialogControlSetEnabled(gv_F4E2C4A0[1][i],testModePlayerGroup,DialogControlIsEnabled(gv_F4E2C4A0[1][i],currentRemotingPlayer));
-            // DialogControlSetEnabled(gv_F4E2C4A0[2][i],testModePlayerGroup,DialogControlIsEnabled(gv_F4E2C4A0[2][i],currentRemotingPlayer));
-
-            updateGameUI(currentRemotingPlayer,testModePlayerGroup);
+            updateFullGameUI(currentRemotingPlayer,testModePlayerGroup);
+            updatePropBtn(currentRemotingPlayer,testModePlayerGroup);
         }   
 
 
@@ -122,7 +113,8 @@ bool onUpgradeHotKey(bool t, bool r){
     bool flag;
     int i;
 
-    if (!tryLock()){
+    if (!tryLock() || currentRemotingPlayer == 0 || currentRemotingPlayer > 10){
+        unLock();
         return true;
     }
 
@@ -279,9 +271,10 @@ bool onUpgradeHotKey(bool t, bool r){
         {
             gf_18957680(currentRemotingPlayer, gv_F4E2C4A0[0][i]);
         }
+        updatePropBtn(currentRemotingPlayer,testModePlayerGroup);
     }
 
-    updateGameUI(currentRemotingPlayer,testModePlayerGroup);
+    updateFullGameUI(currentRemotingPlayer,testModePlayerGroup);
     unLock();
     return true;
 }

@@ -16,7 +16,11 @@ unit getTestPlayerCurrentSelectedUnit(){
 }
 //设置玩家选中的单位
 void setTestPlayerCurrentSelectedUnit(unit inUnit){
+    DataTableSetUnit(true,"lastheroselected",getTestPlayerCurrentSelectedUnit());
     DataTableSetUnit(true,"heroselected",inUnit);
+}
+void getTestPlayerLastSelectedUnit(){
+    return DataTableGetUnit(true,"lastheroselected");
 }
 //获得上一个选择的英雄
 int getHeroLastSelected(){
@@ -25,13 +29,14 @@ int getHeroLastSelected(){
 void setHeroLastSelected(int heroId){
     DataTableSetInt(true,"heroId",heroId);
 }
-//获得上一个选择的玩家
+//获得上一个用于生成英雄的玩家(不是上一个选中的玩家，这是生成盟友或是生成敌人时自动选择的玩家)
 int getPlayerLastPicked(){
     return DataTableGetInt(true,"player");
 }
 void setPlayerLastPicked(int player){
     DataTableSetInt(true,"player",player);
 }
+
 
 void gameSoundPlayer(int type){
     if (type == v_additionalSelect){

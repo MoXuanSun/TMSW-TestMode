@@ -23,6 +23,7 @@ void onInit(){
     initGameUIUpdateTrigger();
     initLogger();
     initGameDie();
+    initGameRemove();
 
     createTestingDialogs();
     loadArane();

@@ -63,8 +63,6 @@ void updateDamageDisplayer(fixed damageAmount, unit damagingUnit, unit damagedUn
     }
 
     //Logger
-    
-
     //dummy
     if (UnitGetOwner(damagedUnit) == 0){
         logStr = TextWithColor(StringToText(playerHeroNameDamaging),ColorFromIndex(PlayerGetColorIndex(damagingUnitOwner,true),c_teamColorDiffuse))+

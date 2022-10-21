@@ -31,7 +31,7 @@ void playerSummonHero(){
     //------------------------------------
     
     //更新数值显示面板
-    gf_3A83C136(playerId);
+    // gf_3A83C136(playerId);
 
     //回合升级总成
     TechTreeUpgradeAddLevel(playerId, "roundupgradeTotal", 1); 
@@ -208,20 +208,26 @@ void playerSummonHero(){
         UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropEnergyPercent, 0.0);
     }
     
+    //能量条长度设置
     // gf_67CE0F82(gv_71C054E5[playerId]);
-    // gf_5B3578B1();    
+    //血量上限 fixed->int 
+    gf_5B3578B1();    
+
+    // gf_5B3578B1();
+    // gf_1A8469C6();
+    // gf_85CE78E1();
 
     //第一次生成
     if (getTestPlayerCurrentSelectedUnit() == null){
         UnitSelect(getPlayerHeroUnit(playerId),testModePlayer,true);
         setTestPlayerCurrentSelectedUnit(getPlayerHeroUnit(playerId));
-        updateGameUI(playerId,testModePlayerGroup);
+        updateFullGameUI(playerId,testModePlayerGroup);
         DialogSetVisible(gv_5C4043F8.lv_B91A282D, testModePlayerGroup, true);
         DialogSetVisible(gv_5C4043F8.lv_8DEC25E2, testModePlayerGroup, true);
         DialogSetVisible(gv_5C4043F8.lv_AF2E051A, testModePlayerGroup, true);
+        updatePropBtn(playerId,testModePlayerGroup);
     }
-
-
+    
     gv_BB284D6D = 1;
     gf_5B3968D5();
 
