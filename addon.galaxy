@@ -3,22 +3,26 @@
 //TestMode conf
 const int testModePlayer = 1;
 playergroup testModePlayerGroup = PlayerGroupSingle(testModePlayer);
-int damageDisplayerReflash = 5;
-int heroSummon = 19;
-string botHero = "dbHero38";
-timer damageTimer = TimerCreate();
-timer resetTimer = TimerCreate();
-bool timerInit; 
-int mineralsSpent;
-string lastBehaviorAdded;
-unit botUnit;
-fixed botUnitDamagedTotal;
-bool flagEmeny;
-//正在为选择的英雄选择天赋
-bool summoning;
-bool loggerInvisableFlag;
+const fixed damageDisplayerReflash = 7.0;
+bool showGameTime = true;
+bool showLogLevel;
 
 //WARNING!!----DO NOT CHANGE CODE BELOW THIS LINE IF IT IS NOT NECESSARY----CAUTION!!
+bool summoning;
+bool loggerVisablityFlag;
+string upgradeInfoPrefix = "playerupgraderecoder-upgradeinfo";
+int[10] playerTalentSelected;
+
+const int LOGGER_VERBOSE = 0;
+const int LOGGER_INFO = 1;
+const int LOGGER_DEBUG = 2;
+const int LOGGER_WARN = 3;
+const int LOGGER_ERROR = 4;
+const int loggerMessageMAX = 400;
+const int loggerMessageMAXlength = 65;
+
+string[4] loggerLevelColor;
+string[4] loggerLevelName;
 
 //TestingUI
 const int TEST_UI_PADDING = 10;
@@ -54,6 +58,7 @@ struct SmainMenu{
     mBtn nextRound;
     mBtn lastRound;
     mBtn summonDummy;
+    mBtn summonShieldObj;
 };
 
 struct Slogger{
@@ -70,54 +75,23 @@ struct Dialog{
 Dialog Dialogs;
 defaultConstances DEFAULTS;
 
-int createNormalImgControl(int rootDialog,int width, int height, int anchor, 
-    int offsetX, int offsetY, string img);
-int createNormalImgControlWithRelativePosition(int rootDialog,int width, int height,int relative,
-    int relativeAnchor, int offsetX, int offsetY, string img, 
-    playergroup inPlayergroup);
-int createNormalBtnControl(int rootDialog,int width, int height,int anchor, 
-    int offsetX, int offsetY, string tooltip, string title,
-    string btnImg, string btnHoverImg, playergroup inPlayergroup);
-int createNormalBtnControl(int rootDialog,int width, int height,int anchor, 
-    int offsetX, int offsetY, string tooltip, string title,
-    string btnImg, string btnHoverImg, playergroup inPlayergroup);
-int createNormalBtnControlWithRelativePosition(int rootDialog,int width, int height, int relative , 
-    int relativeAnchor, int offsetX, int offsetY, string tooltip, 
-    string title,string btnImg, string btnHoverImg, playergroup inPlayergroup);
-void createmBtn(structref<mBtn> mBtnRef,
-    int rootDialog,
-    int borderWidth,int borderHeight, int imgWidth , int imgHeight, int btnWidth, int btnHeight ,
-    int anchor , int offsetXFromEdge, int offsetYFromEdge , 
-    string borderDDS, string img,
-    string tooltip, string title, string fontStyle,
-    string btnImg, string btnHoverImg, 
-    playergroup inPlayergroup);
-void createmBtnRelative(structref<mBtn> mBtnRef,
-    int rootDialog,
-    int borderWidth,int borderHeight, int imgWidth , int imgHeight, int btnWidth, int btnHeight ,
-    int ref , int offsetXFromEdge, int offsetYFromEdge , 
-    string borderDDS, string img,
-    string tooltip, string title, string fontStyle, 
-    string btnImg, string btnHoverImg, 
-    playergroup inPlayergroup,
-    bool nextLine);
-
 //GameTools
 int getPlayerHeroId(int playerId);
 unit getPlayerHeroUnit(int playerId);
-unit getTestPlayerCurrentSelectedUnit();
 void setTestPlayerCurrentSelectedUnit(unit inUnit);
+unit getTestPlayerCurrentSelectedUnit();
 int getHeroLastSelected();
+void setHeroLastSelected(int heroId);
 int getPlayerLastPicked();
+void setPlayerLastPicked(int player);
+unit getDummySelected();
+void setDummySelected(unit dummy);
 void gameSoundPlayer(int type);
 int getHeroIdByUnit(unit inUnit);
 void debug(string message);
-// void callUpgradeFunc(int dialogControlId, int player);
-void removeHero();
-void ReflashPlayer();
-void removeHeroAndReflashPlayer();
+string damageDisplayerKey(string unittag, int suffix);
 
-// //GameUI
+//GameUIControl
 const int c_UIType_heroSelect = 1;
 const int c_UIType_talentSelect = 2;
 const int c_UIType_additionalSkillSelect = 3;
@@ -159,17 +133,36 @@ void talentSelectUI(int row, int column, bool select, playergroup p);
 void talentEnableUI(int row, int column, bool enable, playergroup p);
 void upgradeBtnShow(int index,bool show, playergroup p);
 void upgradeBtnEnable(int index, bool show,playergroup p);
+void updateAbilityPickPanel(int currentRemotingPlayer, playergroup p);
+void abilitySelectUI(int row, int column, bool select, playergroup p);
+bool isAbilityBtnVisiable(int row, int column, int player);
+void additionalAbilitySelectUI(int row, int column, bool select , playergroup p);
+bool isAdditionalAbilityBtnVisiable(int row, int column, int player);
+void initPropAddUI(int row, int currentRemotingPlayer, playergroup p);
+void resetPanels(playergroup p);
+void GamePanelShow(int type, bool show, playergroup p);
+void loadDummyHud(playergroup p);
+void showHideDummyHud(bool show, playergroup p);
+void updateTalentDisplay(int currentRemotingPlayer, playergroup p);
+void updatePropBtn(int currentRemotingPlayer, playergroup refractTargetPlayerGroup);
+void updateFullGameUI(int currentRemotingPlayer, playergroup refractTargetPlayerGroup);
+
+//GameData
+void talentSelectData(int row, int column, bool select, int player);
+bool isTalentSelected(int row, int column, int player);
+void abilitySelectData(int row, int column, int player);
+bool isAbilitySelected(int row, int column, int player);
+void additionalAbilitySelectData(int row, int column, int player);
+bool isAdditionalAbilitySelected(int row, int column, int player);
+void initPropAddData(int row, int player);
 void storeUpgradeBtn(int player, int index, bool show);
 void storeUpgradeBtns(int player);
 void restoreUpgradeBtns(int player, playergroup p);
-void makeAbilityUpgrade(int player);
-void updateAbilityPickPanel(int player, playergroup p);
-void abilityPickBtnUI(int row, int column, bool select, playergroup p);
-bool isAbilityBtnVisiable(int row, int column, int player);
-void GamePanelShow(int type, bool show, playergroup p);
-
-//GameData
-bool isTalentSelected(int row, int column, int player);
+void setStatStrsforPlayer(int player);
+void initDataForPlayer();
+void fetchPlayerToCurrentRound(int player);
+void nextRoundGlobal();
+void removeUnitAndReflashPlayer(int player);
 
 //DamageDisplayer
 string damageDisplayerPreFix = "ddp";
@@ -186,12 +179,5 @@ int c_damageDisplayer_damegetotal = 5;
 int c_damagedisplayer_texttagDps = 6;
 int c_damagedisplayer_texttagLast = 7;
 int c_damagedisplayer_texttagTotal = 8;
-
-string damageDisplayerKey(string unittag, int suffix);
-
-
-//Ability
-
-
 
 //WARNING END

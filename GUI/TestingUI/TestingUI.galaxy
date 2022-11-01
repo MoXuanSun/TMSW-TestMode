@@ -1,21 +1,5 @@
 //GongSunink 2022
 
-//1.生成英雄 可选择队友或敌方
-//2.添加天赋
-//3.无cd
-//4.获得敌方视野
-//5.可控制敌方单位
-//6.无敌
-//7.显示伤害显示面板
-//8.升级 +1级 
-
-//8.技能切换
-//9.辅助技能切换
-//10.生成膜
-
-//11.克劳 可出刀 命中
-//12.开启智能施法
-
 //-----------------------------------ui-----------------------------------------------
 //英雄生成ui
 void buildHeroSummonUI(){
@@ -49,35 +33,6 @@ void buildHeroSummonUI(){
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP,false);
         
-}
-
-//1.技能选择
-//2.辅助技能选择
-//3.辅助天赋选择
-//4.初始点数选择
-//5.属性加点
-void buildAbilitySwitchingUI(){
-
-    TriggerExecute(gt_05A513C7, true, true);
-    DialogControlSetEnabled(gv_170BE4AF[0], PlayerGroupAll(), true);
-    DialogControlSetEnabled(gv_170BE4AF[1], PlayerGroupAll(), true);
-    DialogControlSetEnabled(gv_170BE4AF[2], PlayerGroupAll(), true);
-    DialogControlSetEnabled(gv_170BE4AF[3], PlayerGroupAll(), true);
-    DialogControlSetEnabled(gv_170BE4AF[4], PlayerGroupAll(), true);
-   
-    DialogControlSetVisible(gv_ECE9BB7D[0], PlayerGroupAll(), true);
-    DialogControlSetVisible(gv_ECE9BB7D[1], PlayerGroupAll(), true);
-    DialogControlSetVisible(gv_ECE9BB7D[2], PlayerGroupAll(), true);
-    DialogControlSetVisible(gv_ECE9BB7D[3], PlayerGroupAll(), true);
-
-    DialogSetPositionRelative(gv_D2306AF3,c_anchorCenter,Dialogs.mainMenu.self,c_anchorLeft, 300 /2 + TEST_UI_PADDING , 96 + 48 +TEST_UI_PADDING);
- 
-    DialogControlSetVisible(gv_52C3727B[0],PlayerGroupAll(),false);
-
-    DialogControlSetVisible(gv_52C3727B[1],PlayerGroupAll(),false);
-    
-    DialogControlSetVisible(gv_52C3727B[2],PlayerGroupAll(),false);
-
 }
 
 //1.升级英雄
@@ -122,7 +77,7 @@ void buildTestingUI(){
 
      createmBtnRelative(Dialogs.mainMenu.removeHeroBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
         Dialogs.mainMenu.upgradeHeroBtn.border,0,TEST_UI_PADDING,DEFAULTS.DEFAULT_BORDERDDS,"character/newroon/new_tuc_touhou_jibae_1_line_b.dds",
-        "移除选中英雄",
+        "移除选中英雄(点击假人,在显示信息窗口时可以移除假人,esc关闭信息窗口后移除选中的英雄)",
         DEFAULTS.DEFAULT_TITLE, DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP,true);
@@ -149,39 +104,38 @@ void runtimeUI(){
             DEFAULTS.DEFAULT_BTNHOVERIMG,
             DEFAULTS.DEFAULT_PLAYERGROUP,false);
 
-    // createmBtnRelative(Dialogs.mainMenu.nextRound,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
-    //     Dialogs.mainMenu.nextRound.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,
-    //         "将游戏回合数调节至下一回合，游戏的一些参数会与回合数有关", 
-    //         "上一回合",
-    //         DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
-    //         DEFAULTS.DEFAULT_BTNHOVERIMG,
-    //         DEFAULTS.DEFAULT_PLAYERGROUP,false);
-
     createmBtnRelative(Dialogs.mainMenu.summonDummy,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
         Dialogs.mainMenu.nextRound.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,
-            "在玩家选中的英雄旁添加一个假人", 
-            "添加假人",
+            "在玩家选中的英雄旁生成一个木偶", 
+            "生成木偶",
             DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
             DEFAULTS.DEFAULT_BTNHOVERIMG,
             DEFAULTS.DEFAULT_PLAYERGROUP,false);
+
+    createmBtnRelative(Dialogs.mainMenu.summonShieldObj,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
+        Dialogs.mainMenu.removeHeroBtn.border,0,TEST_UI_PADDING,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,
+            "", 
+            "生成宝贵的膜",
+            DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
+            DEFAULTS.DEFAULT_BTNHOVERIMG,
+            DEFAULTS.DEFAULT_PLAYERGROUP,true);
 }
 
-void histroyConsoleUI(){
+void loggerUI(){
     int i;
 
-    Dialogs.logger.self = DialogCreate(1000,900,c_anchorTopLeft,0,0,true);
+    Dialogs.logger.self = DialogCreate(1000,1000,c_anchorTopLeft,0,0,true);
     DialogSetVisible(DialogLastCreated(),PlayerGroupAll(),true);
-    // DialogSetImage(DialogLastCreated(),"GamesUis\\MyG_Frames_Character_Select2.dds");
+    
     DialogSetImageVisible(DialogLastCreated(),false);
     DialogSetPosition(DialogLastCreated(),c_anchorTopLeft,-850,0);
 
     Dialogs.logger.listBoxControl = DialogControlCreate(DialogLastCreated(),c_triggerControlTypeListBox);
-    DialogControlSetSize(DialogControlLastCreated(),testModePlayerGroup,850,900);
+    DialogControlSetSize(DialogControlLastCreated(),testModePlayerGroup,850,1000);
 
     Dialogs.logger.contolBtn = libNtve_gf_CreateDialogItemButton(DialogLastCreated(),100,60,c_anchorBottomRight,50,0,
     EMP_TEXT,StringToText("显示"),null);
-    
-    // DialogControlAddItem()
+
     
 }
 
@@ -203,9 +157,8 @@ void createMainMenu(){
 
     runtimeUI();
 
-    // buildAbilitySwitchingUI();
 
-    histroyConsoleUI();
+    loggerUI();
   
 } 
 //----------------------------------register----------------------------

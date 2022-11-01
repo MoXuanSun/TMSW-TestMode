@@ -15,7 +15,7 @@ void updateDamageDisplayer(fixed damageAmount, unit damagingUnit, unit damagedUn
     fixed dps;
     fixed damageTotal;
 
-    text logStr;
+    string logStr;
 
     //有一个隐藏单位 每次受到伤害都会给那个单位同样打一个伤害 应该是作者的反作弊 这里需要判断一下过滤掉
     if (UnitGetType(damagedUnit) == "dbHero00" || damageAmount == 0){
@@ -25,7 +25,7 @@ void updateDamageDisplayer(fixed damageAmount, unit damagingUnit, unit damagedUn
     //打敌方英雄不会触发
     if (!DataTableGetInt(true,damageDisplayerKey(damagedUnitTag,c_damagedisplayer_texttagLast)) == 0){
             //是否刷新
-        if (GameGetMissionTime() - DataTableGetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_timeLast)) > 7.0 
+        if (GameGetMissionTime() - DataTableGetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_timeLast)) > damageDisplayerReflash 
         || DataTableGetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_timeLast)) == 0){
             timeStart = GameGetMissionTime();
             timeLast = GameGetMissionTime();
@@ -65,30 +65,30 @@ void updateDamageDisplayer(fixed damageAmount, unit damagingUnit, unit damagedUn
     //Logger
     //dummy
     if (UnitGetOwner(damagedUnit) == 0){
-        logStr = TextWithColor(StringToText(playerHeroNameDamaging),ColorFromIndex(PlayerGetColorIndex(damagingUnitOwner,true),c_teamColorDiffuse))+
-        StringToText("对") +
-        StringToText("木偶")+ 
-        StringToText("造成了");
+        logStr = TextToString(TextWithColor(StringToText(playerHeroNameDamaging),ColorFromIndex(PlayerGetColorIndex(damagingUnitOwner,true),c_teamColorDiffuse)))+
+        "对" +
+        "木偶"+ 
+        "造成了";
     }else {
-        logStr = TextWithColor(StringToText(playerHeroNameDamaging),ColorFromIndex(PlayerGetColorIndex(damagingUnitOwner,true),c_teamColorDiffuse))+
-        StringToText("对") +
-        TextWithColor(StringToText(playerHeroNameDamaged),ColorFromIndex(PlayerGetColorIndex(damagedUnitOwner,true),c_teamColorDiffuse)) +
-        StringToText("造成了");
+        logStr = TextToString(TextWithColor(StringToText(playerHeroNameDamaging),ColorFromIndex(PlayerGetColorIndex(damagingUnitOwner,true),c_teamColorDiffuse)))+
+        "对" +
+        TextToString(TextWithColor(StringToText(playerHeroNameDamaged),ColorFromIndex(PlayerGetColorIndex(damagedUnitOwner,true),c_teamColorDiffuse))) +
+        "造成了";
     }
     //物理伤害
     if (damageType == c_unitDamageTypeMelee || damageType == c_unitDamageTypeRanged){
-        logStr += TextWithColor(FixedToText(damageAmount,2) + StringToText("点物理伤害"),gv_C846B6A5[0]);
+        logStr += TextToString(TextWithColor(FixedToText(damageAmount,2) + StringToText("点物理伤害"),gv_C846B6A5[0]));
     }
     //法术伤害
     else if(damageType == c_unitDamageTypeSpell){
-        logStr += TextWithColor(FixedToText(damageAmount,2) + StringToText("点法术伤害"),gv_C846B6A5[1]);
+        logStr += TextToString(TextWithColor(FixedToText(damageAmount,2) + StringToText("点法术伤害"),gv_C846B6A5[1]));
     }
     //真实伤害
     else if(damageType == c_unitDamageTypeSplash){
-        logStr += TextWithColor(FixedToText(damageAmount,2) + StringToText("点真实伤害"),gv_C846B6A5[2]);
+        logStr += TextToString(TextWithColor(FixedToText(damageAmount,2) + StringToText("点真实伤害"),gv_C846B6A5[2]));
     }
 
-    logger(logStr);
+    loggerD(logStr);
 }
 
 bool onDamageMelee(bool t, bool r){

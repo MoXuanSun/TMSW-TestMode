@@ -1,6 +1,5 @@
 //GongSun_ink 2022
 
-
 int pickPlayer(bool isAlly){
     bool flag;
     int i = 1; 
@@ -55,7 +54,7 @@ void playerSummonHero(){
     } 
     
     gv_305DA55D[playerId] = true;
-    //单位设置队伍颜色
+    // 单位设置队伍颜色
     if ((gv_9EEEA78D[playerId] == 0))
     {
         UnitSetTeamColorIndex(gv_71C054E5[playerId], 5);
@@ -213,26 +212,30 @@ void playerSummonHero(){
     //血量上限 fixed->int 
     gf_5B3578B1();    
 
-    // gf_5B3578B1();
-    // gf_1A8469C6();
+    gf_1A8469C6();
     // gf_85CE78E1();
 
-    //第一次生成
-    if (getTestPlayerCurrentSelectedUnit() == null){
-        UnitSelect(getPlayerHeroUnit(playerId),testModePlayer,true);
-        setTestPlayerCurrentSelectedUnit(getPlayerHeroUnit(playerId));
-        updateFullGameUI(playerId,testModePlayerGroup);
-        DialogSetVisible(gv_5C4043F8.lv_B91A282D, testModePlayerGroup, true);
-        DialogSetVisible(gv_5C4043F8.lv_8DEC25E2, testModePlayerGroup, true);
-        DialogSetVisible(gv_5C4043F8.lv_AF2E051A, testModePlayerGroup, true);
-        updatePropBtn(playerId,testModePlayerGroup);
-    }
+   
+    // if (getTestPlayerCurrentSelectedUnit() == null && playerId > 6){
+    //     UnitSelect(getPlayerHeroUnit(playerId),testModePlayer,true);
+    //     setTestPlayerCurrentSelectedUnit(getPlayerHeroUnit(playerId));
+    //     updateFullGameUI(playerId,testModePlayerGroup);
+    //     // 主要UI
+
+    //     DialogSetVisible(gv_5C4043F8.lv_B91A282D, testModePlayerGroup, true);
+    //     DialogSetVisible(gv_598EC0B1, testModePlayerGroup, true);
+    //     DialogSetVisible(gv_5C4043F8.lv_8DEC25E2, testModePlayerGroup, true);
+    //     DialogSetVisible(gv_5C4043F8.lv_AF2E051A, testModePlayerGroup, true);
+    // }
     
     gv_BB284D6D = 1;
     gf_5B3968D5();
 
     //更新Tab
     TriggerExecute(gt_EFE165C0,false,true);
+
+
+    updatePropBtn(playerId,testModePlayerGroup);
 }
 
 void summonDummy(point p){

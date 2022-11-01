@@ -203,22 +203,25 @@ void loadArane(){
     loadDummyHud(testModePlayerGroup);
 
     // gv_BB284D6D = 1;
-    // UI操作disable srcview\set\tip
     // gf_85CE78E1();
+
+    DialogSetVisible(gv_5C4043F8.lv_B91A282D, testModePlayerGroup, false);
+    DialogSetVisible(gv_598EC0B1, testModePlayerGroup, false);
+    DialogSetVisible(gv_5C4043F8.lv_8DEC25E2, testModePlayerGroup, false);
+    DialogSetVisible(gv_5C4043F8.lv_AF2E051A, testModePlayerGroup, false);
 
 
     //为所有玩家启用属性加点控件，原本只有玩家1启用
     IntLoopBegin(0,14);
     while(!IntLoopDone()){
-        // libNtve_gf_SetDialogItemText(gv_F4E2C4A0[2][IntLoopCurrent()], 
-        //             IntToText(gv_60E73511[player][IntLoopCurrent()]), p);
         DialogControlSetEnabled(gv_F4E2C4A0[0][IntLoopCurrent()],PlayerGroupAll(),true);
         DialogControlSetEnabled(gv_F4E2C4A0[1][IntLoopCurrent()],PlayerGroupAll(),true);
         DialogControlSetEnabled(gv_F4E2C4A0[2][IntLoopCurrent()],PlayerGroupAll(),true);
         IntLoopStep();
-
-        
     }
     IntLoopEnd();
+
+    //1级膜
+    TechTreeUpgradeAddLevel(0, "dbup_Object_Shiled", 1);
     
 }

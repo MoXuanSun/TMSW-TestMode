@@ -19,7 +19,7 @@ void setTestPlayerCurrentSelectedUnit(unit inUnit){
     DataTableSetUnit(true,"lastheroselected",getTestPlayerCurrentSelectedUnit());
     DataTableSetUnit(true,"heroselected",inUnit);
 }
-void getTestPlayerLastSelectedUnit(){
+unit getTestPlayerLastSelectedUnit(){
     return DataTableGetUnit(true,"lastheroselected");
 }
 //获得上一个选择的英雄
@@ -35,6 +35,13 @@ int getPlayerLastPicked(){
 }
 void setPlayerLastPicked(int player){
     DataTableSetInt(true,"player",player);
+}
+//获得选中的人偶
+unit getDummySelected(){
+    return DataTableGetUnit(true,"dummyselected");
+}
+void setDummySelected(unit dummy){
+    DataTableSetUnit(true,"dummyselected",dummy);
 }
 
 

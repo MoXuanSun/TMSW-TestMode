@@ -279,7 +279,6 @@ bool onUpgradeHotKey(bool t, bool r){
     return true;
 }
 
-
 void initUpgradeHooker(){
     trigger t1 = TriggerCreate("btnClickHook");
     trigger t2 = TriggerCreate("UnitGainLevelAfter");

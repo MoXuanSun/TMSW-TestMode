@@ -21,13 +21,17 @@ bool onCommand(bool t,bool r){
     int i;
     string currentAbility;
     
+    if (cmd == "help"){
+        showMsg(1,"请打开Logger查看帮助");
+    }
+
     if (cmd == "b"){
         UnitBehaviorAddPlayer(gv_71C054E5[1],param,1,1);
-        lastBehaviorAdded = param;
+        // lastBehaviorAdded = param;
     }
     else if (cmd == "bb"){
         if (param == ""){
-            UnitBehaviorRemove(gv_71C054E5[1],lastBehaviorAdded,1);
+            // UnitBehaviorRemove(gv_71C054E5[1],lastBehaviorAdded,1);
         }
         UnitBehaviorRemove(gv_71C054E5[1],param,1);
     }
@@ -35,7 +39,7 @@ bool onCommand(bool t,bool r){
         libNtve_gf_SetUpgradeLevelForPlayer(1,param,StringToInt(param2));
     }
     else if (cmd == "summon"){
-        reflashPlayer(1);
+        // reflashPlayer(1);
     }
     else if (cmd == "lv"){
         UnitXPSetCurrentLevel(gv_71C054E5[1],null,MinI(UnitXPGetCurrentLevel(gv_71C054E5[1],null) + 1,36));

@@ -1,59 +1,43 @@
 //GongSun_ink 2022
-//1.记录text消息
-//2.记录string消息
-void logMessageT(text message,int level);
-void logMessage(string message,int level);
 
-void debugT(text message);
-void verboseT(text message);
-void errorT(text message);
-void warningT(text message);
+void logger(string message,int level){
 
-void debug(string message);
-void verbose(string message);
-void error(string message);
-void warning(string message);
+    string gameTimeS;
+    string levelS;
+    string finalMessage;
 
-struct Logger{
-    funcref<logMessageT> logMessageT;
-    funcref<logMessage> logMessage;
+    int i;
 
-    funcref<debugT> debugT;
-    funcref<verboseT> verboseT;
-    funcref<errorT> errorT;
-    funcref<warningT> warningT;
+    if (showGameTime){
+        gameTimeS = "<c val = \"00FFFF\">["+FixedToString(GameGetMissionTime(),2)+"]</c> ";
+    }
+    if (showLogLevel){
+        levelS = "<c val = \""+loggerLevelColor[level]+"\">["+loggerLevelName[level]+"]</c> ";
+    }
 
-    funcref<debug> debug;
-    funcref<verbose> verbose;
-    funcref<error> error;
-    funcref<warning> warning;
-};
-
-Logger defaultLogger;
-
-void logger(text message){
-
-    text gameTime = StringToText("<c val = \"00FFFF\">[GameTime:"+FixedToString(GameGetMissionTime(),2)+"]</c> ");
-
-    // TriggerDebugWindowOpen(true);
-
-    if (DialogControlGetItemCount(Dialogs.logger.listBoxControl,testModePlayer) > 200){
+    finalMessage = gameTimeS + levelS + message;
+   
+    if (DialogControlGetItemCount(Dialogs.logger.listBoxControl,testModePlayer) >= loggerMessageMAX){
         DialogControlRemoveItem(Dialogs.logger.listBoxControl,testModePlayerGroup,0);
     }
 
     if (DialogControlGetItemCount(Dialogs.logger.listBoxControl,testModePlayer) > 0){
-        DialogControlRemoveItem(Dialogs.logger.listBoxControl,testModePlayerGroup,DialogControlGetItemCount(Dialogs.logger.listBoxControl,testModePlayer));
+        DialogControlRemoveItem(Dialogs.logger.listBoxControl,testModePlayerGroup,
+            DialogControlGetItemCount(Dialogs.logger.listBoxControl,testModePlayer));
     }
-   
-    DialogControlAddItem(Dialogs.logger.listBoxControl,testModePlayerGroup,gameTime + message);
 
-    //每一次都添加一个空的item并选中，下一次再删除在创建，这样就可以自动滑动logger
+    DialogControlAddItem(Dialogs.logger.listBoxControl,testModePlayerGroup,StringToText(gameTimeS + levelS + message));
+
+    // 每一次都添加一个空的item并选中，下一次再删除在创建，这样就可以自动滑动logger
     DialogControlAddItem(Dialogs.logger.listBoxControl,testModePlayerGroup,EMP_TEXT);
-    
+
     DialogControlSelectItem(Dialogs.logger.listBoxControl,testModePlayerGroup,
         DialogControlGetItemCount(Dialogs.logger.listBoxControl,testModePlayer));
 }
 
+void loggerD(string message){
+    logger(message,LOGGER_DEBUG);
+}
 
 bool loggerAbility(bool r, bool t){
     
@@ -64,20 +48,27 @@ bool loggerEffect(bool r, bool t){
     return true;
 }
 bool loggerBehavior(bool r, bool t){
-    debug(EventUnitBehavior());
+
     return true;
 }
 
-void debug(string message){
-
-}
 
 void initLogger(){
     trigger t1 = TriggerCreate("loggerAbility");
     trigger t2 = TriggerCreate("loggerEffect");
     trigger t3 = TriggerCreate("loggerBehavior");
 
-    // defaultLogger.debug = debug();
+    loggerLevelColor[0] = "00ff00";
+    loggerLevelColor[1] = "0000ff";
+    loggerLevelColor[2] = "00ffff";
+    loggerLevelColor[3] = "ffff00";
+    loggerLevelColor[4] = "ff0000";
+
+    loggerLevelName[0] = "Verbose";
+    loggerLevelName[1] = "info";
+    loggerLevelName[2] = "debug";
+    loggerLevelName[3] = "warn";
+    loggerLevelName[4] = "error";
 
     TriggerAddEventUnitAbility(t1,null,null,c_unitAbilStageAll,false);
     TriggerAddEventPlayerEffectUsed(t2,c_playerAny,null);

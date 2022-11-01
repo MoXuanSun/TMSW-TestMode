@@ -41,6 +41,7 @@ bool onTestingUIClick(bool t, bool r){
         summoning = true;
         setPlayerLastPicked(playerPick);
         onSummonHeroBtnClick();
+        resetPanels(testModePlayerGroup);
         GamePanelShow(c_UIType_talentSelect,true,testModePlayerGroup);
     }
     else if (eDialogControl == Dialogs.mainMenu.summonEnemyHeroBtn.btn){
@@ -56,6 +57,7 @@ bool onTestingUIClick(bool t, bool r){
         summoning = true;
         setPlayerLastPicked(playerPick);
         onSummonHeroBtnClick();
+        resetPanels(testModePlayerGroup);
         GamePanelShow(c_UIType_talentSelect,true,testModePlayerGroup);
     }
     else if (eDialogControl == Dialogs.mainMenu.upgradeHeroBtn.btn){
@@ -84,19 +86,28 @@ bool onTestingUIClick(bool t, bool r){
         }
     }
     else if (eDialogControl == Dialogs.logger.contolBtn){
-        if (loggerInvisableFlag){
+        if (loggerVisablityFlag){
             DialogControlSetPropertyAsText(Dialogs.logger.contolBtn,c_triggerControlPropertyText,testModePlayerGroup,StringToText("显示"));
             DialogSetPosition(Dialogs.logger.self,c_anchorTopLeft,-850,0);
         }else {
             DialogControlSetPropertyAsText(Dialogs.logger.contolBtn,c_triggerControlPropertyText,testModePlayerGroup,StringToText("隐藏"));
             DialogSetPosition(Dialogs.logger.self,c_anchorTopLeft,0,0);
         }
-        loggerInvisableFlag = !loggerInvisableFlag;
+        DialogControlSetVisible(gv_3CD09FC1[0], testModePlayerGroup, loggerVisablityFlag);
+        DialogControlSetVisible(gv_AF909063.lv_F459889A, PlayerGroupSingle(EventPlayer()), loggerVisablityFlag);
+        DialogControlSetVisible(gv_EB705B56.lv_CD1184A4, PlayerGroupSingle(EventPlayer()), loggerVisablityFlag);
+        loggerVisablityFlag = !loggerVisablityFlag;
+    }       
+    else if (eDialogControl == Dialogs.mainMenu.summonShieldObj.btn){
+
+        libNtve_gf_CreateUnitsWithDefaultFacing(1, "PickupEnergy25", c_unitCreateIgnorePlacement, 0, PointFromId(1306575492));
+
+        libNtve_gf_ShareVisionofUnit(UnitLastCreated(), true, testModePlayer);
+    
+        SoundPlay(SoundLink("sounduistar30", -1), PlayerGroupAll(), 100.0, 0.0);
+        UIDisplayMessage(gv_CB47AB71, c_messageAreaSubtitle, (StringExternal("Param/Value/ABD0BFE0") + (IntToText(5) + (StringExternal("Button/Tooltip/db_txt_preset_zameText_61") + (IntToText((gv_8D37EDF7 * 40)) + StringExternal("Button/Tooltip/db_txt_preset_zameText_88"))))));
+        PingCreateWithPlayerId(PlayerGroupAll(), "MinimapPing_help", PointFromId(1306575492), ColorWithAlpha(0.00, 0.00, 0.00, 0.00), 5.6, 0);
     }
-    //暂时无法实现
-    // else if (eDialogControl == Dialogs.mainMenu.lastRound.btn){
-        
-    // }
 
     return true;
 }
@@ -115,5 +126,6 @@ void initTestingUITrigger(){
     TriggerAddEventDialogControl(t,testModePlayer,Dialogs.mainMenu.lastRound.btn,c_triggerControlEventTypeClick);
     TriggerAddEventDialogControl(t,testModePlayer,Dialogs.mainMenu.summonDummy.btn,c_triggerControlEventTypeClick);
     TriggerAddEventDialogControl(t,testModePlayer,Dialogs.logger.contolBtn,c_triggerControlEventTypeClick);
+    TriggerAddEventDialogControl(t,testModePlayer,Dialogs.mainMenu.summonShieldObj.btn,c_triggerControlEventTypeClick);
     DataTableSetTrigger(true,"tirgger-onTestingUIClick",t);
 }

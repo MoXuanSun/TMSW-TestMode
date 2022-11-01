@@ -1,54 +1,89 @@
 //GongSun_ink 2022
 
-//英雄技能选择界面点击触发
-void onHeroSkillPickPanelClick(){
-    int column;
-    int row;
+//天赋界面点击触发，选择后再点击取消选择
+void onTalentSelectPanelClick(){
+    int i;
+    int j;
+
+    int player = getPlayerLastPicked();
+
     gameSoundPlayer(v_additionalSelect);
-    for (column = 0; column < 5; column += 1) {
-        for (row = 0; row < 5; row += 1) {
+    //暴力判断找到控件对应数组的位置
+    for (i = 0; i < 18; i += 1){
+        for (j = 0; j < 5; j += 1){
+            if (EventDialogControl() == gv_BB156610.lv_18A4806A[j][i]){
+                //如果已经选中
+                if (isTalentSelected(i,j,player)){
+                    talentSelectData(i,j,false,player);
+                    talentSelectUI(i,j,false,testModePlayerGroup);
+                    playerTalentSelected[player] -= 1;
+                }
+                //如果没有被选择
+                else{
+                    talentSelectData(i,j,true,player);
+                    talentSelectUI(i,j,true,testModePlayerGroup);
+                    playerTalentSelected[player] += 1;
+                    if (playerTalentSelected[player] == 6){
+                        // gv_BB156610.lv_54CFCAA4[player] = i;
+                        gv_BB156610.lv_54CFCAA4[player] = j;
+                    }
+                }
+            }
+        }
+    }
+}
+
+//英雄技能选择界面点击触发
+void onAbilitySelectPanelClick(){
+    int i;
+    int j;
+    gameSoundPlayer(v_additionalSelect);
+    for (i = 0; i < 5; i += 1) {
+        for (j = 0; j < 5; j += 1) {
             //判断是哪一个技能按键
-            if (EventDialogControl() == gv_BB156610.lv_52872E19[column][row]){
-                if (isAbilityBtnVisiable(row,column,testModePlayer)){
-                    abilityPickBtnUI(row,column,true,testModePlayerGroup);
-                    abilityPickData(row,column,getPlayerLastPicked());
+            if (EventDialogControl() == gv_BB156610.lv_52872E19[i][j]){
+                if (isAbilityBtnVisiable(j,i,testModePlayer)){
+                    abilitySelectData(0,i,getPlayerLastPicked());
+                    abilitySelectUI(j,i,false,testModePlayerGroup);
                 }else{
-                    abilityPickBtnUI(row,column,false,testModePlayerGroup);
-                    abilityPickData(0,column,getPlayerLastPicked());
+                    abilitySelectData(j,i,getPlayerLastPicked());
+                    abilitySelectUI(j,i,true,testModePlayerGroup); 
                 }
             }
         }    
     }
 }
 
-//天赋界面点击触发，选择后再点击取消选择
-void onTalentSelectPanelClick(){
-    int row;
-    int column;
 
-    int player = getPlayerLastPicked();
-
+//辅助技能界面点击触发
+void onAdditionalAbilitySelectPanelClick(){
+    int eDialogControl = EventDialogControl();
+    int i;
+    int j;
     gameSoundPlayer(v_additionalSelect);
-    //暴力判断找到控件对应数组的位置
-    for (row = 0; row < 18; row += 1)
-    {
-        for (column = 0; column < 5; column += 1)
-        {
-            if (EventDialogControl() == gv_BB156610.lv_18A4806A[column][row])
-            {
-                //如果已经选中
-                if (isTalentSelected(row,column,player))
-                {
-                    talentSelectData(row,column,false,player);
-                    talentSelectUI(row,column,false,testModePlayerGroup);
-                }
-                //如果没有被选择
-                else
-                {
-                    talentSelectData(row,column,true,player);
-                    talentSelectUI(row,column,true,testModePlayerGroup);
-                }
+    for (; i < 3 ; i += 1){
+        for (j = 0; j < 10 ; j += 1){
+            if (eDialogControl == gv_BB156610.lv_E2CEB0DB[i][j]){
+                if (isAdditionalAbilityBtnVisiable(i,j,testModePlayer)){
+                    additionalAbilitySelectData(i,0,getPlayerLastPicked());
+                    additionalAbilitySelectUI(i,j,false,testModePlayerGroup);
+                }else {
+                    additionalAbilitySelectData(i,j,getPlayerLastPicked());
+                    additionalAbilitySelectUI(i,j,true,testModePlayerGroup);
+                }   
             }
+        }
+    }
+}
+
+void onInitPropAddPanelClick(){
+    int eDialogControl = EventDialogControl();
+    int i;
+    gameSoundPlayer(v_additionalSelect);
+    for (; i < 6 ; i += 1){
+        if (eDialogControl == gv_BB156610.lv_2C4FE4D0[i]){
+            initPropAddData(i,getPlayerLastPicked());
+            initPropAddUI(i,getPlayerLastPicked(),testModePlayerGroup);  
         }
     }
 }
@@ -58,33 +93,9 @@ bool onGameUIClick(bool t, bool r){
     int eDialogControl = EventDialogControl();
     int rootDialog = DialogControlGetDialog(eDialogControl);
 
-    if (rootDialog == gv_277B64A1){
-        setHeroLastSelected( (EventDialogControl() - gv_749EC876[0][0]) / 3 );
-
-        gameSoundPlayer(v_heroSelect);
-        libNtve_gf_SetDialogItemImage(Dialogs.mainMenu.heroSelectBtn.img,gv_AA1BDB6C[DataTableGetInt(true,"heroId")],testModePlayerGroup);
-        libNtve_gf_SetDialogItemTooltip(Dialogs.mainMenu.heroSelectBtn.btn,
-            StringExternal(("Button/Tooltip/btn_line_ability_" + gf_45491ABD(DataTableGetInt(true,"heroId")) + "_s")),testModePlayerGroup);
-
-        GamePanelShow(c_UIType_heroSelect,false,testModePlayerGroup);
-    }
-    else if (rootDialog == gv_BB156610.lv_5C8CC8E9[0] ||
-        rootDialog == gv_BB156610.lv_5C8CC8E9[1] ||
-        rootDialog == gv_BB156610.lv_5C8CC8E9[2] ||
-        rootDialog == gv_BB156610.lv_5C8CC8E9[3] ||
-        rootDialog == gv_BB156610.lv_5C8CC8E9[4]){
-        onTalentSelectPanelClick();
-    }
-    //技能选择
-    else if (rootDialog == gv_BB156610.lv_DC4A4CA5[0] ||
-        rootDialog == gv_BB156610.lv_DC4A4CA5[1] ||
-        rootDialog == gv_BB156610.lv_DC4A4CA5[2] || 
-        rootDialog == gv_BB156610.lv_DC4A4CA5[3] ||
-        rootDialog == gv_BB156610.lv_DC4A4CA5[4]){
-        onHeroSkillPickPanelClick();
-    }
     //选择按钮
-    else if (eDialogControl == SELECT_BTN){
+    if (eDialogControl == SELECT_BTN){
+        
         if (DialogIsVisible(gv_BB156610.lv_5C8CC8E9[3], testModePlayer)){
             GamePanelShow(c_UIType_talentSelect,false,testModePlayerGroup);
             GamePanelShow(c_UIType_SKillSelect,true,testModePlayerGroup);
@@ -106,11 +117,48 @@ bool onGameUIClick(bool t, bool r){
                 fetchPlayerToCurrentRound(getPlayerLastPicked());
             }
         }
-    } 
+    }
+    //英雄选择
+    else if (rootDialog == gv_277B64A1){
+        setHeroLastSelected( (EventDialogControl() - gv_749EC876[0][0]) / 3 );
+
+        gameSoundPlayer(v_heroSelect);
+        libNtve_gf_SetDialogItemImage(Dialogs.mainMenu.heroSelectBtn.img,gv_AA1BDB6C[DataTableGetInt(true,"heroId")],testModePlayerGroup);
+        libNtve_gf_SetDialogItemTooltip(Dialogs.mainMenu.heroSelectBtn.btn,
+            StringExternal(("Button/Tooltip/btn_line_ability_" + gf_45491ABD(DataTableGetInt(true,"heroId")) + "_s")),testModePlayerGroup);
+
+        GamePanelShow(c_UIType_heroSelect,false,testModePlayerGroup);
+    }
+    //初始属性选择
+    else if (rootDialog == gv_BB156610.lv_C262E618){
+        onInitPropAddPanelClick();
+    }
+    //辅助技能选择
+    else if (rootDialog == gv_BB156610.lv_8BA882A3[0] || 
+        rootDialog == gv_BB156610.lv_8BA882A3[1] || 
+        rootDialog == gv_BB156610.lv_8BA882A3[2]){
+        onAdditionalAbilitySelectPanelClick();
+    }
+    //技能选择
+    else if (rootDialog == gv_BB156610.lv_DC4A4CA5[0] ||
+        rootDialog == gv_BB156610.lv_DC4A4CA5[1] ||
+        rootDialog == gv_BB156610.lv_DC4A4CA5[2] || 
+        rootDialog == gv_BB156610.lv_DC4A4CA5[3] ||
+        rootDialog == gv_BB156610.lv_DC4A4CA5[4]){
+        onAbilitySelectPanelClick();
+    }
+    //天赋选择
+    else if (rootDialog == gv_BB156610.lv_5C8CC8E9[0] ||
+        rootDialog == gv_BB156610.lv_5C8CC8E9[1] ||
+        rootDialog == gv_BB156610.lv_5C8CC8E9[2] ||
+        rootDialog == gv_BB156610.lv_5C8CC8E9[3] ||
+        rootDialog == gv_BB156610.lv_5C8CC8E9[4]){
+        onTalentSelectPanelClick();
+    }
+    
+    
     return true;
 }
-
-
 
 bool onUnitClick(bool t, bool r){
     unit eUnit = EventUnit();
@@ -119,6 +167,7 @@ bool onUnitClick(bool t, bool r){
 
     if (newUnitOwner == 0){
         showHideDummyHud(true,testModePlayerGroup);
+        setDummySelected(eUnit);
         return true;
     }
     
@@ -130,6 +179,13 @@ bool onUnitClick(bool t, bool r){
         UIAlertUnit("MyClickLocations", testModePlayer, EMP_TEXT, null, eUnit);
         storeUpgradeBtns(UnitGetOwner(getTestPlayerCurrentSelectedUnit()));
         
+    }else {
+        updatePropBtn(newUnitOwner,testModePlayerGroup);
+        restoreUpgradeBtns(newUnitOwner,testModePlayerGroup);
+        DialogSetVisible(gv_5C4043F8.lv_B91A282D, testModePlayerGroup, true);
+        DialogSetVisible(gv_598EC0B1, testModePlayerGroup, true);
+        DialogSetVisible(gv_5C4043F8.lv_8DEC25E2, testModePlayerGroup, true);
+        DialogSetVisible(gv_5C4043F8.lv_AF2E051A, testModePlayerGroup, true);
     }
     //--------------------------
     //选择新单位

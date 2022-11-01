@@ -1,23 +1,40 @@
 //GongSunink 2022
 
 bool onUpgradeLevelChanged(bool r, bool t){
+    int i;
+    string upgradeInfo = DataTableGetString(true,upgradeInfoPrefix+IntToString(EventPlayer()));
 
-    if (DataTableGetString(true,EventUpgradeName()) == null){
-        DataTableSetInt(true,EventUpgradeName(),DataTableGetInt(true,"uplevelnameglobalval") + 1);
-        DataTableSetString(true,IntToString(DataTableGetInt(true,"uplevelnameglobalval") + 1),EventUpgradeName());
-
-        DataTableSetInt(true,"uplevelnameglobalval",DataTableGetInt(true,"uplevelnameglobalval") + 1);
+    if (EventPlayer() == 0 || EventPlayer() > 10){
+        return true;
     }
-    DataTableSetString(true,"upgradeinfo-"+IntToString(EventPlayer()),
-        DataTableGetString(true,"upgradeinfo-"+IntToString(EventPlayer())) + IntToString(DataTableGetInt(true,EventUpgradeName())));
+
+    // loggerD("=================================="+IntToString(EventPlayer()));
+    // loggerD(EventUpgradeName());
+    // loggerD(IntToString(EventUpgradeLevelDelta()));
+
+    if (upgradeInfo != null){
+         for(i = 1 ; StringWord(upgradeInfo,i) != null ; i += 1){
+            if (StringEqual(StringWord(upgradeInfo,i),EventUpgradeName(),false)){
+                return true;
+            }
+        }
+    }
+   
+
+    if (EventUpgradeLevelDelta() <= 0){
+        return true;
+    }
+
+    DataTableSetString(true,upgradeInfoPrefix+IntToString(EventPlayer()),
+        upgradeInfo+EventUpgradeName()+" ");
+    
+    // loggerD(DataTableGetString(true,upgradeInfoPrefix+IntToString(EventPlayer())));
     
     return true;
 }
 
-
-
 void initGameRemove(){
     trigger t = TriggerCreate("onUpgradeLevelChanged");
-    
+
     TriggerAddEventUpgradeLevelChanged(t,c_playerAny);
 }
