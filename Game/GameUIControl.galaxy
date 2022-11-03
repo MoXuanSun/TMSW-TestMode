@@ -384,8 +384,8 @@ void GamePanelShow(int type, bool show, playergroup p){
             DialogSetVisible(DialogLastCreated(), p, true);
     
             libNtve_gf_CreateDialogItemButton(DialogLastCreated(), 232, 74, c_anchorCenter, 0, 0, null, StringToText("确认"), "");
-            libNtve_gf_SetDialogItemImage(DialogControlLastCreated(), "GamesUis\\MyG_BTN_Alpha.dds", p);
-            libNtve_gf_SetDialogItemImage2(DialogControlLastCreated(), "GamesUis\\MyG_All_Blue.dds", p);
+            // libNtve_gf_SetDialogItemImage(DialogControlLastCreated(), "GamesUis\\MyG_BTN_Alpha.dds", p);
+            // libNtve_gf_SetDialogItemImage2(DialogControlLastCreated(), "GamesUis\\MyG_All_Blue.dds", p);
     
             SELECT_BTN = DialogControlLastCreated();
             DialogControlSetEnabled(SELECT_BTN, p, true);
@@ -401,9 +401,6 @@ void GamePanelShow(int type, bool show, playergroup p){
             
     }
     else if (type == c_UIType_SKillSelect){
-        
-    
-  
         DialogControlSetVisible(SELECT_BTN, p, show);
         DialogSetVisible(gv_BB156610.lv_DC4A4CA5[0], p, show);
         DialogSetVisible(gv_BB156610.lv_DC4A4CA5[1], p, show);
@@ -606,43 +603,40 @@ void updatePropBtn(int currentRemotingPlayer, playergroup refractTargetPlayerGro
 void updateFullGameUI(int currentRemotingPlayer, playergroup refractTargetPlayerGroup){
     //右侧数值栏数据
 
-    // //ap
-    // libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[1], FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_89BFC1C4], 2), refractTargetPlayerGroup);
-    // //物抗
-    // libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[2], (FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_0B7B7C1E], 2) + StringExternal("Param/Value/6B419391")), refractTargetPlayerGroup);
-    // //法抗
-    // libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[3], (FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_4EF6DA1D], 2) + StringExternal("Param/Value/089CE3E2")), refractTargetPlayerGroup);
-    // //攻速
-    // libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[4], FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_5F19A6B6], 2), refractTargetPlayerGroup);
-    // //移速
-    // libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[5], FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_368F8749], 2), refractTargetPlayerGroup);
-    // //射程
-    // libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[6], FixedToText(UnitWeaponRange(gv_71C054E5[currentRemotingPlayer], 1), 2), refractTargetPlayerGroup);
-    // //暴击
-    // libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[7], (FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_F549A9A2], 0) + StringExternal("Param/Value/1800D7A0")), refractTargetPlayerGroup);
-    // //冷却
-    // libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[8], (FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_513A585F], 0) + StringExternal("Param/Value/C7314030")), refractTargetPlayerGroup);
-
     //ap
     libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[1], FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_89BFC1C4], 2), refractTargetPlayerGroup);
     //物抗
-    libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[2], (FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_0B7B7C1E], 2) + StringExternal("Param/Value/6B419391")), refractTargetPlayerGroup);
+    // libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[2], (FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_0B7B7C1E], 2) + StringExternal("Param/Value/6B419391")), refractTargetPlayerGroup);
     //法抗
     libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[3], (FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_4EF6DA1D], 2) + StringExternal("Param/Value/089CE3E2")), refractTargetPlayerGroup);
     //攻速
-    libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[4], FixedToText(UnitWeaponPeriod(gv_71C054E5[currentRemotingPlayer], 1) / 10.0 , 2), refractTargetPlayerGroup);
-    //移速
-    libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[5], FixedToText(UnitGetPropertyFixed(gv_71C054E5[currentRemotingPlayer],c_unitPropMovementSpeed,true), 2), refractTargetPlayerGroup);
+    libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[4], FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_5F19A6B6], 2), refractTargetPlayerGroup);
+    //移速 显示有问题
+    // libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[5], FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_368F8749], 2), refractTargetPlayerGroup);
     //射程
     libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[6], FixedToText(UnitWeaponRange(gv_71C054E5[currentRemotingPlayer], 1), 2), refractTargetPlayerGroup);
     //暴击
     libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[7], (FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_F549A9A2], 0) + StringExternal("Param/Value/1800D7A0")), refractTargetPlayerGroup);
     //冷却
     libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[8], (FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_513A585F], 0) + StringExternal("Param/Value/C7314030")), refractTargetPlayerGroup);
- 
-    
 
-    
+    // //ap
+    // libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[1], FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_89BFC1C4], 2), refractTargetPlayerGroup);
+    // //物抗
+    libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[2], (FixedToText(UnitGetPropertyFixed(gv_71C054E5[currentRemotingPlayer],c_unitPropLifeArmor,true), 2) + StringExternal("Param/Value/6B419391")), refractTargetPlayerGroup);
+    // //法抗
+    // libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[3], (FixedToText(UnitGetPropertyFixed(gv_71C054E5[currentRemotingPlayer],c_unitPropEnergyArmor,true), 2) + StringExternal("Param/Value/089CE3E2")), refractTargetPlayerGroup);
+    // //攻速
+    // libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[4], FixedToText(UnitWeaponPeriod(gv_71C054E5[currentRemotingPlayer], 1) , 2), refractTargetPlayerGroup);
+    // //移速
+    libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[5], FixedToText(UnitGetPropertyFixed(gv_71C054E5[currentRemotingPlayer],c_unitPropMovementSpeed,true), 2), refractTargetPlayerGroup);
+    // //射程
+    // libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[6], FixedToText(UnitWeaponRange(gv_71C054E5[currentRemotingPlayer], 1), 2), refractTargetPlayerGroup);
+    // //暴击
+    // libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[7], (FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_F549A9A2], 0) + StringExternal("Param/Value/1800D7A0")), refractTargetPlayerGroup);
+    // //冷却
+    // libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[8], (FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_513A585F], 0) + StringExternal("Param/Value/C7314030")), refractTargetPlayerGroup);
+ 
     if (getPlayerHeroId(currentRemotingPlayer) == 7){
         if ((gv_BB156610.lv_0195430E[currentRemotingPlayer][0] == 0))
         {

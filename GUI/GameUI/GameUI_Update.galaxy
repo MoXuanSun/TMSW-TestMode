@@ -2,102 +2,14 @@
 //1.更新属性条
 
 bool updatePlayerStatusBars(bool r, bool t){
- int lv_FB93CE8F;
-    fixed lv_FC82AC58;
-    int lv_2DF04F39;
-    int lv_FFCC09D8;
-    const int autoA6A4C785_ae = 14;
-    const int autoA6A4C785_ai = 1;
-    const int auto4C508240_ae = 14;
-    const int auto4C508240_ai = 1;
-    lv_FC82AC58 = 268.0;
 
-    if (gv_AC56085D && getTestPlayerCurrentSelectedUnit() != EventUnit()){
+    if (getTestPlayerCurrentSelectedUnit() == null){
         return true;
     }
 
-    if (t)
-    {
-        if (!((UnitTypeTestAttribute(UnitGetType(EventUnit()), c_unitAttributeHeroic) == true)))
-        {
-            return false;
-        }
-        if (!((UnitBehaviorCount(EventUnit(), "HallucinationTimedLife") == 0)))
-        {
-            return false;
-        }
-    }
-    if (!r)
-    {
-        return true;
-    }
-
-    if ((UnitBehaviorCount(EventUnit(), "jocuser") == 0))
-    {
-        if ((EventUnitProperty() == c_unitPropLife))
-        {
-            if (((EventPlayer() >= 1) && (EventPlayer() <= 10)))
-            {
-                if ((EventUnit() == gv_71C054E5[EventPlayer()]))
-                {
-                    gf_2AF0A3EE(testModePlayer, EventUnit(), gv_5C4043F8.lv_23D09B56, c_unitPropLifePercent, gv_5C4043F8.lv_24D62004, c_unitPropLife, c_unitPropLifeMax);
-                }
-            }
-             //如果玩家能看到敌方 开始更新信息显示窗口
-            // lv_FB93CE8F = 1;
-            // for (; ((autoA6A4C785_ai >= 0 && lv_FB93CE8F <= autoA6A4C785_ae) || (autoA6A4C785_ai < 0 && lv_FB93CE8F >= autoA6A4C785_ae)); lv_FB93CE8F += autoA6A4C785_ai)
-            // {
-            //     if (gf_009A8454(lv_FB93CE8F, 1) && (gv_EDC9A72C[lv_FB93CE8F] == EventPlayer()))
-            //     {
-            //         if ((VisIsVisibleForPlayer(lv_FB93CE8F, UnitGetPosition(EventUnit())) == true))
-            //         {
-            //             libNtve_gf_SetDialogItemText(gv_D33859CA[8], (IntToText(FixedToInt(UnitGetPropertyFixed(EventUnit(), c_unitPropLife, c_unitPropCurrent))) + (StringExternal("Param/Value/31861927") + IntToText(FixedToInt(UnitGetPropertyFixed(EventUnit(), c_unitPropLifeMax, c_unitPropCurrent))))), PlayerGroupSingle(lv_FB93CE8F));
-            //             lv_FFCC09D8 = FixedToInt((lv_FC82AC58 * (UnitGetPropertyFixed(EventUnit(), c_unitPropLifePercent, c_unitPropCurrent) * 0.01)));
-            //             if ((lv_FFCC09D8 == 0))
-            //             {
-            //                 lv_FFCC09D8 = 1;
-            //             }
-            //             DialogControlSetSize(gv_2DED9336[4], PlayerGroupSingle(lv_FB93CE8F), lv_FFCC09D8, 16);
-            //         }
-            //         else
-            //         {
-            //             DialogSetVisible(gv_4EE04C84, PlayerGroupSingle(lv_FB93CE8F), false);
-            //         }
-            //     }
-            // }
-        }
-        else if ((EventUnitProperty() == c_unitPropEnergy))
-        {
-            if (((EventPlayer() >= 1) && (EventPlayer() <= 10)))
-            {
-                if ((EventUnit() == gv_71C054E5[EventPlayer()]))
-                {
-                    gf_2AF0A3EE(testModePlayer, EventUnit(), gv_5C4043F8.lv_472F835E, c_unitPropEnergyPercent, gv_5C4043F8.lv_D9B13017, c_unitPropEnergy, c_unitPropEnergyMax);
-                }
-            }
-            //如果玩家能看到敌方 开始更新信息显示窗口
-            // lv_FB93CE8F = 1;
-            // for (; ((auto4C508240_ai >= 0 && lv_FB93CE8F <= auto4C508240_ae) || (auto4C508240_ai < 0 && lv_FB93CE8F >= auto4C508240_ae)); lv_FB93CE8F += auto4C508240_ai)
-            // {
-            //     if (gf_009A8454(lv_FB93CE8F, 1) && (gv_EDC9A72C[lv_FB93CE8F] == EventPlayer()))
-            //     {
-            //         if ((VisIsVisibleForPlayer(lv_FB93CE8F, UnitGetPosition(EventUnit())) == true))
-            //         {
-            //             libNtve_gf_SetDialogItemText(gv_D33859CA[9], (IntToText(FixedToInt(UnitGetPropertyFixed(EventUnit(), c_unitPropEnergy, c_unitPropCurrent))) + (StringExternal("Param/Value/E85FE5D0") + IntToText(FixedToInt(UnitGetPropertyFixed(EventUnit(), c_unitPropEnergyMax, c_unitPropCurrent))))), PlayerGroupSingle(lv_FB93CE8F));
-            //             lv_FFCC09D8 = FixedToInt((lv_FC82AC58 * (UnitGetPropertyFixed(EventUnit(), c_unitPropEnergyPercent, c_unitPropCurrent) * 0.01)));
-            //             if ((lv_FFCC09D8 == 0))
-            //             {
-            //                 lv_FFCC09D8 = 1;
-            //             }
-            //             DialogControlSetSize(gv_2DED9336[5], PlayerGroupSingle(lv_FB93CE8F), lv_FFCC09D8, 16);
-            //         }
-            //         else
-            //         {
-            //             DialogSetVisible(gv_4EE04C84, PlayerGroupSingle(lv_FB93CE8F), false);
-            //         }
-            //     }
-            // }
-        }
+    gf_2AF0A3EE(testModePlayer, getTestPlayerCurrentSelectedUnit(), gv_5C4043F8.lv_23D09B56, c_unitPropLifePercent, gv_5C4043F8.lv_24D62004, c_unitPropLife, c_unitPropLifeMax);
+    gf_2AF0A3EE(testModePlayer, getTestPlayerCurrentSelectedUnit(), gv_5C4043F8.lv_472F835E, c_unitPropEnergyPercent, gv_5C4043F8.lv_D9B13017, c_unitPropEnergy, c_unitPropEnergyMax);
+        
         // else if (EventUnitProperty() == c_unitPropShieldsMax){
         //     DialogControlCreate(DialogControlGetDialog(gv_5C4043F8.lv_23D09B56),c_triggerControlTypeImage);
             
@@ -109,7 +21,7 @@ bool updatePlayerStatusBars(bool r, bool t){
         //     DialogControlSetVisible(DialogControlLastCreated(),testModePlayerGroup,true);
         //     // libNtve_gf_CreateDialogItemImage(DialogControlGetDialog(gv_5C4043F8.lv_472F835),0,20,c_anchorBottomLeft,0,0,EMP_TEXT,"",Color(0,0,255))
         // }
-    }
+    
     // if (EventUnitProperty() == c_unitPropShieldsMax){
     //     debug(FixedToString(UnitGetPropertyFixed(EventUnit(),c_unitPropShieldsMax,true),2));
     //     debug("test");
@@ -122,10 +34,7 @@ bool updatePlayerStatusBars(bool r, bool t){
     //     debug(FixedToString(UnitGetPropertyFixed(EventUnit(),c_unitPropShields,true),2));
     //     debug("tes2t");
     // }
-    else
-    {
-        DialogSetVisible(gv_4EE04C84, PlayerGroupSingle(EventPlayer()), false);
-    }
+   
     // return true;
 
     // unit currentUnit = getTestPlayerCurrentSelectedUnit();
@@ -149,11 +58,32 @@ bool updatePlayerStatusBars(bool r, bool t){
     return true;
 }
 
+bool upgradeGameFullUIPeriod(bool r, bool t){
+    
+    if (getTestPlayerCurrentSelectedUnit() == null){
+        return true;
+    }
+
+    updateFullGameUI(UnitGetOwner(getTestPlayerCurrentSelectedUnit()),testModePlayerGroup);
+
+    // debug(UnitWeaponGet(getTestPlayerCurrentSelectedUnit(),1));
+    // debug(FixedToString((UnitWeaponPeriod(getTestPlayerCurrentSelectedUnit(),1)),4));
+
+    return true;
+}
+
 void initGameUIUpdateTrigger(){
     trigger t = TriggerCreate("updatePlayerStatusBars");
-    
-    TriggerAddEventUnitProperty(t, null, c_unitPropLife);
-    TriggerAddEventUnitProperty(t, null, c_unitPropEnergy);
+    trigger t1 = TriggerCreate("upgradeGameFullUIPeriod");
+
+    // TriggerAddEventUnitProperty(t, null, c_unitPropLife);
+    // TriggerAddEventUnitProperty(t, null, c_unitPropEnergy);
+
+    TriggerAddEventTimePeriodic(t,0.0625,c_timeGame);
+    TriggerAddEventTimePeriodic(t1,0.0625 * 10,c_timeGame);
+
+
+
     // TriggerAddEventUnitProperty(t, null, c_unitPropShieldsMax);
     // TriggerAddEventUnitProperty(t, null, c_unitPropShieldsPercent);
     // TriggerAddEventUnitProperty(t, null, c_unitPropShields);

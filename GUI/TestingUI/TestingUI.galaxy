@@ -63,21 +63,21 @@ void buildTestingUI(){
 
     createmBtnRelative(Dialogs.mainMenu.noCoolDownBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
         Dialogs.mainMenu.upgradeHeroBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,"character/newroon/new_tuc_touhou_mabub_0_line_a.dds",
-        "刷新选中英雄的所有技能",
+        "刷新选中英雄的所有技能,无法刷新技能充能次数",
         DEFAULTS.DEFAULT_TITLE, DEFAULTS.DEFAULT_FONTSTYLE , DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP,false);
 
     createmBtnRelative(Dialogs.mainMenu.fullmana,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
         Dialogs.mainMenu.noCoolDownBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,"character/newroon/new_tuc_touhou_yungam_0_line_a.dds",
-        "你的能量不足",
+        "回满选中英雄的能量",
         DEFAULTS.DEFAULT_TITLE, DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP,false);
 
      createmBtnRelative(Dialogs.mainMenu.removeHeroBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
         Dialogs.mainMenu.upgradeHeroBtn.border,0,TEST_UI_PADDING,DEFAULTS.DEFAULT_BORDERDDS,"character/newroon/new_tuc_touhou_jibae_1_line_b.dds",
-        "移除选中英雄(点击假人,在显示信息窗口时可以移除假人,esc关闭信息窗口后移除选中的英雄)",
+        "移除选中英雄(点击木偶,显示信息窗口时可以移除木偶),尽可能少用该功能,可能会出现bug",
         DEFAULTS.DEFAULT_TITLE, DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP,true);
@@ -98,7 +98,7 @@ void runtimeUI(){
 
     createmBtnRelative(Dialogs.mainMenu.nextRound,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
         Dialogs.mainMenu.removeHeroBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,
-            "将游戏回合数调节至下一回合，游戏的一些参数会与回合数有关", 
+            "将游戏回合数调节至下一回合，游戏的一些参数与回合数有关", 
             "下一回合",
             DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
             DEFAULTS.DEFAULT_BTNHOVERIMG,
@@ -134,15 +134,15 @@ void loggerUI(){
     DialogControlSetSize(DialogControlLastCreated(),testModePlayerGroup,850,1000);
 
     Dialogs.logger.contolBtn = libNtve_gf_CreateDialogItemButton(DialogLastCreated(),100,60,c_anchorBottomRight,50,0,
-    EMP_TEXT,StringToText("显示"),null);
+    StringToText("显示伤害记录器"),StringToText("显示"),null);
 
-    
+    // loggerVisablityFlag = true;
 }
 
 void createMainMenu(){
 
     //1.创建主菜单
-    Dialogs.mainMenu.self = DialogCreate(400,800,c_anchorTopRight,0,0,false); 
+    Dialogs.mainMenu.self = DialogCreate(400,500,c_anchorTopRight,0,0,false); 
     //2.设置可见性
     DialogSetVisible(DialogLastCreated(),PlayerGroupActive(),true);
     //3.设置背景不可见

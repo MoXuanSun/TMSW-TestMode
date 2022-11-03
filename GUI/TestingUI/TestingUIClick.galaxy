@@ -73,8 +73,6 @@ bool onTestingUIClick(bool t, bool r){
         if (getTestPlayerCurrentSelectedUnit() != null){
              removeUnitAndReflashPlayer(UnitGetOwner(getTestPlayerCurrentSelectedUnit()));
         }
-        
-       
     }
     else if (eDialogControl == Dialogs.mainMenu.nextRound.btn){
         nextRoundGlobal();
@@ -88,9 +86,11 @@ bool onTestingUIClick(bool t, bool r){
     else if (eDialogControl == Dialogs.logger.contolBtn){
         if (loggerVisablityFlag){
             DialogControlSetPropertyAsText(Dialogs.logger.contolBtn,c_triggerControlPropertyText,testModePlayerGroup,StringToText("显示"));
+            DialogControlSetPropertyAsText(Dialogs.logger.contolBtn,c_triggerControlPropertyTooltip,testModePlayerGroup,StringToText("显示伤害记录器"));
             DialogSetPosition(Dialogs.logger.self,c_anchorTopLeft,-850,0);
         }else {
             DialogControlSetPropertyAsText(Dialogs.logger.contolBtn,c_triggerControlPropertyText,testModePlayerGroup,StringToText("隐藏"));
+            DialogControlSetPropertyAsText(Dialogs.logger.contolBtn,c_triggerControlPropertyTooltip,testModePlayerGroup,StringToText("隐藏伤害记录器"));
             DialogSetPosition(Dialogs.logger.self,c_anchorTopLeft,0,0);
         }
         DialogControlSetVisible(gv_3CD09FC1[0], testModePlayerGroup, loggerVisablityFlag);

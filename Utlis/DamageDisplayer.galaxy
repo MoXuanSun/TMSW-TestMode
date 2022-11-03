@@ -1,5 +1,7 @@
 //GongSun_ink 2022
 
+//溅射伤害就是真实伤害 伤害响应行为中没有勾选的只有他
+
 void updateDamageDisplayer(fixed damageAmount, unit damagingUnit, unit damagedUnit, int damageType){
     int damagingUnitOwner = UnitGetOwner(damagingUnit);
     int damagedUnitOwner = UnitGetOwner(damagedUnit);
@@ -21,7 +23,6 @@ void updateDamageDisplayer(fixed damageAmount, unit damagingUnit, unit damagedUn
     if (UnitGetType(damagedUnit) == "dbHero00" || damageAmount == 0){
         return;
     }
-    
     //打敌方英雄不会触发
     if (!DataTableGetInt(true,damageDisplayerKey(damagedUnitTag,c_damagedisplayer_texttagLast)) == 0){
             //是否刷新

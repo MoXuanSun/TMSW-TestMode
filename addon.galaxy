@@ -158,7 +158,6 @@ void initPropAddData(int row, int player);
 void storeUpgradeBtn(int player, int index, bool show);
 void storeUpgradeBtns(int player);
 void restoreUpgradeBtns(int player, playergroup p);
-void setStatStrsforPlayer(int player);
 void initDataForPlayer();
 void fetchPlayerToCurrentRound(int player);
 void nextRoundGlobal();

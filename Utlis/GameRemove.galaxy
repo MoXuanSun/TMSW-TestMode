@@ -7,23 +7,23 @@ bool onUpgradeLevelChanged(bool r, bool t){
     if (EventPlayer() == 0 || EventPlayer() > 10){
         return true;
     }
-
-    // loggerD("=================================="+IntToString(EventPlayer()));
-    // loggerD(EventUpgradeName());
-    // loggerD(IntToString(EventUpgradeLevelDelta()));
-
-    if (upgradeInfo != null){
-         for(i = 1 ; StringWord(upgradeInfo,i) != null ; i += 1){
-            if (StringEqual(StringWord(upgradeInfo,i),EventUpgradeName(),false)){
-                return true;
-            }
-        }
-    }
    
-
     if (EventUpgradeLevelDelta() <= 0){
         return true;
     }
+
+    if (upgradeInfo != null){
+        for(i = 1 ; StringWord(upgradeInfo,i) != null ; i += 1){
+           if (StringEqual(StringWord(upgradeInfo,i),EventUpgradeName(),false)){
+               return true;
+           }
+       }
+   }
+
+  
+    // loggerD("=================================="+IntToString(EventPlayer()));
+    // loggerD(EventUpgradeName());
+    // loggerD(IntToString(EventUpgradeLevelDelta()));
 
     DataTableSetString(true,upgradeInfoPrefix+IntToString(EventPlayer()),
         upgradeInfo+EventUpgradeName()+" ");

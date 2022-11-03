@@ -18,10 +18,11 @@ void logger(string message,int level){
     finalMessage = gameTimeS + levelS + message;
    
     if (DialogControlGetItemCount(Dialogs.logger.listBoxControl,testModePlayer) >= loggerMessageMAX){
-        DialogControlRemoveItem(Dialogs.logger.listBoxControl,testModePlayerGroup,0);
+        DialogControlRemoveItem(Dialogs.logger.listBoxControl,testModePlayerGroup,1);
     }
 
-    if (DialogControlGetItemCount(Dialogs.logger.listBoxControl,testModePlayer) > 0){
+    // 会导致bug
+    if (DialogControlGetItemCount(Dialogs.logger.listBoxControl,testModePlayer) > 1){
         DialogControlRemoveItem(Dialogs.logger.listBoxControl,testModePlayerGroup,
             DialogControlGetItemCount(Dialogs.logger.listBoxControl,testModePlayer));
     }
@@ -64,7 +65,7 @@ void initLogger(){
     loggerLevelColor[3] = "ffff00";
     loggerLevelColor[4] = "ff0000";
 
-    loggerLevelName[0] = "Verbose";
+    loggerLevelName[0] = "verbose";
     loggerLevelName[1] = "info";
     loggerLevelName[2] = "debug";
     loggerLevelName[3] = "warn";

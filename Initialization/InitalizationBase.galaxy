@@ -107,6 +107,9 @@ void initGameData(){
     gv_B37F1D3F = 0;
     gv_DA579AA4 = 2;
 
+    //初始护甲加点判断用 0则不会自增gv_9CB902A4 函数gf_3F0031D2
+    gv_2A156F88 = 1;
+
 }
 
 void disableTriggers(){
@@ -130,6 +133,8 @@ void disableTriggers(){
     TriggerEnable(gt_74AB4E94,false);
     //爱丽丝的bug触发器
     // TriggerEnable(gt_3C710124,false);
+    //先代q触发器
+    // TriggerEnable(gt_BABA7AEA,false);
 }
 
 //通过开启关闭操作重新排列触发器顺序
@@ -146,7 +151,8 @@ void loadArane(){
     gameSoundPlayer(v_roundInit);
 
     //进入
-    DialogControlFadeTransparency(gv_D3F35143, PlayerGroupAll(), 2.0, 100.0);
+    DialogControlFadeTransparency(gv_D3F35143, PlayerGroupAll(), 0.0, 100.0);
+    DialogDestroy(gv_D3F35143);
 
     UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeInventoryPanel, true);
     UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeInfoPanel, true);
@@ -156,7 +162,6 @@ void loadArane(){
     UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeMenuBar, true);
 
     CameraPan(testModePlayer,PointFromId(36),0,0,0,false);
-    // CameraSetValue(testModePlayer, c_cameraValueDistance, 200, 0.0, 0, 0);
     CameraSetValue(testModePlayer, c_cameraValueDistance, 3 + gv_E2739273[testModePlayer].lv_3275AA55 * 7 , 0.0, 0, 0);
     CameraLockInput(testModePlayer, false);
 
@@ -197,19 +202,12 @@ void loadArane(){
     //ui
     TriggerExecute(gt_0315FDBE, false, false);
 
-    //timer显示
-    // TriggerExecute(gt_50AA3CE2, false, false);
-
     loadDummyHud(testModePlayerGroup);
-
-    // gv_BB284D6D = 1;
-    // gf_85CE78E1();
 
     DialogSetVisible(gv_5C4043F8.lv_B91A282D, testModePlayerGroup, false);
     DialogSetVisible(gv_598EC0B1, testModePlayerGroup, false);
     DialogSetVisible(gv_5C4043F8.lv_8DEC25E2, testModePlayerGroup, false);
     DialogSetVisible(gv_5C4043F8.lv_AF2E051A, testModePlayerGroup, false);
-
 
     //为所有玩家启用属性加点控件，原本只有玩家1启用
     IntLoopBegin(0,14);
@@ -224,4 +222,5 @@ void loadArane(){
     //1级膜
     TechTreeUpgradeAddLevel(0, "dbup_Object_Shiled", 1);
     
+    gv_BB284D6D = 1;
 }

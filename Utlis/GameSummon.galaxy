@@ -73,15 +73,14 @@ void playerSummonHero(){
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie", playerId, 1);
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie4", playerId, 1);
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie42", playerId, 1);
-    //不添加不可选中效果
-    // UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie2", playerId, 1);
 
     gv_55A8AB50[playerId] += 1;
     //两边队伍剩余人数
     gv_48E7CC05[gv_9EEEA78D[playerId]] += 1;
 
-  
+    //近战 远程
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie25", playerId, 1);
+    //法术
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie23", playerId, 1);
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie24res", playerId, 1);        
     
@@ -182,6 +181,16 @@ void playerSummonHero(){
     gf_91088DA7(playerId);
     //储存升级按钮    
     storeUpgradeBtns(playerId);
+
+    if (playerId == 1 && getTestPlayerCurrentSelectedUnit() != gv_71C054E5[playerId]){
+        IntLoopBegin(0,3);
+        while(!IntLoopDone()){
+            upgradeBtnShow(IntLoopCurrent(),false,testModePlayerGroup);
+            IntLoopStep();
+        }
+        IntLoopEnd();
+    }
+
     //技能组
     gf_C71F331B(playerId);
     //初始属性加点
@@ -196,6 +205,7 @@ void playerSummonHero(){
     gf_17113C81(gv_71C054E5[playerId]);
     //天赋
     gf_1DA6D503(gv_71C054E5[playerId]);
+
     UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropLifePercent, 100.0);
     //除四季外 其他英雄回复85%能量
     if ((UnitGetType(gv_71C054E5[playerId]) != "dbHero43"))
@@ -206,36 +216,12 @@ void playerSummonHero(){
     {
         UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropEnergyPercent, 0.0);
     }
-    
-    //能量条长度设置
-    // gf_67CE0F82(gv_71C054E5[playerId]);
     //血量上限 fixed->int 
     gf_5B3578B1();    
-
-    gf_1A8469C6();
-    // gf_85CE78E1();
-
-   
-    // if (getTestPlayerCurrentSelectedUnit() == null && playerId > 6){
-    //     UnitSelect(getPlayerHeroUnit(playerId),testModePlayer,true);
-    //     setTestPlayerCurrentSelectedUnit(getPlayerHeroUnit(playerId));
-    //     updateFullGameUI(playerId,testModePlayerGroup);
-    //     // 主要UI
-
-    //     DialogSetVisible(gv_5C4043F8.lv_B91A282D, testModePlayerGroup, true);
-    //     DialogSetVisible(gv_598EC0B1, testModePlayerGroup, true);
-    //     DialogSetVisible(gv_5C4043F8.lv_8DEC25E2, testModePlayerGroup, true);
-    //     DialogSetVisible(gv_5C4043F8.lv_AF2E051A, testModePlayerGroup, true);
-    // }
-    
-    gv_BB284D6D = 1;
+    //更新远程英雄为true
     gf_5B3968D5();
-
     //更新Tab
     TriggerExecute(gt_EFE165C0,false,true);
-
-
-    updatePropBtn(playerId,testModePlayerGroup);
 }
 
 void summonDummy(point p){

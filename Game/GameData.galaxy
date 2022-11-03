@@ -60,134 +60,105 @@ void restoreUpgradeBtns(int player, playergroup p){
     }
     IntLoopEnd();
 }
-//为所有玩家初始化信息
-void setStatStrsforPlayer(int player){
 
-    string[2][16] lv_B3606C7F;
-    string[2][16] lv_E1FEB3A7;
-    string[2][16] lv_D280BB95;
-    string[2][16] lv_99015105;
+void fetchArmorUpgrade(int player){
+    string[2][10] lv_272FC741;
 
-    string[16] lv_96618FF6;
-  
-    string[16] lv_3E40DCEF;
+    int temp;
+    int type;
+    int armorType;
 
-    lv_B3606C7F[0][0] = "dbup_g_stat_str_012";
-    lv_B3606C7F[0][1] = "dbup_g_stat_str_06";
-    lv_B3606C7F[0][2] = "dbup_g_stat_str_11";
-    lv_B3606C7F[0][3] = "dbup_g_stat_str_16";
-    lv_B3606C7F[0][4] = "dbup_g_stat_str_21";
-    lv_B3606C7F[0][5] = "dbup_g_stat_str_26";
-    lv_B3606C7F[0][6] = "dbup_g_stat_str_31";
-    lv_B3606C7F[0][7] = "dbup_g_stat_str_36";
-    lv_B3606C7F[0][8] = "dbup_g_stat_str_41";
-    lv_B3606C7F[0][9] = "dbup_g_stat_str_46";
-    lv_B3606C7F[1][0] = "dbup_g_stat_int_01";
-    lv_B3606C7F[1][1] = "dbup_g_stat_int_06";
-    lv_B3606C7F[1][2] = "dbup_g_stat_int_11";
-    lv_B3606C7F[1][3] = "dbup_g_stat_int_16";
-    lv_B3606C7F[1][4] = "dbup_g_stat_int_21";
-    lv_B3606C7F[1][5] = "dbup_g_stat_int_26";
-    lv_B3606C7F[1][6] = "dbup_g_stat_int_31";
-    lv_B3606C7F[1][7] = "dbup_g_stat_int_36";
-    lv_B3606C7F[1][8] = "dbup_g_stat_int_41";
-    lv_B3606C7F[1][9] = "dbup_g_stat_int_46";
-    lv_E1FEB3A7[0][0] = "dbup_f_stat_str_01";
-    lv_E1FEB3A7[0][1] = "dbup_f_stat_str_06";
-    lv_E1FEB3A7[0][2] = "dbup_f_stat_str_11";
-    lv_E1FEB3A7[0][3] = "dbup_f_stat_str_16";
-    lv_E1FEB3A7[0][4] = "dbup_f_stat_str_21";
-    lv_E1FEB3A7[0][5] = "dbup_f_stat_str_26";
-    lv_E1FEB3A7[0][6] = "dbup_f_stat_str_31";
-    lv_E1FEB3A7[0][7] = "dbup_f_stat_str_36";
-    lv_E1FEB3A7[0][8] = "dbup_f_stat_str_41";
-    lv_E1FEB3A7[0][9] = "dbup_f_stat_str_46";
-    lv_E1FEB3A7[1][0] = "dbup_f_stat_int_01";
-    lv_E1FEB3A7[1][1] = "dbup_f_stat_int_06";
-    lv_E1FEB3A7[1][2] = "dbup_f_stat_int_11";
-    lv_E1FEB3A7[1][3] = "dbup_f_stat_int_16";
-    lv_E1FEB3A7[1][4] = "dbup_f_stat_int_21";
-    lv_E1FEB3A7[1][5] = "dbup_f_stat_int_26";
-    lv_E1FEB3A7[1][6] = "dbup_f_stat_int_31";
-    lv_E1FEB3A7[1][7] = "dbup_f_stat_int_36";
-    lv_E1FEB3A7[1][8] = "dbup_f_stat_int_41";
-    lv_E1FEB3A7[1][9] = "dbup_f_stat_int_46";
-    lv_D280BB95[1][0] = "dbup_f_stat_int_5";
-    lv_D280BB95[1][1] = "dbup_f_stat_int_062";
-    lv_D280BB95[1][2] = "dbup_f_stat_int_112";
-    lv_D280BB95[1][3] = "dbup_f_stat_int_162";
-    lv_D280BB95[1][4] = "dbup_f_stat_int_212";
-    lv_D280BB95[1][5] = "dbup_f_stat_int_262";
-    lv_D280BB95[1][6] = "dbup_f_stat_int_312";
-    lv_D280BB95[1][7] = "dbup_f_stat_int_362";
-    lv_D280BB95[1][8] = "dbup_f_stat_int_412";
-    lv_D280BB95[1][9] = "dbup_f_stat_int_462";
-    lv_99015105[0][0] = "dbup_f_stat_str_012";
-    lv_99015105[0][1] = "dbup_f_stat_str_062";
-    lv_99015105[0][2] = "dbup_f_stat_str_112";
-    lv_99015105[0][3] = "dbup_f_stat_str_162";
-    lv_99015105[0][4] = "dbup_f_stat_str_212";
-    lv_99015105[0][5] = "dbup_f_stat_str_262";
-    lv_99015105[0][6] = "dbup_f_stat_str_312";
-    lv_99015105[0][7] = "dbup_f_stat_str_362";
-    lv_99015105[0][8] = "dbup_f_stat_str_412";
-    lv_99015105[0][9] = "dbup_f_stat_str_462";
-    lv_99015105[1][0] = "dbup_f_stat_int_52";
-    lv_99015105[1][1] = "dbup_f_stat_int_0622";
-    lv_99015105[1][2] = "dbup_f_stat_int_1122";
-    lv_99015105[1][3] = "dbup_f_stat_int_1622";
-    lv_99015105[1][4] = "dbup_f_stat_int_2122";
-    lv_99015105[1][5] = "dbup_f_stat_int_2622";
-    lv_99015105[1][6] = "dbup_f_stat_int_3122";
-    lv_99015105[1][7] = "dbup_f_stat_int_3622";
-    lv_99015105[1][8] = "dbup_f_stat_int_4122";
-    lv_99015105[1][9] = "dbup_f_stat_int_4622";
+    lv_272FC741[0][0] = "dbup_armor_spec";
+    lv_272FC741[0][1] = "dbup_armor_spec2";
+    lv_272FC741[0][2] = "dbup_armor_spec3";
+    lv_272FC741[0][3] = "dbup_armor_spec4";
+    lv_272FC741[0][4] = "dbup_armor_spec5";
+    lv_272FC741[0][5] = "dbup_armor_spec6";
+    lv_272FC741[0][6] = "dbup_armor_spec7";
+    lv_272FC741[0][7] = "dbup_armor_spec8";
+    lv_272FC741[0][8] = "dbup_armor_spec9";
+    lv_272FC741[0][9] = "dbup_armor_spec10";
+    lv_272FC741[1][0] = "dbup_armor2_spec";
+    lv_272FC741[1][1] = "dbup_armor2_spec2";
+    lv_272FC741[1][2] = "dbup_armor2_spec3";
+    lv_272FC741[1][3] = "dbup_armor2_spec4";
+    lv_272FC741[1][4] = "dbup_armor2_spec5";
+    lv_272FC741[1][5] = "dbup_armor2_spec6";
+    lv_272FC741[1][6] = "dbup_armor2_spec7";
+    lv_272FC741[1][7] = "dbup_armor2_spec8";
+    lv_272FC741[1][8] = "dbup_armor2_spec9";
+    lv_272FC741[1][9] = "dbup_armor2_spec10";
 
-    gv_F8080DD9[player][0] = lv_B3606C7F[0][gf_3761C93C(gv_131E8983[player])];
-    gv_F8080DD9[player][1] = lv_B3606C7F[1][gf_3761C93C(gv_131E8983[player])];
-    gv_47EB06F2[player][0] = lv_E1FEB3A7[0][gf_3761C93C(gv_131E8983[player])];
-    gv_47EB06F2[player][1] = lv_E1FEB3A7[1][gf_3761C93C(gv_131E8983[player])];
-    gv_454FA4B8[player][1] = lv_D280BB95[1][gf_3761C93C(gv_131E8983[player])];
-    gv_85488D42[player][1] = lv_99015105[1][gf_3761C93C(gv_131E8983[player])];
-    gv_85488D42[player][0] = lv_99015105[0][gf_3761C93C(gv_131E8983[player])];
+    for (; armorType < 2 ; armorType += 1){
+        if (armorType == 0)
+        {
+            type = 4;
+        }
+        else
+        { 
+            type = 5;
+        }        
 
-    lv_3E40DCEF[0] = "dbup_i_cool_01";
-    lv_3E40DCEF[1] = "dbup_i_cool_06";
-    lv_3E40DCEF[2] = "dbup_i_cool_11";
-    lv_3E40DCEF[3] = "dbup_i_cool_16";
-    lv_3E40DCEF[4] = "dbup_i_cool_21";
-    lv_3E40DCEF[5] = "dbup_i_cool_26";
-    lv_3E40DCEF[6] = "dbup_i_cool_31";
-    lv_3E40DCEF[7] = "dbup_i_cool_36";
-    lv_3E40DCEF[8] = "dbup_i_cool_41";
-    lv_3E40DCEF[9] = "dbup_i_cool_46";
+        //先把科技都重置回来
+        while(gv_D877D515[player][armorType] > DataTableGetInt(true,"playerarmor"+IntToString(type)+"-D"+IntToString(player))){
+            libNtve_gf_SetUpgradeLevelForPlayer(player, lv_272FC741[armorType][gv_D877D515[player][armorType]], 0);
+            gv_D877D515[player][armorType] -= 1;
+            DataTableSetFixed(true,"playerarmor"+IntToString(type)+IntToString(player),
+                DataTableGetFixed(true,"playerarmor"+IntToString(type)+IntToString(player)) - gv_D877D515[player][armorType] * 100);
+        }
 
-    gv_EFE7171B[player] = lv_3E40DCEF[gf_3761C93C(gv_131E8983[player])];
+        gv_9CB902A4[IntLoopCurrent()][type] = DataTableGetFixed(true,"playerarmor"+IntToString(type)+IntToString(player)) / 10;
 
-    lv_96618FF6[0] = "dbup_e_stat_str_01";
-    lv_96618FF6[1] = "dbup_e_stat_str_06";
-    lv_96618FF6[2] = "dbup_e_stat_str_11";
-    lv_96618FF6[3] = "dbup_e_stat_str_16";
-    lv_96618FF6[4] = "dbup_e_stat_str_21";
-    lv_96618FF6[5] = "dbup_e_stat_str_26";
-    lv_96618FF6[6] = "dbup_e_stat_str_31";
-    lv_96618FF6[7] = "dbup_e_stat_str_36";
-    lv_96618FF6[8] = "dbup_e_stat_str_41";
-    lv_96618FF6[9] = "dbup_e_stat_str_46";
+        libNtve_gf_SetUpgradeLevelForPlayer(player, lv_272FC741[armorType][gv_D877D515[player][armorType]], 
+            FixedToInt(DataTableGetFixed(true,"playerarmor"+IntToString(type)+IntToString(player))));
 
-    gv_93D2AA8F[player] = lv_96618FF6[gf_3761C93C(gv_131E8983[player])];
+        //  loggerD(IntToString(FixedToInt(DataTableGetFixed(true,"playerarmor"+IntToString(type)+IntToString(player)))));
+        //  loggerD("------------------------");
+        
+    }
+
 }
 
+//作者把数据都直接写在函数里面了
 void initDataForPlayer(){
     
     //初始化信息
-
     //加点的需要的钱、各种stat值
     TriggerExecute(gt_C7E3A592, false, true);
-    //属性上限
+    TriggerExecute(gt_D16F0461, false, true);
+    //gv_2A156F88 = 1 在init中被设置 判断初始护甲升级让属性数组自增 
+    gv_2A156F88 = 0;
+    IntLoopBegin(1,10);
+    while(!IntLoopDone()){
+        if (IntLoopCurrent() == getPlayerLastPicked() || getPlayerHeroId(IntLoopCurrent()) == 0){
+            IntLoopStep();
+            continue;
+        }
+        
+        DataTableSetFixed(true,"playerarmor4"+IntToString(IntLoopCurrent()),gv_9CB902A4[IntLoopCurrent()][4] * 10);
+        DataTableSetInt(true,"playerarmor4-D"+IntToString(IntLoopCurrent()),gv_D877D515[IntLoopCurrent()][0]);
+        DataTableSetFixed(true,"playerarmor5"+IntToString(IntLoopCurrent()),gv_9CB902A4[IntLoopCurrent()][5] * 10);
+        DataTableSetInt(true,"playerarmor5-D"+IntToString(IntLoopCurrent()),gv_D877D515[IntLoopCurrent()][1]);
+        IntLoopStep();
+    }
+    IntLoopEnd();
+ 
+    //属性上限、初始护甲
     TriggerExecute(gt_84BE2900, false, true);
     TriggerExecute(gt_53B638C3, false, true);
     TriggerExecute(gt_B15050B7, false, true);
+
+    IntLoopBegin(1,10);
+    while(!IntLoopDone()){
+        if (IntLoopCurrent() == getPlayerLastPicked() || getPlayerHeroId(IntLoopCurrent()) == 0){
+            IntLoopStep();
+            continue;
+        }
+        fetchArmorUpgrade(IntLoopCurrent());
+        IntLoopStep();
+    }
+    IntLoopEnd();
+    gv_2A156F88 = 1;
     //技能数据
     TriggerExecute(gt_F00C0934, false, true);
     TriggerExecute(gt_64FBF599, false, true);
@@ -198,8 +169,6 @@ void initDataForPlayer(){
     TriggerExecute(gt_7B46B8A2, false, true);
     TriggerExecute(gt_E09377E6, false, true);
     TriggerExecute(gt_21AB3C1E, false, true);
-  
-    setStatStrsforPlayer(getPlayerLastPicked());
 
 }
 //用于非0回合创建新英雄时无回合升级的问题
@@ -490,33 +459,28 @@ void removeUnitAndReflashPlayer(int player){
         setDummySelected(null);
         return;
     }
-
-    if (upgradeInfo != null){
-        for(i = 1 ; StringWord(upgradeInfo,i) != null ; i += 1){
-            libNtve_gf_SetUpgradeLevelForPlayer(player,StringWord(upgradeInfo,i),0);
-            // loggerD(StringWord(upgradeInfo,i));
-        }
-
-        DataTableSetString(true,upgradeInfoPrefix+IntToString(player),null);
-    }
     
     UnitXPSetXPForLevel(gv_71C054E5[player],"dbdo_ex",1,0);
     //玩家等级
     gv_893C301B[player] = 1;
     //玩家可用技能点
-    gv_63B35897[1] = 0;
-    for (i = 0; i < 5; i+=1){
+    gv_63B35897[player] = 0;
+    for (i = 0; i < 5; i += 1){
         //玩家英雄对应技能等级
-        gv_D0B36B8F[1][i] = 0;       
+        gv_D0B36B8F[player][i] = 0;       
         if (i < 4){
             storeUpgradeBtn(player,i,false);
             upgradeBtnShow(i,false,testModePlayerGroup);
             //玩家英雄技能上次升级对应的玩家英雄等级
-            gv_203166CD[1][i] = 0;
+            gv_203166CD[player][i] = 0;
             //判断英雄技能是否学习过
-            gv_5DDEB9BD[1][i] = 0;
+            gv_5DDEB9BD[player][i] = 0;
         }
     }
+
+    gv_55A8AB50[player] -= 1;
+    //两边队伍剩余人数
+    gv_48E7CC05[gv_9EEEA78D[player]] -= 1;
 
     for (i = 0 ; i < 5 ; i +=1){
         for (j = 0 ; j < 18 ; j+=1){
@@ -549,6 +513,13 @@ void removeUnitAndReflashPlayer(int player){
         UnitBehaviorRemove(gv_71C054E5[player],UnitBehaviorGet(gv_71C054E5[player],i),UnitBehaviorCount(gv_71C054E5[player],UnitBehaviorGet(gv_71C054E5[player],i)));
     }
     
+    if (upgradeInfo != null){
+        for(i = 1 ; StringWord(upgradeInfo,i) != null ; i += 1){
+            libNtve_gf_SetUpgradeLevelForPlayer(player,StringWord(upgradeInfo,i),0);
+            // loggerD(StringWord(upgradeInfo,i));
+        }
+        DataTableSetString(true,upgradeInfoPrefix+IntToString(player),null);
+    }
 
     if (getPlayerHeroId(player) == 8){
         libNtve_gf_ShowHideUnit(gv_E7EDB9D8[player],false);
@@ -564,19 +535,16 @@ void removeUnitAndReflashPlayer(int player){
     }else {
         UnitRemove(gv_71C054E5[player]);
     }
+
     UnitSelect(gv_71C054E5[player],testModePlayer,false);
 
     setTestPlayerCurrentSelectedUnit(null);
     gv_71C054E5[player] = null;
     gv_131E8983[player] = 0;
 
-
     DialogSetVisible(gv_5C4043F8.lv_B91A282D, testModePlayerGroup, false);
     DialogSetVisible(gv_598EC0B1, testModePlayerGroup, false);
     DialogSetVisible(gv_5C4043F8.lv_8DEC25E2, testModePlayerGroup, false);
-    DialogSetVisible(gv_5C4043F8.lv_AF2E051A, testModePlayerGroup, false);
-
-
-    
+    DialogSetVisible(gv_5C4043F8.lv_AF2E051A, testModePlayerGroup, false);    
 }
 

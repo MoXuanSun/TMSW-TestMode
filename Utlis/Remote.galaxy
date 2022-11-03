@@ -1,0 +1,162 @@
+//GongSun_ink
+
+//修复先代q
+//如果玩家1控制玩家2释放了技能A进而使用了效果a,会算作玩家1使用了效果a
+
+// //修改EventPlayerEffectUsedUnitOwner(c_effectPlayerCaster) 为 UnitGetOwner(getTestPlayerCurrentSelectedUnit())
+// bool leeSinAbilQ(bool r, bool t){
+//     int lv_0590988D;
+//     bool lv_9B38256B;
+//     string auto4DE40D9A_val;
+//     const int auto180388F2_ae = 22;
+//     const int auto180388F2_ai = 1;
+//     const int auto754D0600_ae = 360;
+//     const int auto754D0600_ai = 1;
+    
+//     int remotingPlayer = UnitGetOwner(getTestPlayerCurrentSelectedUnit());
+
+//     auto4DE40D9A_val = EventPlayerEffectUsed();
+//     //q1段
+//     if (auto4DE40D9A_val == "dbhy_35_1_1q_00")
+//     {
+//         if ((UnitBehaviorCount(gv_71C054E5[remotingPlayer], "dbdo35_1_0t") == 1))
+//         {
+//             UnitCreateEffectUnit(gv_71C054E5[remotingPlayer], "dbhy_35_1_1q_06", gv_71C054E5[remotingPlayer]);
+//             UnitCreateEffectUnit(EventPlayerEffectUsedUnit(c_effectUnitCaster), "hy_a_won_1j4sec322", EventPlayerEffectUsedUnit(c_effectUnitCaster));
+//         }
+//         if ((UnitIsAlive(EventPlayerEffectUsedUnit(c_effectUnitTarget)) == true) && (UnitBehaviorCount(EventPlayerEffectUsedUnit(c_effectUnitTarget), "jocuser") == 0))
+//         {
+//             gv_A1F896F9[remotingPlayer] = EventPlayerEffectUsedUnit(c_effectUnitTarget);
+//             //解锁二段q
+//             UnitBehaviorAdd(gv_71C054E5[remotingPlayer], "dbdo35_1_1q_00", gv_71C054E5[remotingPlayer], 1);
+//             lv_0590988D = 1;
+//             for (; ((auto180388F2_ai >= 0 && lv_0590988D <= auto180388F2_ae) || (auto180388F2_ai < 0 && lv_0590988D >= auto180388F2_ae)); lv_0590988D += auto180388F2_ai)
+//             {
+//                 Wait(0.245, c_timeGame);
+//                 if (((UnitBehaviorCount(gv_71C054E5[remotingPlayer], "dbdo35_1_1q_00") == 0) || (UnitIsAlive(EventPlayerEffectUsedUnit(c_effectUnitTarget)) == false) || (UnitBehaviorCount(EventPlayerEffectUsedUnit(c_effectUnitTarget), "jocuser") == 1)))
+//                 {
+//                     UnitBehaviorRemove(gv_71C054E5[remotingPlayer], "dbdo35_1_1q_00", 1);
+//                     break;
+//                 }
+//             }
+//         }
+//     }
+//     //q2段
+//     else if (auto4DE40D9A_val == "dbhy_35_1_1q_02")
+//     {
+//         UnitBehaviorRemove(EventPlayerEffectUsedUnit(c_effectUnitCaster), "dbdo35_1_1q_00", 1);
+//         if ((UnitIsAlive(gv_A1F896F9[remotingPlayer]) == true) && (UnitBehaviorCount(gv_A1F896F9[remotingPlayer], "jocuser") == 0))
+//         {
+//             UnitBehaviorAdd(gv_A1F896F9[remotingPlayer], "dbdo35_1_1q_01", gv_A1F896F9[remotingPlayer], 1);
+//             UnitBehaviorRemove(gv_A1F896F9[remotingPlayer], "dbdo35_1_1q", 1);
+//             //更改单位属性
+//             CatalogFieldValueSet(c_gameCatalogUnit, "dbHero35", "Mover", remotingPlayer, "FlyMikos");
+//             UnitIssueOrder(EventPlayerEffectUsedUnit(c_effectUnitCaster), OrderTargetingUnit(AbilityCommand("move", 0), gv_A1F896F9[remotingPlayer]), c_orderQueueReplace);
+//             UnitBehaviorAdd(EventPlayerEffectUsedUnit(c_effectUnitCaster), "dbdo35_1_1q_03", EventPlayerEffectUsedUnit(c_effectUnitCaster), 1);
+//             libNtve_gf_MakeUnitFacePoint(EventPlayerEffectUsedUnit(c_effectUnitCaster), UnitGetPosition(gv_A1F896F9[remotingPlayer]), 0.0);
+//             UnitIssueOrder(EventPlayerEffectUsedUnit(c_effectUnitCaster), OrderTargetingUnit(AbilityCommand("move", 0), gv_A1F896F9[remotingPlayer]), c_orderQueueReplace);
+//             lv_0590988D = 1;
+//             for (; ((auto754D0600_ai >= 0 && lv_0590988D <= auto754D0600_ae) || (auto754D0600_ai < 0 && lv_0590988D >= auto754D0600_ae)); lv_0590988D += auto754D0600_ai)
+//             {
+//                 if ((UnitIsAlive(gv_A1F896F9[remotingPlayer]) == true) && (UnitBehaviorCount(gv_A1F896F9[remotingPlayer], "jocuser") == 0) && (UnitBehaviorCount(EventPlayerEffectUsedUnit(c_effectUnitCaster), "dbdo35_1_1q_03") == 1))
+//                 {
+//                     if ((DistanceBetweenPoints(UnitGetPosition(EventPlayerEffectUsedUnit(c_effectUnitCaster)), UnitGetPosition(gv_A1F896F9[remotingPlayer])) <= 2.0))
+//                     {
+//                         lv_9B38256B = true;
+//                         UnitCreateEffectUnit(EventPlayerEffectUsedUnit(c_effectUnitCaster), "dbhy_35_1_4r_06", EventPlayerEffectUsedUnit(c_effectUnitCaster));
+//                         gf_E6E46441(EventPlayerEffectUsedUnit(c_effectUnitCaster));
+//                         UnitSetPosition(EventPlayerEffectUsedUnit(c_effectUnitCaster), PointWithOffsetPolar(UnitGetPosition(gv_A1F896F9[EventPlayerEffectUsedUnitOwner(c_effectPlayerOrigin)]), 0.95, AngleBetweenPoints(UnitGetPosition(gv_A1F896F9[remotingPlayer]), UnitGetPosition(EventPlayerEffectUsedUnit(c_effectUnitCaster)))), false);
+//                         UnitIssueOrder(EventPlayerEffectUsedUnit(c_effectUnitCaster), OrderTargetingUnit(AbilityCommand("attack", 0), gv_A1F896F9[remotingPlayer]), c_orderQueueReplace);
+//                         UnitCreateEffectUnit(EventPlayerEffectUsedUnit(c_effectUnitCaster), "dbhy_35_1_1q_04", gv_A1F896F9[remotingPlayer]);
+//                         break;
+//                     }
+//                     else
+//                     {
+//                         if ((UnitBehaviorCount(EventPlayerEffectUsedUnit(c_effectUnitCaster), "dbdo35_1_1q_03") == 1))
+//                         {
+//                             UnitIssueOrder(EventPlayerEffectUsedUnit(c_effectUnitCaster), OrderTargetingUnit(AbilityCommand("move", 0), gv_A1F896F9[remotingPlayer]), c_orderQueueReplace);
+//                         }
+//                         Wait(0.077, c_timeGame);
+//                     }
+//                 }
+//                 else
+//                 {
+//                     lv_9B38256B = true;
+//                     gf_E6E46441(EventPlayerEffectUsedUnit(c_effectUnitCaster));
+//                     break;
+//                 }
+//             }
+//         }
+//         if ((lv_9B38256B == false))
+//         {
+//             gf_E6E46441(EventPlayerEffectUsedUnit(c_effectUnitCaster));
+//         }
+//     }
+//     else if (auto4DE40D9A_val == "dbhy_35_1_2w_08")
+//     {
+//         gf_E6E46441(EventPlayerEffectUsedUnit(c_effectUnitCaster));
+//     }
+//     else
+//     {
+//     }    
+//     return true;
+// }
+
+//先击晕 然后在通过unitissue释放技能 这样就可以避免玩家1控制玩家2释放技能后，发射物是玩家1的
+bool leeSinAbilQUnit(bool r, bool t){
+    int remotingPlayer = UnitGetOwner(getTestPlayerCurrentSelectedUnit());
+    //敌方
+    if (remotingPlayer > 1){
+        //击晕 打断技能
+        UnitBehaviorAdd(EventUnit(),"DragStun",EventUnit(),1);
+        Wait(0.0625,c_timeGame);
+        UnitBehaviorRemove(EventUnit(),"DragStun",1);
+        UnitIssueOrder(EventUnit(),OrderTargetingPoint(AbilityCommand("dbnu35_1_1q",0),
+            OrderGetTargetPoint(EventUnitOrder())),c_orderQueueReplace);
+        //关闭触发器防止循环调用
+        TriggerEnable(TriggerGetCurrent(),false);
+        Wait(0.625,c_timeGame);
+        TriggerEnable(TriggerGetCurrent(),true);
+        return true;
+    }
+    
+
+    return true;
+}
+
+bool tuziAbliQ(bool test_conds, bool run_actions){
+
+    int remotingPlayer = UnitGetOwner(getTestPlayerCurrentSelectedUnit());
+    //敌方
+    if (remotingPlayer > 1){
+        //击晕 打断技能
+        UnitBehaviorAdd(EventUnit(),"DragStun",EventUnit(),1);
+        Wait(0.0625,c_timeGame);
+        UnitBehaviorRemove(EventUnit(),"DragStun",1);
+        UnitIssueOrder(EventUnit(),OrderTargetingPoint(AbilityCommand("dbnu07_2_1q",0),
+            OrderGetTargetPoint(EventUnitOrder())),c_orderQueueReplace);
+        //关闭触发器防止循环调用
+        TriggerEnable(TriggerGetCurrent(),false);
+        Wait(0.625,c_timeGame);
+        TriggerEnable(TriggerGetCurrent(),true);
+        return true;
+    }
+    return true;
+}
+
+void initRemote(){
+    
+    // trigger t = TriggerCreate("leeSinAbilQ");
+    trigger t1 = TriggerCreate("leeSinAbilQUnit");
+    trigger t2 = TriggerCreate("tuziAbliQ");
+
+    // TriggerAddEventPlayerEffectUsed(t, c_playerAny, "dbhy_35_1_1q_00");
+    // TriggerAddEventPlayerEffectUsed(t, c_playerAny, "dbhy_35_1_1q_02");
+    // TriggerAddEventPlayerEffectUsed(t, c_playerAny, "dbhy_35_1_2w_08");
+
+    // TriggerAddEventUnitBehaviorChange(t1,null,"dbdo35_1_1q_02",c_unitBehaviorChangeAny);
+    
+    TriggerAddEventUnitOrder(t1,null,AbilityCommand("dbnu35_1_1q",0));
+    TriggerAddEventUnitOrder(t2,null,AbilityCommand("dbnu07_2_1q",0));
+
+}
