@@ -6,7 +6,7 @@ bool onEffectUnitDie(bool r, bool t){
     UnitKill(UnitLastCreated());
     
     Wait(2.0,c_timeGame);
-    UnitBehaviorRemove(eUnit, "nodie2", 1);
+    // UnitBehaviorRemove(eUnit, "nodie2", 1);
     UnitBehaviorRemove(eUnit, "jocuser", 1);
     UnitBehaviorRemove(eUnit, "nodie24res2", 1);
     libNtve_gf_MakeUnitInvulnerable(eUnit, false);

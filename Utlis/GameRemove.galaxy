@@ -4,13 +4,14 @@ bool onUpgradeLevelChanged(bool r, bool t){
     int i;
     string upgradeInfo = DataTableGetString(true,upgradeInfoPrefix+IntToString(EventPlayer()));
 
+    if (EventUpgradeLevelDelta() <= 0){
+        return true;
+    }
+
     if (EventPlayer() == 0 || EventPlayer() > 10){
         return true;
     }
    
-    if (EventUpgradeLevelDelta() <= 0){
-        return true;
-    }
 
     if (upgradeInfo != null){
         for(i = 1 ; StringWord(upgradeInfo,i) != null ; i += 1){

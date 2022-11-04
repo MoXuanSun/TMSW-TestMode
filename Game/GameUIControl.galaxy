@@ -82,6 +82,7 @@ void talentSelectUI(int row, int column, bool select, playergroup p){
             libNtve_gf_SetDialogItemImage(gv_BB156610.lv_DEE7AA8A[column][row], "character\\newroon\\border\\my_roon_system_border_4_teal.dds", p);
             libNtve_gf_SetDialogItemColor(gv_BB156610.lv_48C4BDD0[column][row], Color(70.98, 93.33, 98.43), p);
         }
+        //辉光效果
         DialogControlSetVisible(gv_BB156610.lv_51B06619[column][row], p, false);
     }
 }

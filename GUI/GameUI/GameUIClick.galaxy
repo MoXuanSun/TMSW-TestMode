@@ -172,10 +172,10 @@ bool onUnitClick(bool t, bool r){
     }
     
     if (getTestPlayerCurrentSelectedUnit() != null){
+        
          //取消选择
         UnitSelect(getTestPlayerCurrentSelectedUnit(), testModePlayer, false);
-        //移除不可选中效果
-        UnitBehaviorRemove(eUnit, "nodie2", 1);
+        
         UIAlertUnit("MyClickLocations", testModePlayer, EMP_TEXT, null, eUnit);
         storeUpgradeBtns(UnitGetOwner(getTestPlayerCurrentSelectedUnit()));
         
@@ -189,9 +189,13 @@ bool onUnitClick(bool t, bool r){
     }
     //--------------------------
     //选择新单位
+    //移除不可选中行为 这个行为绑定了攻击距离升级 不能移除
+    UnitBehaviorRemove(eUnit, "nodie2", 1);
     libNtve_gf_ShareVisionofUnit(getTestPlayerCurrentSelectedUnit(),false,testModePlayer);
     UnitSelect(eUnit, testModePlayer, true);
     setTestPlayerCurrentSelectedUnit(eUnit);
+    //添加不可选中行为
+    UnitBehaviorAdd(eUnit, "nodie2",eUnit, 1);
 
     updatePropBtn(newUnitOwner,testModePlayerGroup);
     updateFullGameUI(newUnitOwner,testModePlayerGroup);

@@ -1,4 +1,6 @@
 //GongSun_ink 2022
+
+//天赋选择
 void talentSelectData(int row, int column, bool select, int player){
     gv_BB156610.lv_48849745[player][column][row] = select;
 }
@@ -109,24 +111,30 @@ void fetchArmorUpgrade(int player){
 
         gv_9CB902A4[IntLoopCurrent()][type] = DataTableGetFixed(true,"playerarmor"+IntToString(type)+IntToString(player)) / 10;
 
+
         libNtve_gf_SetUpgradeLevelForPlayer(player, lv_272FC741[armorType][gv_D877D515[player][armorType]], 
-            FixedToInt(DataTableGetFixed(true,"playerarmor"+IntToString(type)+IntToString(player))));
+            FixedToInt(DataTableGetFixed(true,"playerarmor"+IntToString(type)+IntToString(player))) % 100);
 
         //  loggerD(IntToString(FixedToInt(DataTableGetFixed(true,"playerarmor"+IntToString(type)+IntToString(player)))));
+        //  loggerD(IntToString(FixedToInt(gv_9CB902A4[IntLoopCurrent()][type])));
         //  loggerD("------------------------");
         
     }
 
 }
 
-//作者把数据都直接写在函数里面了
 void initDataForPlayer(){
     
+    int i;
     //初始化信息
     //加点的需要的钱、各种stat值
     TriggerExecute(gt_C7E3A592, false, true);
     TriggerExecute(gt_D16F0461, false, true);
+
+    //不重写这些数据，为了防止变动，作者把数据都直接写在函数里面了
+
     //gv_2A156F88 = 1 在init中被设置 判断初始护甲升级让属性数组自增 
+
     gv_2A156F88 = 0;
     IntLoopBegin(1,10);
     while(!IntLoopDone()){
@@ -134,11 +142,25 @@ void initDataForPlayer(){
             IntLoopStep();
             continue;
         }
+
+        //这些只是数值有问题
+        //ap 没有初始带ap的英雄
+        // DataTableSetFixed(true,"playerProp"+IntToString(3)+IntToString(getPlayerLastPicked()),gv_9CB902A4[IntLoopCurrent()][3]);
+        //攻速
+        DataTableSetFixed(true,"playerProp"+IntToString(6)+IntToString(getPlayerLastPicked()),gv_9CB902A4[IntLoopCurrent()][6]);
+        //法抗
+        DataTableSetFixed(true,"playerProp"+IntToString(8)+IntToString(getPlayerLastPicked()),gv_9CB902A4[IntLoopCurrent()][8]);
+        //冷却 初始也没有冷却
+        // DataTableSetFixed(true,"playerProp"+IntToString(9)+IntToString(getPlayerLastPicked()),gv_9CB902A4[IntLoopCurrent()][9]);
+
+        for (i = 0 ; i < 8 ; i += 1){
+            DataTableSetFixed(true,"playerarmor4"+IntToString(IntLoopCurrent()),gv_9CB902A4[IntLoopCurrent()][4] * 10);
+            DataTableSetInt(true,"playerarmor4-D"+IntToString(IntLoopCurrent()),gv_D877D515[IntLoopCurrent()][0]);
+            DataTableSetFixed(true,"playerarmor5"+IntToString(IntLoopCurrent()),gv_9CB902A4[IntLoopCurrent()][5] * 10);
+            DataTableSetInt(true,"playerarmor5-D"+IntToString(IntLoopCurrent()),gv_D877D515[IntLoopCurrent()][1]);
+        }
+       
         
-        DataTableSetFixed(true,"playerarmor4"+IntToString(IntLoopCurrent()),gv_9CB902A4[IntLoopCurrent()][4] * 10);
-        DataTableSetInt(true,"playerarmor4-D"+IntToString(IntLoopCurrent()),gv_D877D515[IntLoopCurrent()][0]);
-        DataTableSetFixed(true,"playerarmor5"+IntToString(IntLoopCurrent()),gv_9CB902A4[IntLoopCurrent()][5] * 10);
-        DataTableSetInt(true,"playerarmor5-D"+IntToString(IntLoopCurrent()),gv_D877D515[IntLoopCurrent()][1]);
         IntLoopStep();
     }
     IntLoopEnd();
@@ -154,6 +176,13 @@ void initDataForPlayer(){
             IntLoopStep();
             continue;
         }
+
+        // gv_9CB902A4[IntLoopCurrent()][3] = DataTableGetFixed(true,"playerProp"+IntToString(3)+IntToString(getPlayerLastPicked()));
+        gv_9CB902A4[IntLoopCurrent()][6] = DataTableGetFixed(true,"playerProp"+IntToString(6)+IntToString(getPlayerLastPicked()));
+        gv_9CB902A4[IntLoopCurrent()][8] = DataTableGetFixed(true,"playerProp"+IntToString(8)+IntToString(getPlayerLastPicked()));
+        // gv_9CB902A4[IntLoopCurrent()][9] = DataTableGetFixed(true,"playerProp"+IntToString(9)+IntToString(getPlayerLastPicked()));
+
+        debug(IntToString(IntLoopCurrent()));
         fetchArmorUpgrade(IntLoopCurrent());
         IntLoopStep();
     }
@@ -169,6 +198,11 @@ void initDataForPlayer(){
     TriggerExecute(gt_7B46B8A2, false, true);
     TriggerExecute(gt_E09377E6, false, true);
     TriggerExecute(gt_21AB3C1E, false, true);
+
+    //血量上限 fixed->int 
+    gf_5B3578B1();    
+    //更新远程英雄为true
+    gf_5B3968D5();
 
 }
 //用于非0回合创建新英雄时无回合升级的问题
@@ -529,7 +563,7 @@ void removeUnitAndReflashPlayer(int player){
         libNtve_gf_ShowHideUnit(gv_71C054E5[player],false);
         
         UnitSetPosition(gv_71C054E5[player],UnitGetPosition(UnitFromId(1587265046)),false);
-        UnitBehaviorAdd(gv_71C054E5[player],"nodie2",gv_71C054E5[player],1);   
+        // UnitBehaviorAdd(gv_71C054E5[player],"nodie2",gv_71C054E5[player],1);   
         UnitBehaviorAdd(gv_71C054E5[player],"nodie2res",gv_71C054E5[player],1);   
         libNtve_gf_PauseUnit(gv_71C054E5[player],true);
     }else {

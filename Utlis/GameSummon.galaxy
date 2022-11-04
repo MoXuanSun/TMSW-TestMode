@@ -71,6 +71,8 @@ void playerSummonHero(){
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "dbdo_ex", playerId, 1);
             
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie", playerId, 1);
+    //这个行为居然还绑定了射程升级。。。大坑啊
+    UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie2", playerId, 1);
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie4", playerId, 1);
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie42", playerId, 1);
 
@@ -216,10 +218,7 @@ void playerSummonHero(){
     {
         UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropEnergyPercent, 0.0);
     }
-    //血量上限 fixed->int 
-    gf_5B3578B1();    
-    //更新远程英雄为true
-    gf_5B3968D5();
+ 
     //更新Tab
     TriggerExecute(gt_EFE165C0,false,true);
 }
