@@ -221,6 +221,12 @@ void playerSummonHero(){
  
     //更新Tab
     TriggerExecute(gt_EFE165C0,false,true);
+
+
+    //血量上限 fixed->int 
+    gf_5B3578B1();    
+    //更新远程英雄为true
+    gf_5B3968D5();
 }
 
 void summonDummy(point p){

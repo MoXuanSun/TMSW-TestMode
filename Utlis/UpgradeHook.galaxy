@@ -119,7 +119,8 @@ bool onUpgradeHotKey(bool t, bool r){
     }
 
     //技能
-    if ((EventKeyAlt() || EventKeyControl()) && (eKey == c_keyQ || eKey == c_keyW || eKey == c_keyE || eKey == c_keyR)
+    if ((EventKeyAlt() || EventKeyControl()) && 
+            (eKey == c_keyQ || eKey == c_keyW || eKey == c_keyE || eKey == c_keyR)
             && (gv_63B35897[currentRemotingPlayer] > 0) 
             && (DialogControlIsVisible(gv_99F9B79B[0], testModePlayer)
             || DialogControlIsVisible(gv_99F9B79B[1], testModePlayer)

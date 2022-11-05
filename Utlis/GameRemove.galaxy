@@ -20,7 +20,6 @@ bool onUpgradeLevelChanged(bool r, bool t){
            }
        }
    }
-
   
     // loggerD("=================================="+IntToString(EventPlayer()));
     // loggerD(EventUpgradeName());

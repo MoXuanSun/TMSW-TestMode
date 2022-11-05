@@ -182,7 +182,7 @@ void initDataForPlayer(){
         gv_9CB902A4[IntLoopCurrent()][8] = DataTableGetFixed(true,"playerProp"+IntToString(8)+IntToString(getPlayerLastPicked()));
         // gv_9CB902A4[IntLoopCurrent()][9] = DataTableGetFixed(true,"playerProp"+IntToString(9)+IntToString(getPlayerLastPicked()));
 
-        debug(IntToString(IntLoopCurrent()));
+        // debug(IntToString(IntLoopCurrent()));
         fetchArmorUpgrade(IntLoopCurrent());
         IntLoopStep();
     }
@@ -198,11 +198,6 @@ void initDataForPlayer(){
     TriggerExecute(gt_7B46B8A2, false, true);
     TriggerExecute(gt_E09377E6, false, true);
     TriggerExecute(gt_21AB3C1E, false, true);
-
-    //血量上限 fixed->int 
-    gf_5B3578B1();    
-    //更新远程英雄为true
-    gf_5B3968D5();
 
 }
 //用于非0回合创建新英雄时无回合升级的问题

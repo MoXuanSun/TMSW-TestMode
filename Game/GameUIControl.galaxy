@@ -393,7 +393,8 @@ void GamePanelShow(int type, bool show, playergroup p){
         }
 
         DialogControlSetVisible(SELECT_BTN, p, show);
-
+        DialogSetPositionRelative(DialogLastCreated(), c_anchorCenter, gv_BB156610.lv_5C8CC8E9[2], c_anchorTop, 0, -100);
+        
         DialogSetVisible(gv_BB156610.lv_5C8CC8E9[0], p, show);
         DialogSetVisible(gv_BB156610.lv_5C8CC8E9[1], p, show);
         DialogSetVisible(gv_BB156610.lv_5C8CC8E9[2], p, show);
