@@ -13,8 +13,7 @@ bool bugAbilRemote(bool r, bool t){
         Wait(0.0625,c_timeGame);
         UnitBehaviorRemove(EventUnit(),"DragStun",1);
 
-        
-        
+    
         if (OrderGetTargetPoint(EventUnitOrder()) == null){
             UnitIssueOrder(EventUnit(),OrderTargetingUnit(OrderGetAbilityCommand(EventUnitOrder()),
             OrderGetTargetUnit(EventUnitOrder())),c_orderQueueReplace);

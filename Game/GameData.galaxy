@@ -309,7 +309,7 @@ void fetchPlayerToCurrentRound(int player){
         }
 
         //经验值诈骗
-        if ((i != 0) || (i != 1) || (i != 2)){
+        if (i > 2){
             PlayerCreateEffectUnit(player, "dbhy_00_0622322", gv_71C054E5[player]);
         }
     }

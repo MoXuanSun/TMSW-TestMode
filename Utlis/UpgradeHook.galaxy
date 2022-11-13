@@ -5,19 +5,19 @@
 //3.英雄升级时，展示升级按钮(由于必须选中才能升级，所以不需要判断是否选中)
 //4.一次升级后如果有多余的升级点，则再次展示升级按钮
 
-bool lock;
+bool tmUIlock;
 
 bool tryLock(){
-    // Wait(0.625,c_timeGame);
-    if (!lock){
-        lock = true;
+    Wait(0.0625,c_timeGame);
+    if (!tmUIlock){
+        tmUIlock = true;
         return true;
     }
     return false;
 }
 
 void unLock(){
-    lock = false;
+    tmUIlock = false;
 }
 
 void refractUpgradeBtns(int player, playergroup p){
@@ -91,8 +91,13 @@ bool btnClickHook(bool t, bool r){
             (edialogControl == gv_F4E2C4A0[0][14])){
 
             i = gf_9C62D140(edialogControl);
-
+            DialogControlSetEnabled(gv_F4E2C4A0[0][i], testModePlayerGroup, false);
+            DialogControlSetEnabled(gv_F4E2C4A0[1][i], testModePlayerGroup, false);
+            DialogControlSetEnabled(gv_F4E2C4A0[2][i], testModePlayerGroup, false);
             gf_18957680(currentRemotingPlayer, edialogControl);
+            DialogControlSetEnabled(gv_F4E2C4A0[0][i], testModePlayerGroup, true);
+            DialogControlSetEnabled(gv_F4E2C4A0[1][i], testModePlayerGroup, true);
+            DialogControlSetEnabled(gv_F4E2C4A0[2][i], testModePlayerGroup, true);
 
             updateFullGameUI(currentRemotingPlayer,testModePlayerGroup);
             updatePropBtn(currentRemotingPlayer,testModePlayerGroup);
@@ -120,13 +125,13 @@ bool onUpgradeHotKey(bool t, bool r){
 
     //技能
     if ((EventKeyAlt() || EventKeyControl()) && 
-            (eKey == c_keyQ || eKey == c_keyW || eKey == c_keyE || eKey == c_keyR)
-            && (gv_63B35897[currentRemotingPlayer] > 0) 
-            && (DialogControlIsVisible(gv_99F9B79B[0], testModePlayer)
-            || DialogControlIsVisible(gv_99F9B79B[1], testModePlayer)
-            || DialogControlIsVisible(gv_99F9B79B[2], testModePlayer)
-            || DialogControlIsVisible(gv_99F9B79B[3], testModePlayer))
-        ){
+            (eKey == c_keyQ || eKey == c_keyW || eKey == c_keyE || eKey == c_keyR)&& 
+            (gv_63B35897[currentRemotingPlayer] > 0) && (
+            DialogControlIsVisible(gv_99F9B79B[0], testModePlayer) || 
+            DialogControlIsVisible(gv_99F9B79B[1], testModePlayer) || 
+            DialogControlIsVisible(gv_99F9B79B[2], testModePlayer) || 
+            DialogControlIsVisible(gv_99F9B79B[3], testModePlayer)
+        )){
             if (eKey == c_keyQ)
             {
                 i = 0;
@@ -214,6 +219,9 @@ bool onUpgradeHotKey(bool t, bool r){
         else if (eKey == c_key5)
         {
             i = gv_288042C5.lv_235E8DEB;
+        }else {
+            unLock();
+            return true;
         }
 
         if (i == gv_288042C5.lv_756C1089)
@@ -270,7 +278,13 @@ bool onUpgradeHotKey(bool t, bool r){
         }
         if ((flag == true))
         {
+            DialogControlSetEnabled(gv_F4E2C4A0[0][i], testModePlayerGroup, false);
+            DialogControlSetEnabled(gv_F4E2C4A0[1][i], testModePlayerGroup, false);
+            DialogControlSetEnabled(gv_F4E2C4A0[2][i], testModePlayerGroup, false);
             gf_18957680(currentRemotingPlayer, gv_F4E2C4A0[0][i]);
+            DialogControlSetEnabled(gv_F4E2C4A0[0][i], testModePlayerGroup, true);
+            DialogControlSetEnabled(gv_F4E2C4A0[1][i], testModePlayerGroup, true);
+            DialogControlSetEnabled(gv_F4E2C4A0[2][i], testModePlayerGroup, true);
         }
         updatePropBtn(currentRemotingPlayer,testModePlayerGroup);
     }

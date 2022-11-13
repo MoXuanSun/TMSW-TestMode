@@ -1,12 +1,8 @@
 //GongSun_ink 2022
 
-//--------------------------------------------------------------------------------------------------------------
-
 //最开始调用
 void onPreInit(){
-
     DEFAULTS.DEFAULT_PLAYERGROUP = testModePlayerGroup;
-    
 }
 
 //初始化测试模式数据
@@ -48,14 +44,15 @@ void onPostInit(){
         "Q:等级到了，但是没有显示升级按钮?\n"+
         "A:点击一下英雄即可\n"+
         "Q:属性加点出现错误\n"+
-        "A:同上，点击一下英雄，刷新一次\n");
+        "A:同上，点击一下英雄，刷新一次\n"+
+        "TMSW-TestModule https://github.com/MoXuanSun/TMSW-TestMode");
 
-  //显示frame
-  UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeHelpMenuButton, true);
-  UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeTipAlertPanel, true);
+    //显示frame
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeHelpMenuButton, true);
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeTipAlertPanel, true);
 
-  showMsg(1,TextToString(TextWithColor(PlayerName(1),libNtve_gf_ConvertPlayerColorToColor(PlayerGetColorIndex(1,false)))+
-      StringToText("，欢迎来到测试模式！请按F12查看帮助")));
+    showMsg(1,TextToString(TextWithColor(PlayerName(1),libNtve_gf_ConvertPlayerColorToColor(PlayerGetColorIndex(1,false)))+
+        StringToText("，欢迎来到测试模式！请按F12查看帮助")));
 
     HelpPanelAddTip(PlayerGroupAll(), 
         libNtve_gf_FormatTipTitle(StringToText("帮助"), libNtve_ge_TipType_NormalTip), 
