@@ -27,6 +27,8 @@ void onInit(){
 
     disableTriggers();
     resortTriggerExecutingQueue();
+
+    initialHeroSelect();
    
 }
 

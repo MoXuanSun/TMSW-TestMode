@@ -102,8 +102,39 @@ bool btnClickHook(bool t, bool r){
             updateFullGameUI(currentRemotingPlayer,testModePlayerGroup);
             updatePropBtn(currentRemotingPlayer,testModePlayerGroup);
         }   
-
-
+    //修复皮肤无法选择bug
+    else if (edialogControl == gv_7A5E22CF){
+        //皮肤英雄选择
+        if (((DialogControlGetSelectedItem(gv_7A5E22CF, testModePlayer) == 3) || (DialogControlGetSelectedItem(gv_7A5E22CF, testModePlayer) == 4) || (DialogControlGetSelectedItem(gv_7A5E22CF, testModePlayer) == 15) || (DialogControlGetSelectedItem(gv_7A5E22CF, testModePlayer) == 17)))
+        {
+            gv_E48017C5[currentRemotingPlayer][1] = 0;
+            gf_92233EB5(currentRemotingPlayer, 7, 0);
+            i = DialogControlGetSelectedItem(gv_7A5E22CF, currentRemotingPlayer);
+            if (i == 3)
+            {
+                gv_E48017C5[currentRemotingPlayer][0] = 3;
+            }
+            else if (i == 4)
+            {
+                gv_E48017C5[currentRemotingPlayer][0] = 4;
+            }
+            else if (i == 15)
+            {
+                gv_E48017C5[currentRemotingPlayer][0] = 15;
+            }
+            else if (i == 17)
+            {
+                gv_E48017C5[currentRemotingPlayer][0] = 17;
+            }
+            else
+            {
+            }
+            gf_92233EB5(currentRemotingPlayer, 5, 0);
+            gf_92233EB5(currentRemotingPlayer, 6, 0);
+            
+        }
+        
+    }
     else {
         TriggerExecute(gt_B5F15D4C,false,true);
     }
@@ -126,12 +157,8 @@ bool onUpgradeHotKey(bool t, bool r){
     //技能
     if ((EventKeyAlt() || EventKeyControl()) && 
             (eKey == c_keyQ || eKey == c_keyW || eKey == c_keyE || eKey == c_keyR)&& 
-            (gv_63B35897[currentRemotingPlayer] > 0) && (
-            DialogControlIsVisible(gv_99F9B79B[0], testModePlayer) || 
-            DialogControlIsVisible(gv_99F9B79B[1], testModePlayer) || 
-            DialogControlIsVisible(gv_99F9B79B[2], testModePlayer) || 
-            DialogControlIsVisible(gv_99F9B79B[3], testModePlayer)
-        )){
+            (gv_63B35897[currentRemotingPlayer] > 0)
+        ){
             if (eKey == c_keyQ)
             {
                 i = 0;
@@ -300,6 +327,7 @@ void initUpgradeHooker(){
     trigger t3 = TriggerCreate("onUpgradeHotKey");
 
     TriggerAddEventDialogControl(t1,c_playerAny,c_invalidDialogControlId,c_triggerControlEventTypeClick);
+    TriggerAddEventDialogControl(t1,c_playerAny,c_invalidDialogControlId,c_triggerControlEventTypeSelectionChanged);
 
     TriggerAddEventUnitGainLevel(t2,null);
     

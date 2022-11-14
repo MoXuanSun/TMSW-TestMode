@@ -28,6 +28,7 @@ void initAlliances(){
     libNtve_gf_SetPlayerGroupAlliance(gv_12BC5A6E[0], libNtve_ge_AllianceSetting_AllyWithSharedVisionAndControl);
     libNtve_gf_SetPlayerGroupAlliance(gv_12BC5A6E[1], libNtve_ge_AllianceSetting_AllyWithSharedVisionAndControl);
     
+
     for (i=1;i<6;i+=1){
         PlayerSetAlliance(i + 5,c_allianceIdControl,1,true); 
         libNtve_gf_SetAllianceOneWay(0,i,libNtve_ge_AllianceSetting_Ally);
@@ -96,6 +97,7 @@ void initGameData(){
     TriggerExecute(gt_A42AFADF, true, true);
     TriggerExecute(gt_67FDA500, true, true);
     TriggerExecute(gt_A21467A7, true, true);
+    TriggerExecute(gt_C7E3A592, true, true);
 
     //车
     // TriggerExecute(gt_6C7F4620, false, true);
@@ -183,10 +185,10 @@ void loadArane(){
     TriggerExecute(gt_A6596446, true, true);
     //创建英雄信息ui
     TriggerExecute(gt_0C3CB411, true, true);
-    //信息
+    //信息 皮肤
     TriggerExecute(gt_33A76FD1, true, true);
     //bank
-    TriggerExecute(gt_8F0F4A51, false, false);
+    TriggerExecute(gt_8F0F4A51, false, true);
     //ui
     TriggerExecute(gt_39E9F3AC, false, true);
     TriggerExecute(gt_7E1E7511, false, true);
@@ -195,8 +197,8 @@ void loadArane(){
     //血量 MP显示更新
     TriggerEnable(gt_A334548C, true);
     //创建致命伤害显示ui
-    TriggerExecute(gt_BEAA2115, false, false);
-    TriggerExecute(gt_6A0C33ED, false, false);
+    TriggerExecute(gt_BEAA2115, false, true);
+    TriggerExecute(gt_6A0C33ED, false, true);
     //隐藏皮肤选择界面
     DialogSetVisible(gv_17071D73, PlayerGroupAll(), false);
     //ui
@@ -223,4 +225,12 @@ void loadArane(){
     TechTreeUpgradeAddLevel(0, "dbup_Object_Shiled", 1);
     
     gv_BB284D6D = 1;
+
+
+}
+
+void initialHeroSelect(){
+    
+    GamePanelShow(c_UIType_heroSelect,true,testModePlayerGroup);
+    initialSelect = true;
 }

@@ -8,6 +8,7 @@ bool showGameTime = true;
 bool showLogLevel;
 
 //WARNING!!----DO NOT CHANGE CODE BELOW THIS LINE IF IT IS NOT NECESSARY----CAUTION!!
+bool initialSelect;
 bool summoning;
 bool loggerVisablityFlag;
 string upgradeInfoPrefix = "playerupgraderecoder-upgradeinfo";

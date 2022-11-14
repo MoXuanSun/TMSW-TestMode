@@ -128,6 +128,24 @@ bool onGameUIClick(bool t, bool r){
             StringExternal(("Button/Tooltip/btn_line_ability_" + gf_45491ABD(DataTableGetInt(true,"heroId")) + "_s")),testModePlayerGroup);
 
         GamePanelShow(c_UIType_heroSelect,false,testModePlayerGroup);
+
+        if (initialSelect){
+
+            summoning = true;
+            setPlayerLastPicked(1);
+
+            gv_131E8983[1] = getHeroLastSelected();
+            
+            //玩家队伍
+            gv_9EEEA78D[1] = MinI(FixedToInt(1 / 6),1);
+            
+            gv_A6CEA227[0][0] = 1;
+            
+            //初始化数据
+            initDataForPlayer();
+            resetPanels(testModePlayerGroup);
+            GamePanelShow(c_UIType_talentSelect,true,testModePlayerGroup);
+        }
     }
     //初始属性选择
     else if (rootDialog == gv_BB156610.lv_C262E618){
@@ -172,13 +190,10 @@ bool onUnitClick(bool t, bool r){
     }
     
     if (getTestPlayerCurrentSelectedUnit() != null){
-        
          //取消选择
         UnitSelect(getTestPlayerCurrentSelectedUnit(), testModePlayer, false);
-        
         UIAlertUnit("MyClickLocations", testModePlayer, EMP_TEXT, null, eUnit);
         storeUpgradeBtns(UnitGetOwner(getTestPlayerCurrentSelectedUnit()));
-        
     }else {
         updatePropBtn(newUnitOwner,testModePlayerGroup);
         restoreUpgradeBtns(newUnitOwner,testModePlayerGroup);

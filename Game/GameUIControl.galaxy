@@ -563,13 +563,19 @@ void updatePropBtn(int currentRemotingPlayer, playergroup refractTargetPlayerGro
         IntLoopStep();
     }
     IntLoopEnd();
+    
+    for (IntLoopBegin(0,14);!IntLoopDone();IntLoopStep()){
+        DialogControlSetPropertyAsText(gv_F4E2C4A0[0][IntLoopCurrent()],c_triggerControlPropertyTooltip,refractTargetPlayerGroup,
+            DialogControlGetPropertyAsText(gv_F4E2C4A0[0][IntLoopCurrent()],c_triggerControlPropertyTooltip,currentRemotingPlayer));
+    }
+    IntLoopEnd();
 
     libNtve_gf_SetDialogItemTooltip(gv_F4E2C4A0[0][10], 
         gf_D7D17EEF(gv_D79965A1[0][gv_288042C5.lv_107F1097], gv_D79965A1[1][10], gv_288042C5.lv_47E787AD, gv_8ED21F40[gv_288042C5.lv_107F1097], 2, StringExternal("Button/Tooltip/db_txt_preset_zameText_81")), PlayerGroupAll());
      //判断玩家是不是远程角色 详情见gf_5B3968D5(); true为远程
-     if ((gv_4B57750F[currentRemotingPlayer] == true)){
+     if (gv_4B57750F[currentRemotingPlayer]){
         //如果玩家的加点大于加点上限
-        if ((gv_60E73511[currentRemotingPlayer][10] >= gv_D79965A1[1][10]))
+        if (gv_60E73511[currentRemotingPlayer][10] >= gv_D79965A1[1][10])
         {
             DialogControlSetEnabled(gv_F4E2C4A0[0][10], refractTargetPlayerGroup, false);
             DialogControlSetEnabled(gv_F4E2C4A0[1][10], refractTargetPlayerGroup, false);
@@ -640,10 +646,20 @@ void updateFullGameUI(int currentRemotingPlayer, playergroup refractTargetPlayer
     IntLoopEnd();
 
     //更新英雄头像
-    libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_D11CB209, (("character\\interface\\face\\interface_face_" 
+   
+    if (TechTreeUpgradeCount(currentRemotingPlayer,"dbup_cos_1",c_techCountCompleteOnly) > 0 ){
+        libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_D11CB209, (("character\\interface\\face\\interface_face_" 
+        + IntToString(getPlayerHeroId(currentRemotingPlayer)) + "_1.dds")), refractTargetPlayerGroup);
+    } else if (TechTreeUpgradeCount(currentRemotingPlayer,"dbup_cos_2",c_techCountCompleteOnly) > 0 ){
+        libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_D11CB209, (("character\\interface\\face\\interface_face_" 
+        + IntToString(getPlayerHeroId(currentRemotingPlayer)) + "_2.dds")), refractTargetPlayerGroup);
+    } else {
+        libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_D11CB209, (("character\\interface\\face\\interface_face_" 
         + IntToString(getPlayerHeroId(currentRemotingPlayer)) + ".dds")), refractTargetPlayerGroup);
-    libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_A9C8BA19, "GamesUis\\frame_mp_bar_frame.dds", refractTargetPlayerGroup);
-    libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_472F835E, "GamesUis\\frame_mp_bar_image.dds", refractTargetPlayerGroup);
+    }
+   
+    // libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_A9C8BA19, "GamesUis\\frame_mp_bar_frame.dds", refractTargetPlayerGroup);
+    // libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_472F835E, "GamesUis\\frame_mp_bar_image.dds", refractTargetPlayerGroup);
     //小头像
     libNtve_gf_SetDialogItemImage(gv_169C778B[0], gv_AA1BDB6C[getPlayerHeroId(currentRemotingPlayer)], refractTargetPlayerGroup);
     libNtve_gf_SetDialogItemText(gv_169C778B[1], UnitTypeGetName(UnitGetType(gv_71C054E5[currentRemotingPlayer])), refractTargetPlayerGroup);
@@ -654,4 +670,5 @@ void updateFullGameUI(int currentRemotingPlayer, playergroup refractTargetPlayer
     updateStatusBar(PlayerGroupPlayer(refractTargetPlayerGroup,1),getPlayerHeroUnit(currentRemotingPlayer));
     //更新天赋显示
     updateTalentDisplay(currentRemotingPlayer,refractTargetPlayerGroup);
+    updatePropBtn(currentRemotingPlayer,refractTargetPlayerGroup);
 }

@@ -21,25 +21,18 @@ int pickPlayer(bool isAlly){
 }
 
 void playerSummonHero(){
-
-    point[2] teamPoints;
     int playerId = getPlayerLastPicked();
-
-    teamPoints[0] = PointFromId(36);
-    teamPoints[1] = PointFromId(37);
-    //------------------------------------
-    
     //更新数值显示面板
     // gf_3A83C136(playerId);
 
     //回合升级总成
-    TechTreeUpgradeAddLevel(playerId, "roundupgradeTotal", 1); 
+    // TechTreeUpgradeAddLevel(playerId, "roundupgradeTotal", 1); 
 
     //女院被动
-    gf_35172460(playerId, 0);
+    // gf_35172460(playerId, 0);
 
     libNtve_gf_CreateUnitsWithDefaultFacing(1, gv_367C7760[gv_131E8983[playerId]],
-         c_unitCreateIgnorePlacement, playerId, RegionRandomPoint(RegionCircle(teamPoints[0], 5.5)));
+         c_unitCreateIgnorePlacement, playerId, RegionRandomPoint(RegionCircle(PointFromId(36), 5.5)));
     //S
     UnitIssueOrder(UnitLastCreated(), Order(AbilityCommand("dbnu00_witchsajam", 0)), c_orderQueueAddToFront);
     gv_71C054E5[playerId] = UnitLastCreated();         
@@ -64,25 +57,38 @@ void playerSummonHero(){
         UnitSetTeamColorIndex(gv_71C054E5[playerId], 8);
     }
     //------------------------------------------------------------------------------------
+    //T技能初始1级
+    gv_D0B36B8F[playerId][0] = 1;
     //启用或禁用技能
     gf_ED9D4333(gv_71C054E5[playerId], playerId);
+
+    if (initialSelect){
+        UnitSelect(gv_71C054E5[playerId],playerId,true);
+        updatePropBtn(playerId,testModePlayerGroup);
+        updateFullGameUI(playerId,testModePlayerGroup);
+        setTestPlayerCurrentSelectedUnit(gv_71C054E5[playerId]);
+        DialogSetVisible(gv_5C4043F8.lv_B91A282D, testModePlayerGroup, true);
+        DialogSetVisible(gv_598EC0B1, testModePlayerGroup, true);
+        DialogSetVisible(gv_5C4043F8.lv_8DEC25E2, testModePlayerGroup, true);
+        DialogSetVisible(gv_5C4043F8.lv_AF2E051A, testModePlayerGroup, true);
+        initialSelect = false;
+    }
     
     //老兵行为
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "dbdo_ex", playerId, 1);
-            
+    
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie", playerId, 1);
-    //这个行为居然还绑定了射程升级。。。大坑啊
-    UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie2", playerId, 1);
+    //nodie2行为绑定了射程升级
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie4", playerId, 1);
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie42", playerId, 1);
-
+    UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie2", playerId, 1);
     gv_55A8AB50[playerId] += 1;
     //两边队伍剩余人数
     gv_48E7CC05[gv_9EEEA78D[playerId]] += 1;
 
-    //近战 远程
+    //近战 远程抗性
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie25", playerId, 1);
-    //法术
+    //法术抗性
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie23", playerId, 1);
     UnitBehaviorAddPlayer(gv_71C054E5[playerId], "nodie24res", playerId, 1);        
     
@@ -174,25 +180,27 @@ void playerSummonHero(){
     {
         CameraFollowUnitGroup(playerId, libNtve_gf_ConvertUnitToUnitGroup(gv_71C054E5[playerId]), false, false);
     }
-
-    //玩家技能可升级点数+1
-    gv_63B35897[playerId] = 1;
-    //没有用的函数
-    gf_E21FB1A1(gv_71C054E5[playerId]);
-    //技能升级函数
-    gf_91088DA7(playerId);
-    //储存升级按钮    
-    storeUpgradeBtns(playerId);
-
+   
     if (playerId == 1 && getTestPlayerCurrentSelectedUnit() != gv_71C054E5[playerId]){
-        IntLoopBegin(0,3);
-        while(!IntLoopDone()){
+        for (IntLoopBegin(0,3);!IntLoopDone();IntLoopStep()){
             upgradeBtnShow(IntLoopCurrent(),false,testModePlayerGroup);
-            IntLoopStep();
         }
         IntLoopEnd();
     }
 
+    //玩家技能可升级点数+1
+    gv_63B35897[playerId] = 1;
+    //没有用的函数
+    // gf_E21FB1A1(gv_71C054E5[playerId]);
+    //技能升级函数
+    gf_91088DA7(playerId);
+    //储存升级按钮
+    storeUpgradeBtns(playerId);
+
+    if (playerId == 1 && getTestPlayerCurrentSelectedUnit() != gv_71C054E5[playerId]){
+        restoreUpgradeBtns(UnitGetOwner(getTestPlayerCurrentSelectedUnit()),testModePlayerGroup);
+    }
+    
     //技能组
     gf_C71F331B(playerId);
     //初始属性加点
@@ -210,24 +218,18 @@ void playerSummonHero(){
 
     UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropLifePercent, 100.0);
     //除四季外 其他英雄回复85%能量
-    if ((UnitGetType(gv_71C054E5[playerId]) != "dbHero43"))
-    {
+    if ((UnitGetType(gv_71C054E5[playerId]) != "dbHero43")){
         UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropEnergyPercent, 85.0);
     }
-    else
-    {
+    else{
         UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropEnergyPercent, 0.0);
     }
- 
     //更新Tab
     TriggerExecute(gt_EFE165C0,false,true);
-
     //血量上限 fixed->int 
     gf_5B3578B1();    
     //更新远程英雄为true
     gf_5B3968D5();
-
-    // initAltPanelImageAll();
 }
 
 void summonDummy(point p){
