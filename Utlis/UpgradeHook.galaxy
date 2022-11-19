@@ -103,38 +103,12 @@ bool btnClickHook(bool t, bool r){
             updatePropBtn(currentRemotingPlayer,testModePlayerGroup);
         }   
     //修复皮肤无法选择bug
-    else if (edialogControl == gv_7A5E22CF){
+    else if (edialogControl == gv_7A5E22CF || EventDialogControlEventType() == c_triggerControlEventTypeSelectionChanged){
         //皮肤英雄选择
-        if (((DialogControlGetSelectedItem(gv_7A5E22CF, testModePlayer) == 3) || (DialogControlGetSelectedItem(gv_7A5E22CF, testModePlayer) == 4) || (DialogControlGetSelectedItem(gv_7A5E22CF, testModePlayer) == 15) || (DialogControlGetSelectedItem(gv_7A5E22CF, testModePlayer) == 17)))
-        {
-            gv_E48017C5[currentRemotingPlayer][1] = 0;
-            gf_92233EB5(currentRemotingPlayer, 7, 0);
-            i = DialogControlGetSelectedItem(gv_7A5E22CF, currentRemotingPlayer);
-            if (i == 3)
-            {
-                gv_E48017C5[currentRemotingPlayer][0] = 3;
-            }
-            else if (i == 4)
-            {
-                gv_E48017C5[currentRemotingPlayer][0] = 4;
-            }
-            else if (i == 15)
-            {
-                gv_E48017C5[currentRemotingPlayer][0] = 15;
-            }
-            else if (i == 17)
-            {
-                gv_E48017C5[currentRemotingPlayer][0] = 17;
-            }
-            else
-            {
-            }
-            gf_92233EB5(currentRemotingPlayer, 5, 0);
-            gf_92233EB5(currentRemotingPlayer, 6, 0);
-            
-        }
-        
+        //无法触发 可能是错误导致的
+        TriggerExecute(gt_1F1BDF88,false,true);
     }
+
     else {
         TriggerExecute(gt_B5F15D4C,false,true);
     }

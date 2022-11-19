@@ -597,7 +597,7 @@ void updatePropBtn(int currentRemotingPlayer, playergroup refractTargetPlayerGro
 //更新状态栏、等级栏、头像和天赋小图标
 void updateFullGameUI(int currentRemotingPlayer, playergroup refractTargetPlayerGroup){
     //右侧数值栏数据
-
+    
     //ap
     libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[1], FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_89BFC1C4], 2), refractTargetPlayerGroup);
     //法抗
@@ -653,6 +653,7 @@ void updateFullGameUI(int currentRemotingPlayer, playergroup refractTargetPlayer
     } else if (TechTreeUpgradeCount(currentRemotingPlayer,"dbup_cos_2",c_techCountCompleteOnly) > 0 ){
         libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_D11CB209, (("character\\interface\\face\\interface_face_" 
         + IntToString(getPlayerHeroId(currentRemotingPlayer)) + "_2.dds")), refractTargetPlayerGroup);
+
     } else {
         libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_D11CB209, (("character\\interface\\face\\interface_face_" 
         + IntToString(getPlayerHeroId(currentRemotingPlayer)) + ".dds")), refractTargetPlayerGroup);
@@ -670,5 +671,6 @@ void updateFullGameUI(int currentRemotingPlayer, playergroup refractTargetPlayer
     updateStatusBar(PlayerGroupPlayer(refractTargetPlayerGroup,1),getPlayerHeroUnit(currentRemotingPlayer));
     //更新天赋显示
     updateTalentDisplay(currentRemotingPlayer,refractTargetPlayerGroup);
+    //更新属性btn
     updatePropBtn(currentRemotingPlayer,refractTargetPlayerGroup);
 }
