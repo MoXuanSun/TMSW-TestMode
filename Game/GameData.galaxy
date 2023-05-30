@@ -102,6 +102,8 @@ void fetchArmorUpgrade(int player){
         }        
 
         //先把科技都重置回来
+
+        //当前护甲科技等级大于存入的护甲等级 - 重置护甲科技等级到存入的等级 护甲魔抗每升级0.1便会更换一个科技
         while(gv_D877D515[player][armorType] > DataTableGetInt(true,"playerarmor"+IntToString(type)+"-D"+IntToString(player))){
             libNtve_gf_SetUpgradeLevelForPlayer(player, lv_272FC741[armorType][gv_D877D515[player][armorType]], 0);
             gv_D877D515[player][armorType] -= 1;
@@ -110,7 +112,6 @@ void fetchArmorUpgrade(int player){
         }
 
         gv_9CB902A4[IntLoopCurrent()][type] = DataTableGetFixed(true,"playerarmor"+IntToString(type)+IntToString(player)) / 10;
-
 
         libNtve_gf_SetUpgradeLevelForPlayer(player, lv_272FC741[armorType][gv_D877D515[player][armorType]], 
             FixedToInt(DataTableGetFixed(true,"playerarmor"+IntToString(type)+IntToString(player))) % 100);
@@ -123,9 +124,20 @@ void fetchArmorUpgrade(int player){
 
 }
 
+bool IntLoopDoneAndEnd(){
+    if (IntLoopDone()){
+        IntLoopEnd();
+        return true;
+    }
+    return false;
+}
+
 void initDataForPlayer(){
     
     int i;
+    fixed[10][15] temp_9CB902A4;
+    fixed[10][15] temp_7DC72D59;
+
     //初始化信息
     //加点的需要的钱、各种stat值
     TriggerExecute(gt_C7E3A592, false, true);
@@ -136,22 +148,16 @@ void initDataForPlayer(){
     //gv_2A156F88 = 1 在init中被设置 判断初始护甲升级让属性数组自增 
 
     gv_2A156F88 = 0;
-    IntLoopBegin(1,10);
-    while(!IntLoopDone()){
+
+    for (IntLoopBegin(1,10); !IntLoopDoneAndEnd() ;IntLoopStep()){
         if (IntLoopCurrent() == getPlayerLastPicked() || getPlayerHeroId(IntLoopCurrent()) == 0){
-            IntLoopStep();
             continue;
         }
 
-        //这些只是数值有问题
-        //ap 没有初始带ap的英雄
-        // DataTableSetFixed(true,"playerProp"+IntToString(3)+IntToString(getPlayerLastPicked()),gv_9CB902A4[IntLoopCurrent()][3]);
-        //攻速
-        DataTableSetFixed(true,"playerProp"+IntToString(6)+IntToString(getPlayerLastPicked()),gv_9CB902A4[IntLoopCurrent()][6]);
-        //法抗
-        DataTableSetFixed(true,"playerProp"+IntToString(8)+IntToString(getPlayerLastPicked()),gv_9CB902A4[IntLoopCurrent()][8]);
-        //冷却 初始也没有冷却
-        // DataTableSetFixed(true,"playerProp"+IntToString(9)+IntToString(getPlayerLastPicked()),gv_9CB902A4[IntLoopCurrent()][9]);
+        for (i = 0 ; i < 15 ; i += 1){
+            temp_9CB902A4[IntLoopCurrent()][i] = gv_9CB902A4[IntLoopCurrent()][i];
+            temp_7DC72D59[IntLoopCurrent()][i] = gv_7DC72D59[IntLoopCurrent()][i];
+        }
 
         for (i = 0 ; i < 8 ; i += 1){
             DataTableSetFixed(true,"playerarmor4"+IntToString(IntLoopCurrent()),gv_9CB902A4[IntLoopCurrent()][4] * 10);
@@ -159,34 +165,28 @@ void initDataForPlayer(){
             DataTableSetFixed(true,"playerarmor5"+IntToString(IntLoopCurrent()),gv_9CB902A4[IntLoopCurrent()][5] * 10);
             DataTableSetInt(true,"playerarmor5-D"+IntToString(IntLoopCurrent()),gv_D877D515[IntLoopCurrent()][1]);
         }
-       
-        
-        IntLoopStep();
     }
-    IntLoopEnd();
  
     //属性上限、初始护甲
     TriggerExecute(gt_84BE2900, false, true);
     TriggerExecute(gt_53B638C3, false, true);
     TriggerExecute(gt_B15050B7, false, true);
 
-    IntLoopBegin(1,10);
-    while(!IntLoopDone()){
+    for (IntLoopBegin(1,10); !IntLoopDoneAndEnd() ;IntLoopStep()){
         if (IntLoopCurrent() == getPlayerLastPicked() || getPlayerHeroId(IntLoopCurrent()) == 0){
-            IntLoopStep();
             continue;
         }
 
-        // gv_9CB902A4[IntLoopCurrent()][3] = DataTableGetFixed(true,"playerProp"+IntToString(3)+IntToString(getPlayerLastPicked()));
-        gv_9CB902A4[IntLoopCurrent()][6] = DataTableGetFixed(true,"playerProp"+IntToString(6)+IntToString(getPlayerLastPicked()));
-        gv_9CB902A4[IntLoopCurrent()][8] = DataTableGetFixed(true,"playerProp"+IntToString(8)+IntToString(getPlayerLastPicked()));
-        // gv_9CB902A4[IntLoopCurrent()][9] = DataTableGetFixed(true,"playerProp"+IntToString(9)+IntToString(getPlayerLastPicked()));
-
         // debug(IntToString(IntLoopCurrent()));
         fetchArmorUpgrade(IntLoopCurrent());
-        IntLoopStep();
+
+        for (i = 0 ; i < 15 ; i += 1){
+            gv_9CB902A4[IntLoopCurrent()][i] = temp_9CB902A4[IntLoopCurrent()][i];
+            gv_7DC72D59[IntLoopCurrent()][i] = temp_7DC72D59[IntLoopCurrent()][i];
+        }
+      
     }
-    IntLoopEnd();
+ 
     gv_2A156F88 = 1;
     //技能数据
     TriggerExecute(gt_F00C0934, false, true);
@@ -347,7 +347,7 @@ void nextRoundGlobal(){
         TechTreeUpgradeAddLevel(0, "dbup_bam", 1);
     }
 
-    showMsg(1,"回合"+IntToString(gv_8D37EDF7));
+    UIDisplayMessage(testModePlayerGroup,c_messageAreaSubtitle,StringExternalTestMode("round")+IntToText(gv_8D37EDF7));
 
     IntLoopBegin(1,10);
     while(!IntLoopDone()){
@@ -577,3 +577,6 @@ void removeUnitAndReflashPlayer(int player){
     DialogSetVisible(gv_5C4043F8.lv_AF2E051A, testModePlayerGroup, false);    
 }
 
+text StringExternalTestMode(string name){
+    return StringExternal("DOCSTR_TestMode_"+name);
+}

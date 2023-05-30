@@ -14,21 +14,22 @@ void buildHeroSummonUI(){
     int btnHeight = 86;
 
     createmBtn(Dialogs.mainMenu.heroSelectBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
-        c_anchorTopLeft,TEST_UI_PADDING,TEST_UI_PADDING,DEFAULTS.DEFAULT_BORDERDDS,gv_AA1BDB6C[0],"请选择英雄",
+        c_anchorTopLeft,TEST_UI_PADDING,TEST_UI_PADDING,DEFAULTS.DEFAULT_BORDERDDS,gv_AA1BDB6C[0],
+        TextToString(StringExternalTestMode("plz_selec_hero")),
         DEFAULTS.DEFAULT_TITLE,DEFAULTS.DEFAULT_FONTSTYLE,DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP);
 
     createmBtnRelative(Dialogs.mainMenu.summonAllyHeroBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
-        Dialogs.mainMenu.heroSelectBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,"生成友方英雄",
-        "+友方",DEFAULTS.DEFAULT_FONTSTYLE,
+        Dialogs.mainMenu.heroSelectBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,"",
+        TextToString(StringExternalTestMode("add_ally")),DEFAULTS.DEFAULT_FONTSTYLE,
         DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP,false);
 
     createmBtnRelative(Dialogs.mainMenu.summonEnemyHeroBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
-        Dialogs.mainMenu.summonAllyHeroBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,"生成敌方英雄",
-        "+敌方",DEFAULTS.DEFAULT_FONTSTYLE,
+        Dialogs.mainMenu.summonAllyHeroBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,"",
+        TextToString(StringExternalTestMode("add_enemy")),DEFAULTS.DEFAULT_FONTSTYLE,
         DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP,false);
@@ -56,28 +57,28 @@ void buildTestingUI(){
 
     createmBtnRelative(Dialogs.mainMenu.upgradeHeroBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
         Dialogs.mainMenu.heroSelectBtn.border,0,TEST_UI_PADDING,DEFAULTS.DEFAULT_BORDERDDS,"GamesUis\\MYG_Skill_Plus_BTN.dds",
-        "升级选中单位"
+        TextToString(StringExternalTestMode("upgrade_unit_selected"))
         ,DEFAULTS.DEFAULT_TITLE, DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP,true);
 
     createmBtnRelative(Dialogs.mainMenu.noCoolDownBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
         Dialogs.mainMenu.upgradeHeroBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,"character/newroon/new_tuc_touhou_mabub_0_line_a.dds",
-        "刷新选中英雄的所有技能,无法刷新技能充能次数",
+        TextToString(StringExternalTestMode("reflash_abils")),
         DEFAULTS.DEFAULT_TITLE, DEFAULTS.DEFAULT_FONTSTYLE , DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP,false);
 
     createmBtnRelative(Dialogs.mainMenu.fullmana,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
         Dialogs.mainMenu.noCoolDownBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,"character/newroon/new_tuc_touhou_yungam_0_line_a.dds",
-        "回满选中英雄的能量",
+        TextToString(StringExternalTestMode("charge_mana")),
         DEFAULTS.DEFAULT_TITLE, DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP,false);
 
      createmBtnRelative(Dialogs.mainMenu.removeHeroBtn,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
         Dialogs.mainMenu.upgradeHeroBtn.border,0,TEST_UI_PADDING,DEFAULTS.DEFAULT_BORDERDDS,"character/newroon/new_tuc_touhou_jibae_1_line_b.dds",
-        "移除选中英雄(点击木偶,显示信息窗口时可以移除木偶),尽可能少用该功能,可能会出现bug",
+        TextToString(StringExternalTestMode("remove_unit")),
         DEFAULTS.DEFAULT_TITLE, DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
         DEFAULTS.DEFAULT_BTNHOVERIMG,
         DEFAULTS.DEFAULT_PLAYERGROUP,true);
@@ -98,16 +99,16 @@ void runtimeUI(){
 
     createmBtnRelative(Dialogs.mainMenu.nextRound,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
         Dialogs.mainMenu.removeHeroBtn.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,
-            "将游戏回合数调节至下一回合，游戏的一些参数与回合数有关", 
-            "下一回合",
+        TextToString(StringExternalTestMode("next_rount_toolTip")), 
+        TextToString(StringExternalTestMode("next_round")),
             DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
             DEFAULTS.DEFAULT_BTNHOVERIMG,
             DEFAULTS.DEFAULT_PLAYERGROUP,false);
 
     createmBtnRelative(Dialogs.mainMenu.summonDummy,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
         Dialogs.mainMenu.nextRound.border,TEST_UI_PADDING,0,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,
-            "在玩家选中的英雄旁生成一个木偶", 
-            "生成木偶",
+        TextToString(StringExternalTestMode("add_dummy_tooltip")), 
+        TextToString(StringExternalTestMode("add_dummy")),
             DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
             DEFAULTS.DEFAULT_BTNHOVERIMG,
             DEFAULTS.DEFAULT_PLAYERGROUP,false);
@@ -115,7 +116,7 @@ void runtimeUI(){
     createmBtnRelative(Dialogs.mainMenu.summonShieldObj,-1,borderWidth,borderHeight,imgWidth,imgHeight,btnWidth,btnHeight,
         Dialogs.mainMenu.removeHeroBtn.border,0,TEST_UI_PADDING,DEFAULTS.DEFAULT_BORDERDDS,DEFAULTS.DEFAULT_IMG,
             "", 
-            "生成宝贵的膜",
+            TextToString(StringExternalTestMode("summon_shield")),
             DEFAULTS.DEFAULT_FONTSTYLE ,DEFAULTS.DEFAULT_BTNIMG,
             DEFAULTS.DEFAULT_BTNHOVERIMG,
             DEFAULTS.DEFAULT_PLAYERGROUP,true);
@@ -134,7 +135,7 @@ void loggerUI(){
     DialogControlSetSize(DialogControlLastCreated(),testModePlayerGroup,850,1000);
 
     Dialogs.logger.contolBtn = libNtve_gf_CreateDialogItemButton(DialogLastCreated(),100,60,c_anchorBottomRight,50,0,
-    StringToText("显示伤害记录器"),StringToText("显示"),null);
+    StringExternalTestMode("logger_show") + StringExternalTestMode("logger"),StringExternalTestMode("logger_show"),null);
 
     // loggerVisablityFlag = true;
 }
@@ -156,7 +157,6 @@ void createMainMenu(){
     buildTestingUI();
 
     runtimeUI();
-
 
     loggerUI();
   

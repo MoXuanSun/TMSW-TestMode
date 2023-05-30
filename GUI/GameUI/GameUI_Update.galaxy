@@ -9,51 +9,6 @@ bool updatePlayerStatusBars(bool r, bool t){
 
     gf_2AF0A3EE(testModePlayer, getTestPlayerCurrentSelectedUnit(), gv_5C4043F8.lv_23D09B56, c_unitPropLifePercent, gv_5C4043F8.lv_24D62004, c_unitPropLife, c_unitPropLifeMax);
     gf_2AF0A3EE(testModePlayer, getTestPlayerCurrentSelectedUnit(), gv_5C4043F8.lv_472F835E, c_unitPropEnergyPercent, gv_5C4043F8.lv_D9B13017, c_unitPropEnergy, c_unitPropEnergyMax);
-        
-        // else if (EventUnitProperty() == c_unitPropShieldsMax){
-        //     DialogControlCreate(DialogControlGetDialog(gv_5C4043F8.lv_23D09B56),c_triggerControlTypeImage);
-            
-        //     DialogControlSetPropertyAsInt(DialogControlLastCreated(),c_triggerControlPropertyRenderPriority,testModePlayerGroup,-1);
-        //     DialogControlSetSize(DialogControlLastCreated(),testModePlayerGroup,40,12);
-        //     DialogControlSetPropertyAsColor(DialogControlLastCreated(),c_triggerControlPropertyColor,testModePlayerGroup,Color(0,100,100));
-        //     DialogControlSetPositionRelative(DialogControlLastCreated(),testModePlayerGroup,c_anchorRight,gv_5C4043F8.lv_23D09B56,c_anchorRight,0,0);
-        //     DialogControlSetVisible(DialogControlLastCreated(),testModePlayerGroup,false);
-        //     DialogControlSetVisible(DialogControlLastCreated(),testModePlayerGroup,true);
-        //     // libNtve_gf_CreateDialogItemImage(DialogControlGetDialog(gv_5C4043F8.lv_472F835),0,20,c_anchorBottomLeft,0,0,EMP_TEXT,"",Color(0,0,255))
-        // }
-    
-    // if (EventUnitProperty() == c_unitPropShieldsMax){
-    //     debug(FixedToString(UnitGetPropertyFixed(EventUnit(),c_unitPropShieldsMax,true),2));
-    //     debug("test");
-    // }
-    // if (EventUnitProperty() == c_unitPropShieldsPercent){
-    //     debug(FixedToString(UnitGetPropertyFixed(EventUnit(),c_unitPropShieldsPercent,true),2));
-    //     debug("test1");
-    // }
-    // if (EventUnitProperty() == c_unitPropShields){
-    //     debug(FixedToString(UnitGetPropertyFixed(EventUnit(),c_unitPropShields,true),2));
-    //     debug("tes2t");
-    // }
-   
-    // return true;
-
-    // unit currentUnit = getTestPlayerCurrentSelectedUnit();
-    // int currentPlayer = UnitGetOwner(currentUnit);
-    // playergroup p = PlayerGroupSingle(currentPlayer);
-
-    // if (currentPlayer == testModePlayer || EventUnit() != currentUnit){
-    //     return true;
-    // }
-
-
-    // //HP 
-    // DialogControlSetPropertyAsText(gv_5C4043F8.lv_24D62004,c_triggerControlPropertyText,testModePlayerGroup,DialogControlGetPropertyAsText(gv_5C4043F8.lv_24D62004,c_triggerControlPropertyText,currentPlayer));
-    // DialogControlSetSize(gv_5C4043F8.lv_23D09B56,testModePlayerGroup,DialogControlGetPropertyAsInt(gv_5C4043F8.lv_23D09B56,c_triggerControlPropertyWidth,currentPlayer),20);
-    // //MP
-    // DialogControlSetPropertyAsText(gv_5C4043F8.lv_D9B13017,c_triggerControlPropertyText,testModePlayerGroup,DialogControlGetPropertyAsText(gv_5C4043F8.lv_D9B13017,c_triggerControlPropertyText,currentPlayer));
-    // DialogControlSetSize(gv_5C4043F8.lv_472F835E,testModePlayerGroup,DialogControlGetPropertyAsInt(gv_5C4043F8.lv_472F835E,c_triggerControlPropertyWidth,currentPlayer),20);
-
-    
     
     return true;
 }
@@ -76,18 +31,9 @@ void initGameUIUpdateTrigger(){
     trigger t = TriggerCreate("updatePlayerStatusBars");
     trigger t1 = TriggerCreate("upgradeGameFullUIPeriod");
 
-    // TriggerAddEventUnitProperty(t, null, c_unitPropLife);
-    // TriggerAddEventUnitProperty(t, null, c_unitPropEnergy);
-
+    // TriggerAddEventUnitRegion()
+    
     TriggerAddEventTimePeriodic(t,0.0625,c_timeGame);
     TriggerAddEventTimePeriodic(t1,0.0625 * 10,c_timeGame);
-
-
-
-    // TriggerAddEventUnitProperty(t, null, c_unitPropShieldsMax);
-    // TriggerAddEventUnitProperty(t, null, c_unitPropShieldsPercent);
-    // TriggerAddEventUnitProperty(t, null, c_unitPropShields);
-    // TriggerAddEventDialogControl(t,c_playerAny,gv_5C4043F8.lv_D9B13017,c_triggerControlEventTypeTextChanged);
-    // TriggerAddEventDialogControl(t,c_playerAny,gv_5C4043F8.lv_24D62004,c_triggerControlEventTypeTextChanged);
 
 }

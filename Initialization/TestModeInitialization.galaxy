@@ -35,31 +35,19 @@ void onInit(){
 //进入游戏后
 void onPostInit(){
     // VisRevealerCreate(1, RegionEntireMap());
-
-    text helpMessage = 
-        StringToText("Q:如何创建英雄?\n"+
-        "A:首先点击右上角的第一个按钮，选择一个英雄，然后点击+友方或+敌方按钮，选择天赋、技能、辅助技能、初始属性\n"+
-        "Q:怎么添加木偶?\n"+
-        "A:首先需要先创建一个英雄，然后点击生成木偶按钮，木偶会生成在选中的英雄旁边\n"+
-        "Q:伤害记录器在哪里打开?\n"+
-        "A:左下角地图上方的显示按钮\n"+
-        "Q:等级到了，但是没有显示升级按钮?\n"+
-        "A:点击一下英雄即可\n"+
-        "Q:属性加点出现错误\n"+
-        "A:同上，点击一下英雄，刷新一次\n"+
-        "TMSW-TestModule https://github.com/MoXuanSun/TMSW-TestMode");
-
+    
     //显示frame
     UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeHelpMenuButton, true);
     UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeTipAlertPanel, true);
 
-    showMsg(1,TextToString(TextWithColor(PlayerName(1),libNtve_gf_ConvertPlayerColorToColor(PlayerGetColorIndex(1,false)))+
-        StringToText("，欢迎来到测试模式！请按F12查看帮助")));
+    UIDisplayMessage(testModePlayerGroup,c_messageAreaSubtitle,TextWithColor(PlayerName(testModePlayer),
+        libNtve_gf_ConvertPlayerColorToColor(PlayerGetColorIndex(testModePlayer,false)))+
+        StringExternalTestMode("welcome_msg"));
 
     HelpPanelAddTip(PlayerGroupAll(), 
-        libNtve_gf_FormatTipTitle(StringToText("帮助"), libNtve_ge_TipType_NormalTip), 
-        helpMessage, 
-        StringToText("帮助信息"), 
+        libNtve_gf_FormatTipTitle(StringExternalTestMode("help_tip"), libNtve_ge_TipType_NormalTip), 
+        StringExternalTestMode("help_msg"), 
+        StringExternalTestMode("help_tip"), 
         "Assets\\Textures\\ui_chatbaricons_terran_allies.dds");
       
 }

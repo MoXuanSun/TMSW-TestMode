@@ -17,7 +17,7 @@ void updateDamageDisplayer(fixed damageAmount, unit damagingUnit, unit damagedUn
     fixed dps;
     fixed damageTotal;
 
-    string logStr;
+    text logStr;
 
     //有一个隐藏单位 每次受到伤害都会给那个单位同样打一个伤害 应该是作者的反作弊 这里需要判断一下过滤掉
     if (UnitGetType(damagedUnit) == "dbHero00" || damageAmount == 0){
@@ -58,38 +58,41 @@ void updateDamageDisplayer(fixed damageAmount, unit damagingUnit, unit damagedUn
             DataTableSetFixed(true,damageDisplayerKey(damagedUnitTag,c_damageDisplayer_damegetotal), damageTotal);
         }
 
-        TextTagSetText(DataTableGetInt(true,damageDisplayerKey(damagedUnitTag,c_damagedisplayer_texttagLast)), StringToText("上一次="+FixedToString(damageLast,2)));
-        TextTagSetText(DataTableGetInt(true,damageDisplayerKey(damagedUnitTag,c_damagedisplayer_texttagDps)), StringToText("DPS="+FixedToString(dps,2)));
-        TextTagSetText(DataTableGetInt(true,damageDisplayerKey(damagedUnitTag,c_damagedisplayer_texttagTotal)), StringToText("总伤害="+FixedToString(damageTotal,2)));
+        TextTagSetText(DataTableGetInt(true,damageDisplayerKey(damagedUnitTag,c_damagedisplayer_texttagLast)), StringExternalTestMode("damage_displayer_last") + FixedToText(damageLast,2));
+        TextTagSetText(DataTableGetInt(true,damageDisplayerKey(damagedUnitTag,c_damagedisplayer_texttagDps)), StringExternalTestMode("damage_displayer_DPS") + FixedToText(dps,2));
+        TextTagSetText(DataTableGetInt(true,damageDisplayerKey(damagedUnitTag,c_damagedisplayer_texttagTotal)), StringExternalTestMode("damage_displayer_total") + FixedToText(damageTotal,2));
     }
 
     //Logger
     //dummy
     if (UnitGetOwner(damagedUnit) == 0){
-        logStr = TextToString(TextWithColor(StringToText(playerHeroNameDamaging),ColorFromIndex(PlayerGetColorIndex(damagingUnitOwner,true),c_teamColorDiffuse)))+
-        "对" +
-        "木偶"+ 
-        "造成了";
+        logStr = TextWithColor(StringToText(playerHeroNameDamaging),ColorFromIndex(PlayerGetColorIndex(damagingUnitOwner,true),c_teamColorDiffuse))+
+        StringExternalTestMode("damage_displayer_damage_to_start") +
+        StringExternalTestMode("dummy_name") + 
+        StringExternalTestMode("damage_displayer_damage_to_end");
     }else {
-        logStr = TextToString(TextWithColor(StringToText(playerHeroNameDamaging),ColorFromIndex(PlayerGetColorIndex(damagingUnitOwner,true),c_teamColorDiffuse)))+
-        "对" +
-        TextToString(TextWithColor(StringToText(playerHeroNameDamaged),ColorFromIndex(PlayerGetColorIndex(damagedUnitOwner,true),c_teamColorDiffuse))) +
-        "造成了";
+        logStr = TextWithColor(StringToText(playerHeroNameDamaging),ColorFromIndex(PlayerGetColorIndex(damagingUnitOwner,true),c_teamColorDiffuse))+
+        StringExternalTestMode("damage_displayer_damage_to_start") +
+        TextWithColor(StringToText(playerHeroNameDamaged),ColorFromIndex(PlayerGetColorIndex(damagedUnitOwner,true),c_teamColorDiffuse)) +
+        StringExternalTestMode("damage_displayer_damage_to_end");
     }
     //物理伤害
     if (damageType == c_unitDamageTypeMelee || damageType == c_unitDamageTypeRanged){
-        logStr += TextToString(TextWithColor(FixedToText(damageAmount,2) + StringToText("点物理伤害"),gv_C846B6A5[0]));
+        logStr += TextWithColor(FixedToText(damageAmount,2) + StringExternalTestMode("damage_displayer_unit_of_damage") + 
+        StringExternalTestMode("damage_melee"),gv_C846B6A5[0]);
     }
     //法术伤害
     else if(damageType == c_unitDamageTypeSpell){
-        logStr += TextToString(TextWithColor(FixedToText(damageAmount,2) + StringToText("点法术伤害"),gv_C846B6A5[1]));
+        logStr += TextWithColor(FixedToText(damageAmount,2) + StringExternalTestMode("damage_displayer_unit_of_damage") + 
+        StringExternalTestMode("damage_spell"),gv_C846B6A5[1]);
     }
     //真实伤害
     else if(damageType == c_unitDamageTypeSplash){
-        logStr += TextToString(TextWithColor(FixedToText(damageAmount,2) + StringToText("点真实伤害"),gv_C846B6A5[2]));
+        logStr += TextWithColor(FixedToText(damageAmount,2) + StringExternalTestMode("damage_displayer_unit_of_damage") + 
+        StringExternalTestMode("damage_splash"),gv_C846B6A5[2]);
     }
 
-    loggerD(logStr);
+    loggerD(TextToString(logStr));
 }
 
 bool onDamageMelee(bool t, bool r){

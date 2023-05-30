@@ -217,13 +217,19 @@ void playerSummonHero(){
     gf_1DA6D503(gv_71C054E5[playerId]);
 
     UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropLifePercent, 100.0);
-    //除四季外 其他英雄回复85%能量
-    if ((UnitGetType(gv_71C054E5[playerId]) != "dbHero43")){
-        UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropEnergyPercent, 85.0);
-    }
-    else{
+    if ((UnitGetType(gv_71C054E5[playerId]) == "dbHero43"))
+    {
         UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropEnergyPercent, 0.0);
     }
+    else if ((UnitGetType(gv_71C054E5[playerId]) == "dbHero44"))
+    {
+        UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropEnergyPercent, 100.0);
+    }
+    else
+    {
+        UnitSetPropertyFixed(gv_71C054E5[playerId], c_unitPropEnergyPercent, 85.0);
+    }
+
     //更新Tab
     TriggerExecute(gt_EFE165C0,false,true);
     //血量上限 fixed->int 
@@ -241,9 +247,9 @@ void summonDummy(point p){
     
     libNtve_gf_CreateUnitsWithDefaultFacing(1,"dbHero38",0,0,RegionRandomPoint(RegionCircle(p, 5.5)));
 
-    last = TextTagCreate(StringToText("上一次=0.00"),20,PointWithOffset(UnitGetPosition(UnitLastCreated()),0,10),1,true,true,testModePlayerGroup);
-    dps = TextTagCreate(StringToText("DPS=0.00"),20,PointWithOffset(UnitGetPosition(UnitLastCreated()),0,10),1,true,true,testModePlayerGroup);
-    total = TextTagCreate(StringToText("总伤害=0.00"),20,PointWithOffset(UnitGetPosition(UnitLastCreated()),0,10),1,true,true,testModePlayerGroup);
+    last = TextTagCreate(StringExternalTestMode("damage_displayer_last") + FixedToText(0.00,2),20,PointWithOffset(UnitGetPosition(UnitLastCreated()),0,10),1,true,true,testModePlayerGroup);
+    dps = TextTagCreate(StringExternalTestMode("damage_displayer_DPS") + FixedToText(0.00,2),20,PointWithOffset(UnitGetPosition(UnitLastCreated()),0,10),1,true,true,testModePlayerGroup);
+    total = TextTagCreate(StringExternalTestMode("damage_displayer_total") + FixedToText(0.00,2),20,PointWithOffset(UnitGetPosition(UnitLastCreated()),0,10),1,true,true,testModePlayerGroup);
 
     TextTagAttachToUnit(last,UnitLastCreated(),3);
     TextTagAttachToUnit(dps,UnitLastCreated(),2);

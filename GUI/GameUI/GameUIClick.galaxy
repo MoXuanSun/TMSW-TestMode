@@ -230,6 +230,8 @@ bool onKeyEsc(bool t, bool r){
     GamePanelShow(c_UIType_SKillSelect,false,testModePlayerGroup);
     GamePanelShow(c_UIType_talentSelect,false,testModePlayerGroup);
     summoning = false;
+    gv_131E8983[getPlayerLastPicked()] = 0;
+    setPlayerLastPicked(0);
     return true;
 }
 

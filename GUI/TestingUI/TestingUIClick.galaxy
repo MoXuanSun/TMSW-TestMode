@@ -30,12 +30,12 @@ bool onTestingUIClick(bool t, bool r){
     }
     else if (eDialogControl == Dialogs.mainMenu.summonAllyHeroBtn.btn){
         if (getHeroLastSelected() == 0){
-            showMsg(1,"请先选择英雄");
+            UIDisplayMessage(testModePlayerGroup,c_messageAreaSubtitle,StringExternalTestMode("plz_selec_hero"));
             return true;
         }
         playerPick = pickPlayer(true);
         if (playerPick == -1){
-            showMsg(1,"该阵容已满，请移除英雄");
+            UIDisplayMessage(testModePlayerGroup,c_messageAreaSubtitle,StringExternalTestMode("team_is_full"));
             return true;
         }
         summoning = true;
@@ -46,12 +46,12 @@ bool onTestingUIClick(bool t, bool r){
     }
     else if (eDialogControl == Dialogs.mainMenu.summonEnemyHeroBtn.btn){
         if (getHeroLastSelected() == 0){
-            showMsg(1,"请先选择英雄");
+            UIDisplayMessage(testModePlayerGroup,c_messageAreaSubtitle,StringExternalTestMode("plz_selec_hero"));
             return true;
         }
         playerPick = pickPlayer(false);
         if (playerPick == -1){
-            showMsg(1,"该阵容已满，请移除英雄");
+            UIDisplayMessage(testModePlayerGroup,c_messageAreaSubtitle,StringExternalTestMode("team_is_full"));
             return true;
         }
         summoning = true;
@@ -85,12 +85,12 @@ bool onTestingUIClick(bool t, bool r){
     }
     else if (eDialogControl == Dialogs.logger.contolBtn){
         if (loggerVisablityFlag){
-            DialogControlSetPropertyAsText(Dialogs.logger.contolBtn,c_triggerControlPropertyText,testModePlayerGroup,StringToText("显示"));
-            DialogControlSetPropertyAsText(Dialogs.logger.contolBtn,c_triggerControlPropertyTooltip,testModePlayerGroup,StringToText("显示伤害记录器"));
+            DialogControlSetPropertyAsText(Dialogs.logger.contolBtn,c_triggerControlPropertyText,testModePlayerGroup,StringExternalTestMode("logger_show"));
+            DialogControlSetPropertyAsText(Dialogs.logger.contolBtn,c_triggerControlPropertyTooltip,testModePlayerGroup,StringExternalTestMode("logger_show")+StringExternalTestMode("logger"));
             DialogSetPosition(Dialogs.logger.self,c_anchorTopLeft,-850,0);
         }else {
-            DialogControlSetPropertyAsText(Dialogs.logger.contolBtn,c_triggerControlPropertyText,testModePlayerGroup,StringToText("隐藏"));
-            DialogControlSetPropertyAsText(Dialogs.logger.contolBtn,c_triggerControlPropertyTooltip,testModePlayerGroup,StringToText("隐藏伤害记录器"));
+            DialogControlSetPropertyAsText(Dialogs.logger.contolBtn,c_triggerControlPropertyText,testModePlayerGroup,StringExternalTestMode("logger_invisable"));
+            DialogControlSetPropertyAsText(Dialogs.logger.contolBtn,c_triggerControlPropertyTooltip,testModePlayerGroup,StringExternalTestMode("logger_invisable")+StringExternalTestMode("logger"));
             DialogSetPosition(Dialogs.logger.self,c_anchorTopLeft,0,0);
         }
         DialogControlSetVisible(gv_3CD09FC1[0], testModePlayerGroup, loggerVisablityFlag);

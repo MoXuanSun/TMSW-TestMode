@@ -83,6 +83,7 @@ void talentSelectUI(int row, int column, bool select, playergroup p){
         DialogControlSetVisible(gv_BB156610.lv_51B06619[column][row], p, false);
     }
 }
+
 //启用
 void talentEnableUI(int row, int column, bool enable, playergroup p){
 
@@ -452,12 +453,6 @@ void showHideDummyHud(bool show, playergroup p){
 void updateTalentDisplay(int currentRemotingPlayer, playergroup p){
     int i;
 
-    //先刷新
-    for (; i < 8 ; i += 1){
-        DialogControlSetPropertyAsText(gv_CEBF1A9E[i],c_triggerControlPropertyTooltip,p,EMP_TEXT);
-        DialogControlSetPropertyAsString(gv_CEBF1A9E[i],c_triggerControlPropertyImage,p,"GamesUis\\Profiles\\Profile_Pic_Creater.dds");
-    }
-
     //更新UI
     //前6个
     for (i = 0; i < 5; i += 1){
@@ -469,135 +464,80 @@ void updateTalentDisplay(int currentRemotingPlayer, playergroup p){
     gf_E8DB52E3(currentRemotingPlayer, gv_BB156610.lv_54CFCAA4[currentRemotingPlayer], 1);
 
     for (i = 0 ; i < 8 ; i +=1){
+        DialogControlSetPropertyAsText(gv_CEBF1A9E[i],c_triggerControlPropertyTooltip,p,EMP_TEXT);
+        DialogControlSetPropertyAsString(gv_CEBF1A9E[i],c_triggerControlPropertyImage,p,"GamesUis\\Profiles\\Profile_Pic_Creater.dds");
         DialogControlSetPropertyAsText(gv_CEBF1A9E[i],c_triggerControlPropertyTooltip,p,DialogControlGetPropertyAsText(gv_CEBF1A9E[i],c_triggerControlPropertyTooltip,currentRemotingPlayer));
         DialogControlSetPropertyAsString(gv_CEBF1A9E[i],c_triggerControlPropertyImage,p,DialogControlGetPropertyAsString(gv_CEBF1A9E[i],c_triggerControlPropertyImage,currentRemotingPlayer));
     }
 
 }
 
+void propBtnEnable(int currentRemotingPlayer, int btnId, int show,playergroup p){
+    DialogControlSetEnabled(gv_F4E2C4A0[0][btnId], refractTargetPlayerGroup, show);
+    DialogControlSetEnabled(gv_F4E2C4A0[1][btnId], refractTargetPlayerGroup, show);
+    DialogControlSetEnabled(gv_F4E2C4A0[2][btnId], refractTargetPlayerGroup, show);
+}
+
 void updatePropBtn(int currentRemotingPlayer, playergroup refractTargetPlayerGroup){
-    bool flag;
+    
+    bool flag = true;
+    //更新属性加点数值
+    for (IntLoopBegin(0,14); !IntLoopEnd() ; IntLoopStep()){
+        libNtve_gf_SetDialogItemText(gv_F4E2C4A0[2][IntLoopCurrent()], 
+                    IntToText(gv_60E73511[currentRemotingPlayer][IntLoopCurrent()]), refractTargetPlayerGroup);
+    }
+    IntLoopEnd();
 
-    IntLoopBegin(0,14);
-    while(!IntLoopDone()){
+    for (IntLoopBegin(0,14); !IntLoopEnd() ; IntLoopStep()){
         if (IntLoopCurrent() == gv_288042C5.lv_756C1089){
-            if ((gv_60E73511[currentRemotingPlayer][IntLoopCurrent()] >= gv_533C63F3[currentRemotingPlayer]))
-            {
+            if ((gv_60E73511[currentRemotingPlayer][IntLoopCurrent()] >= gv_533C63F3[currentRemotingPlayer])){
                 flag = false;
             }
-            else
-            {
-                flag = true;
-            }
-        }
-        else if (IntLoopCurrent() == gv_288042C5.lv_235E8DEB){
-            if ((gv_BB156610.lv_48849745[currentRemotingPlayer][gv_55AE090B.lv_5305D027][gv_55AE090B.lv_D52E7207] == true))
-            {
-                if ((gv_60E73511[currentRemotingPlayer][IntLoopCurrent()] >= gv_10AEE349))
-                {
+        }else if (IntLoopCurrent() == gv_288042C5.lv_235E8DEB){
+            if ((gv_BB156610.lv_48849745[currentRemotingPlayer][gv_55AE090B.lv_5305D027][gv_55AE090B.lv_D52E7207] == true)){
+                if ((gv_60E73511[currentRemotingPlayer][IntLoopCurrent()] >= gv_10AEE349)){
                     flag = false;
                 }
-                else
-                {
-                    flag = true;
-                }
-            }
-            else
-            {
-                if ((gv_60E73511[currentRemotingPlayer][IntLoopCurrent()] >= gv_D79965A1[1][IntLoopCurrent()]))
-                {
+            }else{
+                if ((gv_60E73511[currentRemotingPlayer][IntLoopCurrent()] >= gv_D79965A1[1][IntLoopCurrent()])){
                     flag = false;
                 }
-                else
-                {
-                    flag = true;
-                }
             }
-        }
-        else if (IntLoopCurrent() == gv_288042C5.lv_E9CF3C37){
-            if ((gv_BB156610.lv_48849745[currentRemotingPlayer][gv_55AE090B.lv_E9BE1477][gv_55AE090B.lv_35263ECD] == true))
-            {
-                if ((gv_60E73511[currentRemotingPlayer][IntLoopCurrent()] >= gv_37008C71[currentRemotingPlayer]))
-                {
+        }else if (IntLoopCurrent() == gv_288042C5.lv_E9CF3C37){
+            if ((gv_BB156610.lv_48849745[currentRemotingPlayer][gv_55AE090B.lv_E9BE1477][gv_55AE090B.lv_35263ECD] == true)){
+                if ((gv_60E73511[currentRemotingPlayer][IntLoopCurrent()] >= gv_37008C71[currentRemotingPlayer])){
                     flag = false;
                 }
-                else
-                {
-                    flag = true;
-                }
-            }
-            else
-            {
-                if ((gv_60E73511[currentRemotingPlayer][IntLoopCurrent()] >= gv_D79965A1[1][IntLoopCurrent()]))
-                {
+            }else{
+                if ((gv_60E73511[currentRemotingPlayer][IntLoopCurrent()] >= gv_D79965A1[1][IntLoopCurrent()])){
                     flag = false;
                 }
-                else
-                {
-                    flag = true;
-                }
             }
-        }
-        else{
-            if ((gv_60E73511[currentRemotingPlayer][IntLoopCurrent()] >= gv_D79965A1[1][IntLoopCurrent()]))
-            {
+        }else{
+            if ((gv_60E73511[currentRemotingPlayer][IntLoopCurrent()] >= gv_D79965A1[1][IntLoopCurrent()])){
                 flag = false;
-            }
-            else
-            {
-                flag = true;
             }
         }
 
-        if ((flag == false)){
-            DialogControlSetEnabled(gv_F4E2C4A0[0][IntLoopCurrent()], refractTargetPlayerGroup, false);
-            DialogControlSetEnabled(gv_F4E2C4A0[1][IntLoopCurrent()], refractTargetPlayerGroup, false);
-            DialogControlSetEnabled(gv_F4E2C4A0[2][IntLoopCurrent()], refractTargetPlayerGroup, false);
-        }
-        else{
-            DialogControlSetEnabled(gv_F4E2C4A0[0][IntLoopCurrent()], refractTargetPlayerGroup, true);
-            DialogControlSetEnabled(gv_F4E2C4A0[1][IntLoopCurrent()], refractTargetPlayerGroup, true);
-            DialogControlSetEnabled(gv_F4E2C4A0[2][IntLoopCurrent()], refractTargetPlayerGroup, true);
-        }
-       
-        IntLoopStep();
+        propBtnEnable(IntLoopCurrent(),!flag);
+        
     }
     IntLoopEnd();
     
+    //反射tooltip
     for (IntLoopBegin(0,14);!IntLoopDone();IntLoopStep()){
         DialogControlSetPropertyAsText(gv_F4E2C4A0[0][IntLoopCurrent()],c_triggerControlPropertyTooltip,refractTargetPlayerGroup,
             DialogControlGetPropertyAsText(gv_F4E2C4A0[0][IntLoopCurrent()],c_triggerControlPropertyTooltip,currentRemotingPlayer));
     }
     IntLoopEnd();
-
-    libNtve_gf_SetDialogItemTooltip(gv_F4E2C4A0[0][10], 
-        gf_D7D17EEF(gv_D79965A1[0][gv_288042C5.lv_107F1097], gv_D79965A1[1][10], gv_288042C5.lv_47E787AD, gv_8ED21F40[gv_288042C5.lv_107F1097], 2, StringExternal("Button/Tooltip/db_txt_preset_zameText_81")), PlayerGroupAll());
-     //判断玩家是不是远程角色 详情见gf_5B3968D5(); true为远程
-     if (gv_4B57750F[currentRemotingPlayer]){
-        //如果玩家的加点大于加点上限
-        if (gv_60E73511[currentRemotingPlayer][10] >= gv_D79965A1[1][10])
-        {
-            DialogControlSetEnabled(gv_F4E2C4A0[0][10], refractTargetPlayerGroup, false);
-            DialogControlSetEnabled(gv_F4E2C4A0[1][10], refractTargetPlayerGroup, false);
-            DialogControlSetEnabled(gv_F4E2C4A0[2][10], refractTargetPlayerGroup, false);
-        }
-        else
-        {
-            DialogControlSetEnabled(gv_F4E2C4A0[0][10], refractTargetPlayerGroup, true);
-            DialogControlSetEnabled(gv_F4E2C4A0[1][10], refractTargetPlayerGroup, true);
-            DialogControlSetEnabled(gv_F4E2C4A0[2][10], refractTargetPlayerGroup, true);
-        }   
-    }else {
-        DialogControlSetEnabled(gv_F4E2C4A0[0][10], refractTargetPlayerGroup, false);
-        DialogControlSetEnabled(gv_F4E2C4A0[1][10], refractTargetPlayerGroup, false);
-        DialogControlSetEnabled(gv_F4E2C4A0[2][10], refractTargetPlayerGroup, false);
-    }
+    
+    //判断玩家是不是远程角色 详情见gf_5B3968D5(); true为远程
+    //如果玩家的加点大于加点上限
+    propBtnEnable(IntLoopCurrent(),gv_4B57750F[currentRemotingPlayer] && (gv_60E73511[currentRemotingPlayer][10] >= gv_D79965A1[1][10]));
+     
 }
 
-//更新状态栏、等级栏、头像和天赋小图标
-void updateFullGameUI(int currentRemotingPlayer, playergroup refractTargetPlayerGroup){
-    //右侧数值栏数据
-    
+void updateAttrUI(int currentRemotingPlayer, playergroup refractTargetPlayerGroup){
     //ap
     libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[1], FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_89BFC1C4], 2), refractTargetPlayerGroup);
     //法抗
@@ -612,65 +552,74 @@ void updateFullGameUI(int currentRemotingPlayer, playergroup refractTargetPlayer
     libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[8], (FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_15A72892.lv_513A585F], 0) + StringExternal("Param/Value/C7314030")), refractTargetPlayerGroup);
     //物抗
     libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[2], (FixedToText(UnitGetPropertyFixed(gv_71C054E5[currentRemotingPlayer],c_unitPropLifeArmor,true), 2) + StringExternal("Param/Value/6B419391")), refractTargetPlayerGroup);
-    // 移速
+    //移速
     libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[5], FixedToText(UnitGetPropertyFixed(gv_71C054E5[currentRemotingPlayer],c_unitPropMovementSpeed,true), 2), refractTargetPlayerGroup);
-
  
     if (getPlayerHeroId(currentRemotingPlayer) == 7){
+        //兔子
         if ((gv_BB156610.lv_0195430E[currentRemotingPlayer][0] == 0))
         {
-            //ad
             libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_3B4D4295], FixedToText(UnitWeaponDamage(gv_71C054E5[currentRemotingPlayer], 1, c_unitAttributeHeroic, false), 2), refractTargetPlayerGroup);
         }
         else
         {   
             libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_3B4D4295], FixedToText(UnitWeaponDamage(gv_71C054E5[currentRemotingPlayer], 2, c_unitAttributeHeroic, false), 2), refractTargetPlayerGroup);
         }
-    }
-    
-    //爱丽丝攻击力显示问题
-    else if (getPlayerHeroId(currentRemotingPlayer) == 8){
+    }else if (getPlayerHeroId(currentRemotingPlayer) == 8){
+        //爱丽丝攻击力显示问题
         libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_3B4D4295], FixedToText(gv_9CB902A4[currentRemotingPlayer][gv_B48492BD[3]], 2), refractTargetPlayerGroup);
     }
     else{
         libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_AD040151[gv_5239340F.lv_3B4D4295], FixedToText(UnitWeaponDamage(gv_71C054E5[currentRemotingPlayer], 1, c_unitAttributeHeroic, false), 2), refractTargetPlayerGroup);
     }
+}
 
-    //更新属性加点UI
-    IntLoopBegin(0,14);
-    while(!IntLoopDone()){
-        libNtve_gf_SetDialogItemText(gv_F4E2C4A0[2][IntLoopCurrent()], 
-                    IntToText(gv_60E73511[currentRemotingPlayer][IntLoopCurrent()]), refractTargetPlayerGroup);
-        IntLoopStep();
+const int UI_ATTR;
+const int UI_PROP = 1;
+const int UI_STATUS_BAR = 2;
+const int UI_TALENT_INFO_PANEL = 3;
+const int UI_EXP = 4;
+const int UI_HEAD_IMAGE = 5;
+const int UI_SMALL_HEAD_IMAGE = 6;
+
+void forceUpdateGameUI(int currentRemotingPlayer, playergroup refractTargetPlayerGroup, int type){
+    if (type == UI_ATTR){
+        updateAttrUI(currentRemotingPlayer,refractTargetPlayerGroup);
+    }else if (type == UI_PROP){
+        updatePropBtn(currentRemotingPlayer,refractTargetPlayerGroup);
+    }else if (type == UI_STATUS_BAR){
+        updateStatusBar(PlayerGroupPlayer(refractTargetPlayerGroup,1),getPlayerHeroUnit(currentRemotingPlayer));
+    }else if (type == UI_TALENT_INFO_PANEL){
+        updateTalentDisplay(currentRemotingPlayer,refractTargetPlayerGroup);
+    }else if (type == UI_EXP){
+        libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_75EF4F32, (IntToText(gv_893C301B[currentRemotingPlayer]) + StringExternal("Param/Value/E919CF14")), refractTargetPlayerGroup);
+    }else if (type == UI_HEAD_IMAGE){
+        if (TechTreeUpgradeCount(currentRemotingPlayer,"dbup_cos_1",c_techCountCompleteOnly) > 0 ){
+            libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_D11CB209, (("character\\interface\\face\\interface_face_" + IntToString(getPlayerHeroId(currentRemotingPlayer)) + "_1.dds")), refractTargetPlayerGroup);
+        } else if (TechTreeUpgradeCount(currentRemotingPlayer,"dbup_cos_2",c_techCountCompleteOnly) > 0 ){
+            libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_D11CB209, (("character\\interface\\face\\interface_face_" + IntToString(getPlayerHeroId(currentRemotingPlayer)) + "_2.dds")), refractTargetPlayerGroup);
+        } else {
+            libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_D11CB209, (("character\\interface\\face\\interface_face_" + IntToString(getPlayerHeroId(currentRemotingPlayer)) + ".dds")), refractTargetPlayerGroup);
+        }
+    }else if (type == UI_SMALL_HEAD_IMAGE){
+        libNtve_gf_SetDialogItemImage(gv_169C778B[0], gv_AA1BDB6C[getPlayerHeroId(currentRemotingPlayer)], refractTargetPlayerGroup);
+        libNtve_gf_SetDialogItemText(gv_169C778B[1], UnitTypeGetName(UnitGetType(gv_71C054E5[currentRemotingPlayer])), refractTargetPlayerGroup);
+    }
+}
+
+void forceUpdateFullGameUI(int currentRemotingPlayer, playergroup refractTargetPlayerGroup){
+    for (IntLoopBegin(0,6);!IntLoopDone();IntLoopStep()){
+        forceUpdateGameUI(currentRemotingPlayer,refractTargetPlayerGroup,IntLoopCurrent());
     }
     IntLoopEnd();
+}
 
-    //更新英雄头像
-   
-    if (TechTreeUpgradeCount(currentRemotingPlayer,"dbup_cos_1",c_techCountCompleteOnly) > 0 ){
-        libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_D11CB209, (("character\\interface\\face\\interface_face_" 
-        + IntToString(getPlayerHeroId(currentRemotingPlayer)) + "_1.dds")), refractTargetPlayerGroup);
-    } else if (TechTreeUpgradeCount(currentRemotingPlayer,"dbup_cos_2",c_techCountCompleteOnly) > 0 ){
-        libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_D11CB209, (("character\\interface\\face\\interface_face_" 
-        + IntToString(getPlayerHeroId(currentRemotingPlayer)) + "_2.dds")), refractTargetPlayerGroup);
+void roundUIupdate(){
+     //攻速tooltip
+     libNtve_gf_SetDialogItemTooltip(gv_F4E2C4A0[0][10], 
+        gf_D7D17EEF(gv_D79965A1[0][gv_288042C5.lv_107F1097], gv_D79965A1[1][10], gv_288042C5.lv_47E787AD, gv_8ED21F40[gv_288042C5.lv_107F1097], 2, StringExternal("Button/Tooltip/db_txt_preset_zameText_81")), PlayerGroupAll());
 
-    } else {
-        libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_D11CB209, (("character\\interface\\face\\interface_face_" 
-        + IntToString(getPlayerHeroId(currentRemotingPlayer)) + ".dds")), refractTargetPlayerGroup);
-    }
-   
-    // libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_A9C8BA19, "GamesUis\\frame_mp_bar_frame.dds", refractTargetPlayerGroup);
-    // libNtve_gf_SetDialogItemImage(gv_5C4043F8.lv_472F835E, "GamesUis\\frame_mp_bar_image.dds", refractTargetPlayerGroup);
-    //小头像
-    libNtve_gf_SetDialogItemImage(gv_169C778B[0], gv_AA1BDB6C[getPlayerHeroId(currentRemotingPlayer)], refractTargetPlayerGroup);
-    libNtve_gf_SetDialogItemText(gv_169C778B[1], UnitTypeGetName(UnitGetType(gv_71C054E5[currentRemotingPlayer])), refractTargetPlayerGroup);
-    //等级显示
-    libNtve_gf_SetDialogItemText(gv_5C4043F8.lv_75EF4F32, (IntToText(gv_893C301B[currentRemotingPlayer]) +
-        StringExternal("Param/Value/E919CF14")), refractTargetPlayerGroup);
-    //更新状态条
-    updateStatusBar(PlayerGroupPlayer(refractTargetPlayerGroup,1),getPlayerHeroUnit(currentRemotingPlayer));
-    //更新天赋显示
-    updateTalentDisplay(currentRemotingPlayer,refractTargetPlayerGroup);
-    //更新属性btn
-    updatePropBtn(currentRemotingPlayer,refractTargetPlayerGroup);
+       
+        
+    
 }

@@ -163,6 +163,7 @@ void initDataForPlayer();
 void fetchPlayerToCurrentRound(int player);
 void nextRoundGlobal();
 void removeUnitAndReflashPlayer(int player);
+text StringExternalTestMode(string name);
 
 //DamageDisplayer
 string damageDisplayerPreFix = "ddp";

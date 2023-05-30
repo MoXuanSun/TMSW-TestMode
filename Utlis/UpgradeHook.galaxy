@@ -49,21 +49,21 @@ bool btnClickHook(bool t, bool r){
     int i;
     
     if (!tryLock() || currentRemotingPlayer == 0 || currentRemotingPlayer > 10){
-        unLock();
         return true;
     }
 
-    if (edialogControl == gv_99F9B79B[0] || 
+    if (!gv_44387A99[1] && (edialogControl == gv_99F9B79B[0] || 
         edialogControl == gv_99F9B79B[1] || 
         edialogControl == gv_99F9B79B[2] || 
-        edialogControl == gv_99F9B79B[3]){
+        edialogControl == gv_99F9B79B[3])){
             gameSoundPlayer(v_additionalSelect);
             for (; i < 4 ; i += 1){
                 upgradeBtnShow(i,false,testModePlayerGroup);
                 upgradeBtnShow(i,false,PlayerGroupSingle(currentRemotingPlayer));
             }
-
+            gv_44387A99[1] = true;
             gf_19E65221(currentRemotingPlayer, edialogControl);
+            gv_44387A99[1] = false;
 
             if (gv_63B35897[currentRemotingPlayer] >= 1){
                 refractUpgradeBtns(currentRemotingPlayer,testModePlayerGroup);
@@ -71,10 +71,7 @@ bool btnClickHook(bool t, bool r){
                 storeUpgradeBtns(currentRemotingPlayer);
             }
           
-    }
-    //data-setPlayerPropPoints(int player, int propType, int opt, int value);
-    //ui-updatePropPointUI(int player, playergroup p);
-    else if ((edialogControl == gv_F4E2C4A0[0][0]) ||
+    }else if (!gv_44387A99[2] && ((edialogControl == gv_F4E2C4A0[0][0]) ||
             (edialogControl == gv_F4E2C4A0[0][1]) ||
             (edialogControl == gv_F4E2C4A0[0][2]) || 
             (edialogControl == gv_F4E2C4A0[0][3]) || 
@@ -88,13 +85,15 @@ bool btnClickHook(bool t, bool r){
             (edialogControl == gv_F4E2C4A0[0][11]) || 
             (edialogControl == gv_F4E2C4A0[0][12]) || 
             (edialogControl == gv_F4E2C4A0[0][13]) || 
-            (edialogControl == gv_F4E2C4A0[0][14])){
+            (edialogControl == gv_F4E2C4A0[0][14]))){
 
             i = gf_9C62D140(edialogControl);
             DialogControlSetEnabled(gv_F4E2C4A0[0][i], testModePlayerGroup, false);
             DialogControlSetEnabled(gv_F4E2C4A0[1][i], testModePlayerGroup, false);
             DialogControlSetEnabled(gv_F4E2C4A0[2][i], testModePlayerGroup, false);
+            gv_44387A99[2] = true;
             gf_18957680(currentRemotingPlayer, edialogControl);
+            gv_44387A99[2] = false;
             DialogControlSetEnabled(gv_F4E2C4A0[0][i], testModePlayerGroup, true);
             DialogControlSetEnabled(gv_F4E2C4A0[1][i], testModePlayerGroup, true);
             DialogControlSetEnabled(gv_F4E2C4A0[2][i], testModePlayerGroup, true);
@@ -124,7 +123,6 @@ bool onUpgradeHotKey(bool t, bool r){
     int i;
 
     if (!tryLock() || currentRemotingPlayer == 0 || currentRemotingPlayer > 10){
-        unLock();
         return true;
     }
 
@@ -161,7 +159,6 @@ bool onUpgradeHotKey(bool t, bool r){
                 IntLoopEnd();
                 
                 gf_19E65221(currentRemotingPlayer, gv_99F9B79B[i]);
-
 
                 if (gv_63B35897[currentRemotingPlayer] >= 1){
                     refractUpgradeBtns(currentRemotingPlayer,testModePlayerGroup);

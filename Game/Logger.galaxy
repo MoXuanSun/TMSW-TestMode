@@ -40,6 +40,7 @@ void loggerD(string message){
     logger(message,LOGGER_DEBUG);
 }
 
+
 bool loggerAbility(bool r, bool t){
     
     return true;
